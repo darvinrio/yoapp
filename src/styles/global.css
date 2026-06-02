@@ -14,12 +14,13 @@
 
 :root {
     --font-title: "F5.6", sans-serif;
-    --font-text: "Montserrat", sans-serif;
+    --font-text: "Merriweather", sans-serif;
     --font-mono: "JetBrains Mono", monospace;
 }
 
 html {
     font-family: var(--font-text);
+    font-weight: 300;
 }
 
 /*h1,
