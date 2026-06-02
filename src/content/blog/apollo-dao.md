@@ -7,7 +7,7 @@ tags: ["terra", "defi", "crypto"]
 
 The Yield Optimizer on Terra.
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*IsRwEY_UeBUpYU1KbQR9nA.jpeg)
+![captionless image](../../assets/blog-images/apollo-dao/001.jpeg)
 
 When Defi summer kicked on, Ethereum’s pole bearer was the Yearn.finance. Yearn.finance took off as it was the easiest and simplest option for a non-tech savvy investor in the complicated world of Crypto and DeFi. The ease of use, abstracting the complex strategies underneath, while providing fancy returns to investors by leveraging the DeFi money-legos, was its selling point. Apollo DAO wants to be the Yearn equivalent and more — not just a Yield Aggregator in common sense, but a one-stop place for all farming on the Terra ecosystem.
 
@@ -21,7 +21,7 @@ But these changed with Mirror v2, where short farming was introduced, and the yi
 
 Now Mirror is a farming paradise for the right person. You will need at least an hour to watch all the possibilities via the informative content created by [danku_r](https://danku-r.medium.com/) and [Terrabites](https://www.youtube.com/c/TerraBites/featured) in their Youtube videos. This is excluding all the newer protocols that are launching in the boom since Columbus-5 deployment. To understand the insanity for an average investor, check out this graphic by the community favorite [danku_r](https://danku-r.medium.com/)
 
-![The Beauty of Terra — by danku_r](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*JtxN6xcdk339bV0PXusZYg.png)
+![The Beauty of Terra — by danku_r](../../assets/blog-images/apollo-dao/002.png)
 
 Overwhelming. Isn’t it? This was built by [danku_r](https://danku-r.medium.com/) over a month ago in their medium post. This doesn’t account for the tons of protocols launching this month.
 
@@ -54,13 +54,13 @@ With Apollo DAO, a resounding Yes. So how easy.
 
 3. A colorful Yellow-Black UI signifying light amongst the darkness for the common user. Click the connect button (1) on the top left. Connect your Station wallet via extension or WalletConnect
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lGZLBJ2agNjVdmvJDdH8Sw.png)
+![captionless image](../../assets/blog-images/apollo-dao/003.png)
 
 4. Select a pool of your choice, from the Top Yields section(2).
 
 5. I’m going with the MINE-UST pair, cause I want 100+% APR.
 
-![captionless image](https://miro.medium.com/v2/resize:fit:856/format:webp/1*Kv_7myfuxlSFeobzUt8KFg.png)![captionless image](https://miro.medium.com/v2/resize:fit:858/format:webp/1*wheoI2Fch9EyyL5pIGHI5w.png)
+![captionless image](../../assets/blog-images/apollo-dao/004.png)![captionless image](../../assets/blog-images/apollo-dao/005.png)
 
 6. Select if you want to deposit UST or LP token into the vault.
 
@@ -70,13 +70,13 @@ With Apollo DAO, a resounding Yes. So how easy.
 
 8. Sign the transaction in your wallet and wait for confirmation
 
-![captionless image](https://miro.medium.com/v2/resize:fit:764/format:webp/1*LX2dJgFoUoc9-PdJ4_RP6g.png)
+![captionless image](../../assets/blog-images/apollo-dao/006.png)
 
 Congrats, you just entered the world of Yield Farming on Terra with just a **single** Transaction. In the future, you could invest your assets into myriad of complex Yield Farming strategies leveraging the Terra ecosystems now outbursting money-legos, in a single transaction. Remember, it's not the APR, but the accessibility of that APR that matters.
 
 You can track your investments and your stakable assets under the Portfolio tab
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VoC5N2LOh9VMe7xlrfGWWQ.png)
+![captionless image](../../assets/blog-images/apollo-dao/007.png)
 
 [3] shows you how much you have invested and the Current APR and DPR.
 
@@ -84,13 +84,13 @@ You can track your investments and your stakable assets under the Portfolio tab
 
 Not satisfied with the Top Yield options, scroll down and choose from the Vaults below.
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UUfelz1T_gCcK79gaZT3xg.png)
+![captionless image](../../assets/blog-images/apollo-dao/008.png)
 
 ### Apollo APR ??? — Apollo token ??
 
 It's DeFi, and DAO. Yes, Apollo will be a Decentralized Project in the long run. The community will have control over all aspects of the protocol. This control is tokenized in the form of its own Governance Token **$APOLLO.** Over the next 3 Years, the $APOLLO token will be distributed in a fair model in the following way
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*OoGFyaHiyjl2earHNSk6BQ.png)
+![captionless image](../../assets/blog-images/apollo-dao/009.png)
 
 If you want full in-depth into the Tokenomics —
 
@@ -106,7 +106,7 @@ So a sizeable chunk of the Governance token will be put to enhancing the Protoco
 
 In a similar way to Curve’s vesting, these $APOLLO tokens can be locked in a vote-lock vault to get boosted returns and a share of the protocol fees in the form of $zAPOLLO tokens. By introducing a locking mechanism for the Yielding token, Apollo DAO restricts the downside movement of the $APOLLO token due to increased sell pressure from Liquidity Mining of $APOLLO.
 
-![captionless image](https://miro.medium.com/v2/resize:fit:942/format:webp/1*Sz_85ERKjOEiH2Pf95QuvA.gif)
+![captionless image](../../assets/blog-images/apollo-dao/010.gif)
 
 The most important feature in the $APOLLO tokenomics is the War-Chest. The War-Chest will act as a value backing vault for the $APOLLO tokens, creating a soft floor for the price of $APOLLO tokens. This War-Chest will be bootstrapped by Protocol Revenue, with 99% of the revenue being redirected into the Vault. This vault at the start will contain a combination of $bETH + $UST + $LUNA in a 2:3:5 ratio. This should enable the $APOLLO token to not just gain from the value generated by the protocol, but also the general market itself.
 
