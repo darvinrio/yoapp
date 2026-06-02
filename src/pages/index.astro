@@ -1,10 +1,13 @@
 ---
+import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 import Welcome from "../components/Welcome.astro";
 ---
 
-<main class="dark:bg-zinc-800 px-6 py-8 md:px-12 md:py-12">
-    <section class="mx-auto max-w-6xl">
-        <Welcome />
-    </section>
-</main>
+<Layout>
+    <main class="px-6 py-8 md:px-12 md:py-12">
+        <section class="mx-auto max-w-6xl">
+            <Welcome />
+        </section>
+    </main>
+</Layout>
