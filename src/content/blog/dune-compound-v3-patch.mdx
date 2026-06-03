@@ -5,6 +5,22 @@ description: "A technical writeup on the Dune Compound v3 patch"
 tags: ["git", "defi", "crypto", "data"]
 ---
 
+import Image from "../../components/BlogImage.astro";
+import img001 from "../../assets/blog-images/dune-compound-v3-patch/image.png";
+import img002 from "../../assets/blog-images/dune-compound-v3-patch/image 1.png";
+import img003 from "../../assets/blog-images/dune-compound-v3-patch/image 2.png";
+import img004 from "../../assets/blog-images/dune-compound-v3-patch/image 3.png";
+import img005 from "../../assets/blog-images/dune-compound-v3-patch/image 4.png";
+import img006 from "../../assets/blog-images/dune-compound-v3-patch/image 5.png";
+import img007 from "../../assets/blog-images/dune-compound-v3-patch/image 6.png";
+import img008 from "../../assets/blog-images/dune-compound-v3-patch/image 7.png";
+import img009 from "../../assets/blog-images/dune-compound-v3-patch/image 8.png";
+import img010 from "../../assets/blog-images/dune-compound-v3-patch/image 9.png";
+import img011 from "../../assets/blog-images/dune-compound-v3-patch/image 10.png";
+
+---
+
+
 The PR https://github.com/duneanalytics/spellbook/pull/6495 aims to
 
 1. Add supply and withdrawal of the Base Asset (the existing model only covers Collateral supply and withdrawal)
@@ -40,9 +56,11 @@ Say a user has 100 USDC debt, and sends 150 USDC via `supply()` as repayment, th
 
 In this case, the `Supply` event logs 100, while the `Transfer` event logs 50.
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image.png)
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%201.png)
+<Image  src={img001}  alt="image.png"/>
+
+
+<Image  src={img002}  alt="image.png"/>
 
 The `Transfer` event is always emitted immediately after the `Supply` event
 
@@ -52,9 +70,11 @@ A user has supplied 50 USDC to the Comet, and now tries to withdrawal 110 USDC. 
 
 In this case, the `Withdraw` event logs 110, while the `Transfer` event logs 50.
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%202.png)
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%203.png)
+<Image  src={img003}  alt="image.png"/>
+
+
+<Image  src={img004}  alt="image.png"/>
 
 The `Transfer` event is always emitted immediately after the `Withdraw` event
 
@@ -66,21 +86,25 @@ In the below queries, you can see that the new model accurately matches the exis
 
 https://dune.com/queries/3996425
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%204.png)
+
+<Image  src={img005}  alt="image.png"/>
 
 https://dune.com/queries/3996456
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%205.png)
+
+<Image  src={img006}  alt="image.png"/>
 
 ### Repays Check:
 
 https://dune.com/queries/3996448
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%206.png)
+
+<Image  src={img007}  alt="image.png"/>
 
 https://dune.com/queries/3996453
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%207.png)
+
+<Image  src={img008}  alt="image.png"/>
 
 ## The arbitrary `10`
 
@@ -93,12 +117,15 @@ I can remove it in a future commit, as that piece of code doesn’t affect the e
 
 https://dune.com/queries/3997824
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%208.png)
+
+<Image  src={img009}  alt="image.png"/>
 
 https://dune.com/queries/3996463
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%209.png)
+
+<Image  src={img010}  alt="image.png"/>
 
 https://dune.com/queries/3996458
 
-![image.png](../../assets/blog-images/dune-compound-v3-patch/image%2010.png)
+
+<Image  src={img011}  alt="image.png"/>

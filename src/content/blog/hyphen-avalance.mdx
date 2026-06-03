@@ -5,6 +5,23 @@ description: "Analysis of Hyphen Bridge on Avalanche"
 tags: ["bridge", "defi", "crypto", "flipside"]
 ---
 
+import Image from "../../components/BlogImage.astro";
+import img001 from "../../assets/blog-images/hyphen-avalance/ava_tvl.png";
+import img002 from "../../assets/blog-images/hyphen-avalance/ava_tvl_eth.png";
+import img003 from "../../assets/blog-images/hyphen-avalance/ava_tvl_usdc.png";
+import img004 from "../../assets/blog-images/hyphen-avalance/ava_hyphen_tvl.png";
+import img005 from "../../assets/blog-images/hyphen-avalance/value_drop.png";
+import img006 from "../../assets/blog-images/hyphen-avalance/ava_bridge_out.png";
+import img007 from "../../assets/blog-images/hyphen-avalance/ava_bridge_out_chain.png";
+import img008 from "../../assets/blog-images/hyphen-avalance/ava_bridge_out_token.png";
+import img009 from "../../assets/blog-images/hyphen-avalance/ava_bridge_in.png";
+import img010 from "../../assets/blog-images/hyphen-avalance/ava_bridge_in_daily.png";
+import img011 from "../../assets/blog-images/hyphen-avalance/ava_bridge_in_token.png";
+import img012 from "../../assets/blog-images/hyphen-avalance/ava_bridge_in_chain.png";
+
+---
+
+
 Biconomy built a bridge called the Hyphen. Essentially an EVM-based cross-chain liquidity service with an excellent on-chain logging system. Using the Bungee Exchange aggregator, Hyphen consistently appears as the most cost-efficient chain while transferring assets.
 
 For info on the Bridge working - [https://docs.biconomy.io/products/hyphen-instant-cross-chain-transfers](https://docs.biconomy.io/products/hyphen-instant-cross-chain-transfers)
@@ -25,13 +42,16 @@ I looked at the following descriptive stats and below are my findings.
 
 As of 26th August, almost 1 Million USD worth of assets is stored on the Avalanche side of the Hyphen bridge. With 500,000 at the start of May, Over the last 4 months, the TVL on the Avalanche has 2x-ed.
 
-![ava_tvl.png](../../assets/blog-images/hyphen-avalance/ava_tvl.png)
+
+<Image  src={img001}  alt="ava_tvl.png"/>
 
 Hyphen on Avalanche, allows only 2 assets to be bridged, ETH, and USDC. Taking a look at the individual assets in the bridge.
 
-![ava_tvl_eth.png](../../assets/blog-images/hyphen-avalance/ava_tvl_eth.png)
 
-![ava_tvl_usdc.png](../../assets/blog-images/hyphen-avalance/ava_tvl_usdc.png)
+<Image  src={img002}  alt="ava_tvl_eth.png"/>
+
+
+<Image  src={img003}  alt="ava_tvl_usdc.png"/>
 
 From the above, charts, we see a clear disparity in TVLs of the different assets. ETH supplied is less than half the USDC supplied. This could mean :
 
@@ -50,11 +70,13 @@ It's also likely that the majority is being LP-ed by a single entity, that adjus
 
 Let us define the TVL intervals into 4 zones. A,B,C,D
 
-![ava_hyphen_tvl.png](../../assets/blog-images/hyphen-avalance/ava_hyphen_tvl.png)
+
+<Image  src={img004}  alt="ava_hyphen_tvl.png"/>
 
 In zone A, the TVL of ETH is constant, hovering around 250 ETH. However post UST-deathspiral market, with 3AC and Celsius getting liquidated, the value of ETH was on the downfall, as seen below. The peak of FUD was reached when ETH went below 1300, the previous cycle top.
 
-![value_drop.png](../../assets/blog-images/hyphen-avalance/value_drop.png)
+
+<Image  src={img005}  alt="value_drop.png"/>
 
 It is at this junction, we see that ETH locked is reducing as seen in zone B. Just before the onset of zone B, we saw a spike in USDC TVL which now stabilizes. This ETH withdrawn can be :
 
@@ -74,7 +96,8 @@ From here on Bridging out will be referred to as deposits.
 
 Looking at the Bridging out or Deposits to the Bridge :
 
-![ava_bridge_out.png](../../assets/blog-images/hyphen-avalance/ava_bridge_out.png)
+
+<Image  src={img006}  alt="ava_bridge_out.png"/>
 
 Except for the occasional spike in volume, Avalanche side deposits have been extremely low, rarely going past 100,000 USD. While small improvements are noticed in July and August, with the events related to Tornado cash arresting the uptrend in activity, the 3.6 Million USD volume and 3700 transactions over 4 months, is extremely low, compared to the likes of Optimism or Arbitrum. This is either an indication of a lack of outflow of from Avalanche via the bridge or, a lack of outflow from the chain itself.
 
@@ -84,13 +107,15 @@ The latter is more likely, as Avalanche with its SubNets was the hype for 2nd ha
 
 #### Analyzing by individual Tokens
 
-![ava_bridge_out_chain.png](../../assets/blog-images/hyphen-avalance/ava_bridge_out_chain.png)
+
+<Image  src={img007}  alt="ava_bridge_out_chain.png"/>
 
 USDC and ETH are DeFi primitives. Yet, the fact that AVAX is the native token and incentivized token on Avalanche Network, ETH content in Avalanche is relatively lower. This means, that most deposits tend to be USDC, as this is a more actively used token on the network, compared to ETH(WETH) .
 
 #### Analyzing by Destination chains:
 
-![ava_bridge_out_token.png](../../assets/blog-images/hyphen-avalance/ava_bridge_out_token.png)
+
+<Image  src={img008}  alt="ava_bridge_out_token.png"/>
 
 Polygon leads destination transactions, while ETH is the primary USD volume receiver. Likely that, users tend to bridge out to Polygon, but most of the whales tend to move directly to Ethereum. Since we have already seen ETH is less preferred to USDC, USDC is probably put into yield farming, and then the yield is sent back to the mainnet. (the good old, L2 mining).
 
@@ -106,7 +131,8 @@ Looking at the Bridging In or Withdraws from the Bridge :
 
 First looking at the overall stats :
 
-![ava_bridge_in.png](../../assets/blog-images/hyphen-avalance/ava_bridge_in.png)
+
+<Image  src={img009}  alt="ava_bridge_in.png"/>
 
 Here are the metrics :
 
@@ -116,7 +142,8 @@ A cheap 0.2% fee+lost, less than the fees paid on many Popular DEXes.
 
 ---
 
-![ava_bridge_in_daily.png](../../assets/blog-images/hyphen-avalance/ava_bridge_in_daily.png)
+
+<Image  src={img010}  alt="ava_bridge_in_daily.png"/>
 
 Similar to Bridging Out volumes, Except for the occasional spike in volume, Avalanche side deposits have been extremely low, rarely going past 100,000 USD. This is a strong case for lack of activity on the Avalanche side of the Hyphen bridge. Both inflows and outflows see extremely low volumes daily. This could also be a strong case for Avalanche being a more independent ecosystem, that other L2s, with most of the funds circulating within the ecosystem.
 
@@ -124,7 +151,8 @@ Similar to Bridging Out volumes, Except for the occasional spike in volume, Aval
 
 #### Analyzing by Individual Assets :
 
-![ava_bridge_in_token.png](../../assets/blog-images/hyphen-avalance/ava_bridge_in_token.png)
+
+<Image  src={img011}  alt="ava_bridge_in_token.png"/>
 
 On the token front, yet again, USDC sees more activity than ETH. Recent Tornado cash-related volatility did see some ETH volume spikes ( whale movements and transaction volume of ETH don’t register a similar signal), it's probably arbitrage-making moves. Interestingly, with those two days totaling about 400,000 USD volume, almost 1/3rd of the entire ETH volume in the same time. Avalanche users, must really shun ETH.
 
@@ -132,7 +160,8 @@ On the token front, yet again, USDC sees more activity than ETH. Recent Tornado 
 
 #### Analyzing by Origin Chains :
 
-![ava_bridge_in_chain.png](../../assets/blog-images/hyphen-avalance/ava_bridge_in_chain.png)
+
+<Image  src={img012}  alt="ava_bridge_in_chain.png"/>
 
 Similarities keep continuing as, Polygon is responsible for the lion's share of the bridge Ins received, while ETH keeps it extremely tight in the USD volume.
 
