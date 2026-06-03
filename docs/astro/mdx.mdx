@@ -1,16 +1,17 @@
 ---
 type: integration
-title: '@astrojs/mdx'
+title: "@astrojs/mdx"
 description: Learn how to use the @astrojs/mdx integration in your Astro project.
 sidebar:
   label: MDX
-githubIntegrationURL: 'https://github.com/withastro/astro/tree/main/packages/integrations/mdx/'
+githubIntegrationURL: "https://github.com/withastro/astro/tree/main/packages/integrations/mdx/"
 category: other
 i18nReady: true
 ---
-import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-import ReadMore from '~/components/ReadMore.astro'
-import Since from '~/components/Since.astro'
+
+import PackageManagerTabs from "~/components/tabs/PackageManagerTabs.astro";
+import ReadMore from "~/components/ReadMore.astro";
+import Since from "~/components/Since.astro";
 
 This **[Astro integration][astro-integration]** enables the usage of [MDX](https://mdxjs.com/) components and allows you to create pages as `.mdx` files.
 
@@ -25,22 +26,10 @@ Astro includes an `astro add` command to automate the setup of official integrat
 Run one of the following commands in a new terminal window.
 
 <PackageManagerTabs>
-  <Fragment slot="npm">
-  ```sh
-  npx astro add mdx
-    ```
-  </Fragment>
-  <Fragment slot="pnpm">
-  ```sh
-  pnpm astro add mdx
-  ```
-  </Fragment>
-  <Fragment slot="yarn">
-  ```sh
-  yarn astro add mdx
-  ```
-  </Fragment>
- </PackageManagerTabs>
+  <Fragment slot="npm">```sh npx astro add mdx ```</Fragment>
+  <Fragment slot="pnpm">```sh pnpm astro add mdx ```</Fragment>
+  <Fragment slot="yarn">```sh yarn astro add mdx ```</Fragment>
+</PackageManagerTabs>
 
 If you run into any issues, [feel free to report them to us on GitHub](https://github.com/withastro/astro/issues) and try the manual installation steps below.
 
@@ -49,28 +38,16 @@ If you run into any issues, [feel free to report them to us on GitHub](https://g
 First, install the `@astrojs/mdx` package:
 
 <PackageManagerTabs>
-  <Fragment slot="npm">
-  ```sh
-  npm install @astrojs/mdx
-  ```
-  </Fragment>
-  <Fragment slot="pnpm">
-  ```sh
-  pnpm add @astrojs/mdx
-  ```
-  </Fragment>
-  <Fragment slot="yarn">
-  ```sh
-  yarn add @astrojs/mdx
-  ```
-  </Fragment>
+  <Fragment slot="npm">```sh npm install @astrojs/mdx ```</Fragment>
+  <Fragment slot="pnpm">```sh pnpm add @astrojs/mdx ```</Fragment>
+  <Fragment slot="yarn">```sh yarn add @astrojs/mdx ```</Fragment>
 </PackageManagerTabs>
 
 Then, apply the integration to your `astro.config.*` file using the `integrations` property:
 
 ```js title="astro.config.mjs" ins={2} ins="mdx()"
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   // ...
@@ -101,9 +78,9 @@ It also adds extra features to standard MDX, including support for Markdown-styl
 To include your local MDX files in a content collection, make sure that your [collection loader](/en/guides/content-collections/#build-time-collection-loaders) is configured to load content from `.mdx` files:
 
 ```js title="src/content.config.ts" ins="mdx"
-import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
-import { z } from 'astro/zod';
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/blog" }),
@@ -111,7 +88,7 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
-  })
+  }),
 });
 
 export const collections = { blog };
@@ -124,7 +101,7 @@ MDX supports using `export` statements to add variables to your MDX content or t
 For example, you can export a `title` field from an MDX page or component to use as a heading with `{JSX expressions}`:
 
 ```mdx title="/src/blog/posts/post-1.mdx"
-export const title = 'My first MDX post'
+export const title = "My first MDX post";
 
 # {title}
 ```
@@ -133,11 +110,11 @@ Or you can use that exported `title` in your page using `import` and `import.met
 
 ```astro title="src/pages/index.astro"
 ---
-const matches = import.meta.glob('./posts/*.mdx', { eager: true });
+const matches = import.meta.glob("./posts/*.mdx", { eager: true });
 const posts = Object.values(matches);
 ---
 
-{posts.map(post => <p>{post.title}</p>)}
+{posts.map((post) => <p>{post.title}</p>)}
 ```
 
 #### Exported Properties
@@ -157,8 +134,8 @@ The Astro MDX integration includes support for using frontmatter in MDX by defau
 
 ```mdx title="/src/blog/posts/post-1.mdx"
 ---
-title: 'My first MDX post'
-author: 'Houston'
+title: "My first MDX post"
+author: "Houston"
 ---
 
 # {frontmatter.title}
@@ -178,11 +155,13 @@ See more examples of using import and export statements in the [MDX docs](https:
 ---
 title: My first post
 ---
-import ReactCounter from '../components/ReactCounter.jsx';
 
-I just started my new Astro blog! 
+import ReactCounter from "../components/ReactCounter.jsx";
+
+I just started my new Astro blog!
 
 Here is my counter component, working in MDX:
+
 <ReactCounter client:load />
 ```
 
@@ -196,17 +175,19 @@ For example, you can create a `Blockquote.astro` component to provide custom sty
 ---
 const props = Astro.props;
 ---
+
 <blockquote {...props} class="bg-blue-50 p-4">
   <span class="text-4xl text-blue-600 mb-2">“</span>
-  <slot /> <!-- Be sure to add a `<slot/>` for child content! -->
+  <slot />
+  <!-- Be sure to add a `<slot/>` for child content! -->
 </blockquote>
 ```
 
 Import your custom component into your `.mdx` file, then export a `components` object that maps the standard HTML element to your custom component:
 
 ```mdx title="src/blog/posts/post-1.mdx"
-import Blockquote from '../components/Blockquote.astro';
-export const components = {blockquote: Blockquote}
+import Blockquote from "../components/Blockquote.astro";
+export const components = { blockquote: Blockquote };
 
 > This quote will be a custom Blockquote
 ```
@@ -227,11 +208,12 @@ If you are importing MDX directly from a single file for use in an Astro compone
 
 ```astro title="src/pages/page.astro" "components={{...components, h1: Heading }}" {2}
 ---
-import { Content, components } from '../content.mdx';
-import Heading from '../Heading.astro';
+import { Content, components } from "../content.mdx";
+import Heading from "../Heading.astro";
 ---
+
 <!-- Creates a custom <h1> for the # syntax, _and_ applies any custom components defined in `content.mdx` -->
-<Content components={{...components, h1: Heading }} />
+<Content components={{ ...components, h1: Heading }} />
 ```
 
 If your MDX file is a content collections entry, then use the `render()` function from `astro:content` to access the `<Content />` component.
@@ -240,11 +222,12 @@ The following example passes a custom heading to the `<Content />` component via
 
 ```astro title="src/pages/blog/post-1.astro" ins="components={{ h1: CustomHeading }}"
 ---
-import { getEntry, render } from 'astro:content';
-import CustomHeading from '../../components/CustomHeading.astro';
-const entry = await getEntry('blog', 'post-1');
+import { getEntry, render } from "astro:content";
+import CustomHeading from "../../components/CustomHeading.astro";
+const entry = await getEntry("blog", "post-1");
 const { Content } = await render(entry);
 ---
+
 <Content components={{ h1: CustomHeading }} />
 ```
 
@@ -254,41 +237,45 @@ Once the MDX integration is installed, no configuration is necessary to use `.md
 
 You can configure how your MDX is rendered with the following options:
 
-* [Options inherited from Markdown config](#options-inherited-from-markdown-config)
-* [`processor`](#processor)
-* [`extendMarkdownConfig`](#extendmarkdownconfig)
-* [`recmaPlugins`](#recmaplugins)
-* [`optimize`](#optimize)
+- [Options inherited from Markdown config](#options-inherited-from-markdown-config)
+- [`processor`](#processor)
+- [`extendMarkdownConfig`](#extendmarkdownconfig)
+- [`recmaPlugins`](#recmaplugins)
+- [`optimize`](#optimize)
 
 ### Options inherited from Markdown config
 
 All [`markdown` configuration options](/en/reference/configuration-reference/#markdown-options) can be configured separately in the MDX integration, including the [Markdown processor](#processor), syntax highlighting, and more. Options will default to those in your Markdown config ([see the `extendMarkdownConfig` option](#extendmarkdownconfig) to modify this).
 
 ```js title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import { unified } from '@astrojs/markdown-remark';
-import mdx from '@astrojs/mdx';
-import remarkToc from 'remark-toc';
-import rehypePresetMinify from 'rehype-preset-minify';
+import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
+import mdx from "@astrojs/mdx";
+import remarkToc from "remark-toc";
+import rehypePresetMinify from "rehype-preset-minify";
 
 export default defineConfig({
   // ...
   integrations: [
     mdx({
-      syntaxHighlight: 'shiki',
-      shikiConfig: { theme: 'dracula' },
+      syntaxHighlight: "shiki",
+      shikiConfig: { theme: "dracula" },
       processor: unified({
         remarkPlugins: [remarkToc],
         rehypePlugins: [rehypePresetMinify],
-        remarkRehype: { footnoteLabel: 'Footnotes' },
-        gfm: false
+        remarkRehype: { footnoteLabel: "Footnotes" },
+        gfm: false,
       }),
     }),
   ],
 });
 ```
 
-<ReadMore>See the [Markdown Options reference](/en/reference/configuration-reference/#markdown-options) for a complete list of options.</ReadMore>
+<ReadMore>
+  See the [Markdown Options
+  reference](/en/reference/configuration-reference/#markdown-options) for a
+  complete list of options.
+</ReadMore>
 
 ### `processor`
 
@@ -296,6 +283,7 @@ export default defineConfig({
 
 **Type:** `MarkdownProcessor`<br />
 **Default:** inherited from [`markdown.processor`](/en/reference/configuration-reference/#markdownprocessor)<br />
+
 <Since v="6.0.0" pkg="@astrojs/mdx" />
 </p>
 
@@ -304,14 +292,12 @@ By default, `.mdx` files render through the same [Markdown processor](/en/guides
 For example, to keep the default remark/rehype processor for `.md` files while rendering `.mdx` files with [Sätteri](https://satteri.bruits.org/) using `@astrojs/markdown-satteri`:
 
 ```js title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import { satteri } from '@astrojs/markdown-satteri';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import { satteri } from "@astrojs/markdown-satteri";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
-  integrations: [
-    mdx({ processor: satteri() }),
-  ],
+  integrations: [mdx({ processor: satteri() })],
 });
 ```
 
@@ -321,6 +307,7 @@ export default defineConfig({
 
 **Type:** `boolean`<br />
 **Default:** `true`<br />
+
 <Since v="0.15.0" pkg="@astrojs/mdx" />
 </p>
 
@@ -329,21 +316,21 @@ MDX will extend [your project's existing Markdown configuration](/en/reference/c
 For example, say you need a different syntax highlighter and a different set of plugins for `.mdx` files. You can apply these options like so, with `extendMarkdownConfig` enabled by default:
 
 ```js title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import { unified } from '@astrojs/markdown-remark';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   // ...
   markdown: {
-    syntaxHighlight: 'prism',
+    syntaxHighlight: "prism",
     processor: unified({ remarkPlugins: [remarkPlugin1] }),
   },
   integrations: [
     mdx({
       // Markdown `syntaxHighlight` overridden,
       // `.mdx` files use Shiki instead.
-      syntaxHighlight: 'shiki',
+      syntaxHighlight: "shiki",
 
       // `markdown.processor` gets overridden for `.mdx` files by this option
       processor: unified({ remarkPlugins: [remarkPlugin2] }),
@@ -355,9 +342,9 @@ export default defineConfig({
 You may also need to disable `markdown` config extension in MDX. For this, set `extendMarkdownConfig` to `false`:
 
 ```js title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import { unified } from '@astrojs/markdown-remark';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   // ...
@@ -380,6 +367,7 @@ export default defineConfig({
 
 **Type:** `PluggableList`<br />
 **Default:** `[]`<br />
+
 <Since v="0.11.5" pkg="@astrojs/mdx" />
 </p>
 
@@ -393,6 +381,7 @@ We suggest [using AST Explorer](https://astexplorer.net/) to play with estree ou
 
 **Type:** `boolean | { ignoreElementNames?: string[] }`<br />
 **Default:** `false`<br />
+
 <Since v="0.19.5" pkg="@astrojs/mdx" />
 </p>
 
@@ -401,8 +390,8 @@ This is an optional configuration setting to optimize the MDX output for faster 
 This is disabled by default. To enable MDX optimization, add the following to your MDX integration configuration:
 
 ```js title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   // ...
@@ -419,6 +408,7 @@ export default defineConfig({
 <p>
 
 **Type:** `string[]`<br />
+
 <Since v="3.0.0" pkg="@astrojs/mdx" />
 </p>
 
@@ -432,8 +422,8 @@ For example, the intended MDX output of the following is `<Heading>...</Heading>
 
 ```astro
 ---
-import { Content, components } from '../content.mdx';
-import Heading from '../Heading.astro';
+import { Content, components } from "../content.mdx";
+import Heading from "../Heading.astro";
 ---
 
 <Content components={{ ...components, h1: Heading }} />
@@ -442,8 +432,8 @@ import Heading from '../Heading.astro';
 To configure optimization for this using the `ignoreElementNames` property, specify an array of HTML element names that should be treated as custom components:
 
 ```js title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   // ...
@@ -451,7 +441,7 @@ export default defineConfig({
     mdx({
       optimize: {
         // Prevent the optimizer from handling `h1` elements
-        ignoreElementNames: ['h1'],
+        ignoreElementNames: ["h1"],
       },
     }),
   ],
@@ -462,8 +452,7 @@ Note that if your MDX file [configures custom components using `export const com
 
 ## Examples
 
-* The [Astro MDX starter template](https://github.com/withastro/astro/tree/latest/examples/with-mdx) shows how to use MDX files in your Astro project.
+- The [Astro MDX starter template](https://github.com/withastro/astro/tree/latest/examples/with-mdx) shows how to use MDX files in your Astro project.
 
 [astro-integration]: /en/guides/integrations/
-
 [astro-ui-frameworks]: /en/guides/framework-components/#using-framework-components
