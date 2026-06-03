@@ -20,7 +20,7 @@ Over the next 4 days, Major Lending protocols would summon war-rooms, propose an
 
 The contagion, would serve a potent remainder of “blue-chips” not being safe havens for both investors and lending protocols, and auditing code at compiler level.
 
-## the price impact:
+## The Price Impact:
 
 Without delving much into the technical details, (a classic re-entry attack, but at a compiler level), as expected for a exploited protocol with a governance token, the exploit saw the price of Curve’s governance token CRV take hit(s). In a bearish low-volatile market, CRV at the initial pETH-msETH-alETH exploits, took a 6% drop. At this point, the vulnerability wasn’t disclosed, and a lower TVL and lesser active pool like pETH-ETH being exploited(which held $10 Million worth ETH instead of stETH -ETH which had close $130 Million) was rather re-assuring.
 
@@ -38,7 +38,7 @@ A total of $200 Million in MarketCap was wiped out in 24 hours. Ripples of this,
 
 ![crv_mcap.png](../../assets/blog-images/crv-contagion/crv_mcap.png)
 
-## liquidity out:
+## Liquidity out:
 
 Curve is considered the haven for stablecoins and passive LPs. Its v1 design maximising efficiency while trading around peg, and v2 design where an internal oracle redistributes liquidity for an automated ‘Uniswap v3’-esque liquidity providing. Aside from ETH LSDs, Curve was top of charts in TVL. In the world of DEXes, liquidity is the king. Deeper the liquidity ensures lower slippage.  
 
@@ -54,7 +54,7 @@ Upto $1.7 Billion worth of liquidity flew out in the 24 hours following. Once th
 
 $1 Billion+ in outflows was seen on the day of hack, with $0.5 Billion returning once OTC trades were public.
 
-## convex concaved:
+## Convex Concaved:
 
 One of the main narratives of the last bull-run was, CRV flywheel, which lead to the Curve Wars. CRV, can be vote locked and votes can be cast to select pools, to which CRV rewards are diverted. Moreover, these locked CRV earn half of the trading fees and hence a source of “real” yield. Since Curve was the main avenue for stablecoin liquidity, alot of protocols with stablecoins tried accumulating CRV to incentivize liquidity. 
 
@@ -82,7 +82,7 @@ cvxCRV the largest of the CRV liquid lockers, hence suffered the most, hitting l
 
 cvxCRV dropped as much as 35% of its peg, before recovering
 
-## lenders war-room:
+## Lenders War-Room:
 
 Last year around November, Avi Eisenberg tried to pull a squeeze on AAVE v2 CRV market. While the “highly profitable trading strategy” failed to materialize profit to Avi, it left AAVE $1.6 Million in bad debt. This was the first time, focus was shined on Curve founder Michael Egorov’s CRV backed loans on AAVE. Both AAVE and Curve knew, it wasn’t going to be the last either. 
 
@@ -114,7 +114,7 @@ Since FRAXLend was the riskiest of the loans, Michael increased borrow against A
 
 Initially, Michael tried to re-adjust loans between protocols to improve position health. However, this movement onchain was a clear indicator of him not having stablecoin liquidity to save the position. Michael realized small repayments on AAVE and FRAX Lend were not going to solve the problem, as any repayment to reduce utilization was immediately sucked out to return to square one. There was only one solution. 
 
-## otc to rescue:
+## OTC to rescue:
 
 Onchain data made it clear, Michael was lacking stablecoin liquidity. Everytime, Michael managed to source funds and repay and reposition the loans, the repayments were immediately withdrawn to prevent the utilization ratio from falling. This meant, the net effect of repayments were effectively zero. 
 
@@ -128,7 +128,7 @@ Post failure of loan repositioning, OTC CRV sales allowed repayment of loans acr
 
 Prominent OTC buyers include Justin Sun, Machi Big Brother, Wintermute and Binance. The OTC trades is what finally managed to curb the volality and uncertainity around CRV. 
 
-## liquidations galore:
+## Liquidations galore:
 
 For the 2nd time, Michael managed to save onchain borrow position, which mean’t there wasn’t a huge liquidation to savour onchain. However, this wasn’t the case on CEX-es
 
@@ -150,7 +150,7 @@ A total $10M positions liquidated in 4 days, with $5M in August 1 alone.
 
 The volatilty, which was expected to be directionally down, ended up turning opposite, as Michael managed to source funds to save borrow positions by the CRV OTC sales. This lead to as much as $5Million worth of positions being liquidated on August 1, with liquidations affecting both long and short sides with equal intensity.
 
-## references:
+## References:
 
 - Dune Dashboard tracking Curve Hack Contagion
     
