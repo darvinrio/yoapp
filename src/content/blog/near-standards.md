@@ -1,7 +1,7 @@
 ---
 title: "Even NEAR got standards !!!"
 date: 2022-10-22
-description: "The goal of the article is to introduce you a little bit to NEAR token data basics. DeFi mostly involves transfer of tokens, so understanding them might just help."
+description: "Introduce you a little bit to NEAR token data basics."
 tags: ["near", "defi", "crypto", "standards"]
 ---
 
