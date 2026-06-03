@@ -25,7 +25,10 @@ function parseEnv(): Env {
       const eqIdx = trimmed.indexOf("=");
       if (eqIdx === -1) continue;
       const key = trimmed.slice(0, eqIdx).trim();
-      const value = trimmed.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, "");
+      const value = trimmed
+        .slice(eqIdx + 1)
+        .trim()
+        .replace(/^["']|["']$/g, "");
       if (key) manualVars[key] = value;
     }
   }
@@ -42,7 +45,10 @@ function parseEnv(): Env {
     outputDir: resolve("OUTPUT_DIR", "src/assets/blog-images/"),
     userAgent: resolve("HTTP_USER_AGENT", "yoapp-blog-migrator/1.0"),
     openaiApiKey: resolve("OPENAI_API_KEY", ""),
-    openaiEndpoint: resolve("OPENAI_ENDPOINT", "https://api.openai.com/v1").replace(/\/+$/, ""),
+    openaiEndpoint: resolve(
+      "OPENAI_ENDPOINT",
+      "https://api.openai.com/v1",
+    ).replace(/\/+$/, ""),
     openaiLabelModel: resolve("OPENAI_LABEL_MODEL", "gpt-4o-mini"),
     openaiLabelMaxTokens: resolveInt("OPENAI_LABEL_MAX_TOKENS", 50),
     openaiLabelConcurrency: resolveInt("OPENAI_LABEL_CONCURRENCY", 4),
@@ -51,7 +57,8 @@ function parseEnv(): Env {
   };
 }
 
-const MIRO_RE = /https:\/\/miro\.medium\.com\/v2\/resize:fit:\d+\/format:\w+\/[^)\s]+/g;
+const MIRO_RE =
+  /https:\/\/miro\.medium\.com\/v2\/resize:fit:\d+\/format:\w+\/[^)\s]+/g;
 
 type IndexedMatch = { url: string; ext: string; index: number };
 
@@ -175,7 +182,9 @@ async function labelWithOpenAI(
         }),
       });
       if (res.ok) {
-        const body = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+        const body = (await res.json()) as {
+          choices?: { message?: { content?: string } }[];
+        };
         return body.choices?.[0]?.message?.content?.trim() ?? "";
       }
       if (res.status >= 500 || res.status === 429) {
@@ -213,7 +222,12 @@ async function runLabelling(
 
     active++;
     try {
-      const label = await labelWithOpenAI(localPath, ext, env, env.labelRetries);
+      const label = await labelWithOpenAI(
+        localPath,
+        ext,
+        env,
+        env.labelRetries,
+      );
       if (label !== null) {
         fs.writeFileSync(labelFile, label + "\n");
       }
@@ -269,7 +283,14 @@ async function main() {
     fs.mkdirSync(slugDir, { recursive: true });
 
     let failed = 0;
-    const successes: Array<{ start: number; end: number; newUrl: string; counter: number; ext: string; localPath: string }> = [];
+    const successes: Array<{
+      start: number;
+      end: number;
+      newUrl: string;
+      counter: number;
+      ext: string;
+      localPath: string;
+    }> = [];
 
     for (let i = 0; i < matches.length; i++) {
       const counter = String(i + 1).padStart(3, "0");

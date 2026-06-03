@@ -5,14 +5,14 @@ description: "An analysis on the Optimism Post RPGF performance"
 tags: ["incentives", "defi", "crypto", "data"]
 ---
 
-Note: 
+Note:
 This was a research piece submitted on behalf of PYOR to Optimism Foundation
 
 ## Overview
 
-With onchain RPGF applications ending the first week of May, we analyzed the performance of previous RPGF receivers in the DeFi space, focusing on onchain metrics. 
-This analysis is an EDA of the performance of these receivers, in order to empower the optimism governance to focus on recipients that bring in a net positive to the Optimism Superchain. 
-Since these are RPGF, these protocols weren’t expected to meet any criteria post-grant. 
+With onchain RPGF applications ending the first week of May, we analyzed the performance of previous RPGF receivers in the DeFi space, focusing on onchain metrics.
+This analysis is an EDA of the performance of these receivers, in order to empower the optimism governance to focus on recipients that bring in a net positive to the Optimism Superchain.
+Since these are RPGF, these protocols weren’t expected to meet any criteria post-grant.
 From the https://github.com/opensource-observer/insights datasets by Opensource Observer, we filtered 11 protocols, with DeFi presence, that received the January RPGF drop. namely:
 
 1. Aerodrome
@@ -21,7 +21,7 @@ From the https://github.com/opensource-observer/insights datasets by Opensource 
 4. Kwenta
 5. Lyra Finance
 6. Sonne Finance
-7. Sushi 
+7. Sushi
 8. Synapse
 9. Synthetix
 10. Velodrome
@@ -36,11 +36,11 @@ For onchain metrics, we defined the following:
 - Volumes - DEX volume or Bridge volume of the respective protocol if any. Data sourced from DeFiLlama API
 - User activity - New and Active wallets interacting with the contracts of a protocol. Data sourced from OpensourceObserver BigQuery datasets
 
-For the metrics that are not continuous, i.e. fees, volumes, and user activity, a smoothing operation is performed with a 5-day moving average. This is performed to remove volatility spikes and show trends better. 
+For the metrics that are not continuous, i.e. fees, volumes, and user activity, a smoothing operation is performed with a 5-day moving average. This is performed to remove volatility spikes and show trends better.
 
 Only Optimism superchain values of these metrics were taken, i.e. metrics on Optimism and Base
 
-For the metrics above : 
+For the metrics above :
 
 - A self-reflection analysis of each protocol is performed by comparing the data points before and after January 1st 2024( the start of RPGF distribution) - to see if there is potential growth in the protocol. This is quantified and made comparable by converting raw values into percentages, to the value on the date of RPGF distribution.
 - Protocols are bucketed into their respective sectors, compared to see how a protocol performed with its peers.
@@ -55,113 +55,77 @@ Link to the notebook:
 ## Trends we noticed from the analysis:
 
 - On individual analysis of protocols:
-    - Growth of various metrics in %. The value of metric on April 1, 2024 is compared to that of Jan 1, 2024.
-        
-        ![Screenshot 2024-05-01 at 17.16.22.png](../../assets/blog-images/optimism-post-rpgf/Screenshot_2024-05-01_at_17.16.22.png)
-        
-    - Aerodrome was the best performer of all. Its 3x TVL growth and 30x Fee growth is the highest amongst the protocols compared in this analysis. its 13x volume growth is also the highest amongst dexes.
-        - aerodrome chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled.png)
-            
-    - Synapse was a strong performer in fees metrics, despite lower volume numbers.
-        - synapse chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%201.png)
-            
-    - Hop protocol displayed strong uptrend in volume
-        - hop chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%202.png)
-            
-    - Kromatika has been on a consistent uptrend in tvl
-        - kromatika chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%203.png)
-            
-    - Sushi saw an initial dip in all metrics, before a late revival. Its 7x growth in fees is second only to aerodrome, while TVL only doubled.
-        - sushi chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%204.png)
-            
-    - Synthetix has seen nominal improvement in TVL and a Fees
-        - synthetix chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%205.png)
-            
-    - Velodrome relatively nominal growth, with late uptrend in early April. the revival saw 2x in fees correlated with 2x in volume, while TVL remained relatively the same.
-        - velodrome charts
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%206.png)
-            
-    - Yearn and Sonne TVL was ranging, with no strong trends
-        - yearn chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%207.png)
-            
-        - sonne chart
-            
-            ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%208.png)
-            
+  - Growth of various metrics in %. The value of metric on April 1, 2024 is compared to that of Jan 1, 2024.
+    ![Screenshot 2024-05-01 at 17.16.22.png](../../assets/blog-images/optimism-post-rpgf/Screenshot_2024-05-01_at_17.16.22.png)
+  - Aerodrome was the best performer of all. Its 3x TVL growth and 30x Fee growth is the highest amongst the protocols compared in this analysis. its 13x volume growth is also the highest amongst dexes.
+    - aerodrome chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled.png)
+  - Synapse was a strong performer in fees metrics, despite lower volume numbers.
+    - synapse chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%201.png)
+  - Hop protocol displayed strong uptrend in volume
+    - hop chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%202.png)
+  - Kromatika has been on a consistent uptrend in tvl
+    - kromatika chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%203.png)
+  - Sushi saw an initial dip in all metrics, before a late revival. Its 7x growth in fees is second only to aerodrome, while TVL only doubled.
+    - sushi chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%204.png)
+  - Synthetix has seen nominal improvement in TVL and a Fees
+    - synthetix chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%205.png)
+  - Velodrome relatively nominal growth, with late uptrend in early April. the revival saw 2x in fees correlated with 2x in volume, while TVL remained relatively the same.
+    - velodrome charts
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%206.png)
+  - Yearn and Sonne TVL was ranging, with no strong trends
+    - yearn chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%207.png)
+    - sonne chart
+      ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%208.png)
 
 - On grouping the protocols by sector
-    - yield comparison chart
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/f4a5367a-5603-4eb0-9918-6e40a9cd63d0.png)
-        
-    - Yield protocols  metrics were stagnant, similar to the total TVL of optimism according to DeFiLlama
-    - dex comparison chart
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/006c5fc2-f507-46a8-a347-5898f361b2e0.png)
-        
-    - Dexes saw strong late uptrends in TVL and volume boosts. However, overall user count have dropped.
-    - Kromatika initially over performed for the RPGF it received compared to the peers, then dwindled.
-    - Aerodrome and Sushi, strongly outperformed velodrome and kromatika in the later stages.
-    - bridge chart
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/595a5690-b8b9-420b-8fa0-b825f729b1e7.png)
-        
-    - Bridge TVLs  recovered post a feb drop, with a strong uptrend from mid February bottoms
-    - Hop volume generates greater volumes than Synapse
+  - yield comparison chart
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/f4a5367a-5603-4eb0-9918-6e40a9cd63d0.png)
+  - Yield protocols metrics were stagnant, similar to the total TVL of optimism according to DeFiLlama
+  - dex comparison chart
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/006c5fc2-f507-46a8-a347-5898f361b2e0.png)
+  - Dexes saw strong late uptrends in TVL and volume boosts. However, overall user count have dropped.
+  - Kromatika initially over performed for the RPGF it received compared to the peers, then dwindled.
+  - Aerodrome and Sushi, strongly outperformed velodrome and kromatika in the later stages.
+  - bridge chart
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/595a5690-b8b9-420b-8fa0-b825f729b1e7.png)
+  - Bridge TVLs recovered post a feb drop, with a strong uptrend from mid February bottoms
+  - Hop volume generates greater volumes than Synapse
 - On comparing the Dexes with Uniswap
-    - control comparison chart
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/70400ff4-f512-475a-b49a-22a066d3a15c.png)
-        
-    - Uniswap was right in the middle between the 2 groups. group 1 consisting of Aerodrome and Sushi, and group 2 consisting of Velodrome and Kromatika
-    - There is light and day difference between these 2 groups in Liquidity metrics like TVL, Fees and volume, but non-tangible difference in user activity.
+  - control comparison chart
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/70400ff4-f512-475a-b49a-22a066d3a15c.png)
+  - Uniswap was right in the middle between the 2 groups. group 1 consisting of Aerodrome and Sushi, and group 2 consisting of Velodrome and Kromatika
+  - There is light and day difference between these 2 groups in Liquidity metrics like TVL, Fees and volume, but non-tangible difference in user activity.
 - Comparing TVL growth of protocols with Superchain TVL
-    - Superchain TVL charts
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%209.png)
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%2010.png)
-        
-        ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%2011.png)
-        
-    
-    The TVL of most Optimism only protocols have trended alongside Optimism TVL. Most TVL growth is seen on Base deployments, which trended up along with Base TVL. 
-    
+  - Superchain TVL charts
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%209.png)
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%2010.png)
+    ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%2011.png)
+  The TVL of most Optimism only protocols have trended alongside Optimism TVL. Most TVL growth is seen on Base deployments, which trended up along with Base TVL.
 
 ## Inferences:
 
 - Protocols with a presence on Base performed strongly. The memecoin craze at the tail end of March fuelled uptrends in liquidity metrics of Aerodrome, and Sushi. Protocols like Velodrome, which are Optimism only, thus couldn’t catch a pie of this growth.
 - Yield protocol stagnation, i.e., Yearn and Sonne metrics, signals bull market preparation. Despite the increase in asset prices, the TVL has stayed relatively the same, which implies that there is only a little new liquidity searching for passive yield.
 - Protocols that are well-established in crypto and those that received a reward from optimism for the third time or more generally remained stagnant or had relatively smaller uptrends. This could be a sign of diminishing returns as these protocols have hit equilibrium.
-    
-    
-    | protocol | funding received in OP | number of times received |
-    | --- | --- | --- |
-    | aerodrome-finance | 104,348 | 1 |
-    | hop-protocol | 1,088,286 | 3 |
-    | kromatika-finance | 324,845 | 2 |
-    | sonne-finance | 331,988 | 2 |
-    | sushi | 603,379 | 2 |
-    | synapse | 1,024,358 | 2 |
-    | synthetix | 9,241,266 | 4 |
-    | uniswap | 1,000,000 | 1 |
-    | velodrome | 5,559,379 | 7 |
-    | yearn | 1,099,379 | 2 |
+  | protocol          | funding received in OP | number of times received |
+  | ----------------- | ---------------------- | ------------------------ |
+  | aerodrome-finance | 104,348                | 1                        |
+  | hop-protocol      | 1,088,286              | 3                        |
+  | kromatika-finance | 324,845                | 2                        |
+  | sonne-finance     | 331,988                | 2                        |
+  | sushi             | 603,379                | 2                        |
+  | synapse           | 1,024,358              | 2                        |
+  | synthetix         | 9,241,266              | 4                        |
+  | uniswap           | 1,000,000              | 1                        |
+  | velodrome         | 5,559,379              | 7                        |
+  | yearn             | 1,099,379              | 2                        |
 
 ## Suggestions to the Governance:
 

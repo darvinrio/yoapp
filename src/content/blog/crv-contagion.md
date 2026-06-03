@@ -7,16 +7,16 @@ tags: ["curve", "defi", "crypto", "data"]
 
 **July 30, 2023. 1:10pm.**
 
-[Peckshield notify JPEG’d](https://twitter.com/peckshield/status/1685645064364822530) that their pETH-ETH pool has been drained 6107 ETH. 
+[Peckshield notify JPEG’d](https://twitter.com/peckshield/status/1685645064364822530) that their pETH-ETH pool has been drained 6107 ETH.
 
 What at the onset, was assumed to be a bad oracle implementation, quickly lead to a chain of events that was going to invoke some massive liquidity movement, onchain and offchain, and convene war-rooms across some top DeFi protocols on Ethereum.
 
-In the next 3 hours, since the initial pETH-ETH exploit, Alchemix alETH-ETH, Metronome msETH-ETH would be exploited (albeit msETH-ETH was frontrun by whitehack). 
+In the next 3 hours, since the initial pETH-ETH exploit, Alchemix alETH-ETH, Metronome msETH-ETH would be exploited (albeit msETH-ETH was frontrun by whitehack).
 
-However, the most significant blow would arrive 4 hours later, when the most liquid CRV pool in all of DeFi, the CRV-ETH pool, would be drained of 7Million CRV and 7700 ETH. 
-7 Million CRV at the hands a black hat, ready to be market dumped anytime, without its most Liquid Pool, insane odds to bet against. But this 7 Million would be the least of problems, when blood thirsty eyes turned to CRV backed loans of Michael Egorov -the founder of Curve Finance-  across major lending protocols, inching closer to liquidation. 
+However, the most significant blow would arrive 4 hours later, when the most liquid CRV pool in all of DeFi, the CRV-ETH pool, would be drained of 7Million CRV and 7700 ETH.
+7 Million CRV at the hands a black hat, ready to be market dumped anytime, without its most Liquid Pool, insane odds to bet against. But this 7 Million would be the least of problems, when blood thirsty eyes turned to CRV backed loans of Michael Egorov -the founder of Curve Finance- across major lending protocols, inching closer to liquidation.
 
-Over the next 4 days, Major Lending protocols would summon war-rooms, propose and debate on drastic measures to contain their CRV exposure and drama would unfold as Michael would go on to shuffle his debts to save the position and agree OTC CRV sales to repay loans. 
+Over the next 4 days, Major Lending protocols would summon war-rooms, propose and debate on drastic measures to contain their CRV exposure and drama would unfold as Michael would go on to shuffle his debts to save the position and agree OTC CRV sales to repay loans.
 
 The contagion, would serve a potent remainder of “blue-chips” not being safe havens for both investors and lending protocols, and auditing code at compiler level.
 
@@ -40,11 +40,11 @@ A total of $200 Million in MarketCap was wiped out in 24 hours. Ripples of this,
 
 ## Liquidity out:
 
-Curve is considered the haven for stablecoins and passive LPs. Its v1 design maximising efficiency while trading around peg, and v2 design where an internal oracle redistributes liquidity for an automated ‘Uniswap v3’-esque liquidity providing. Aside from ETH LSDs, Curve was top of charts in TVL. In the world of DEXes, liquidity is the king. Deeper the liquidity ensures lower slippage.  
+Curve is considered the haven for stablecoins and passive LPs. Its v1 design maximising efficiency while trading around peg, and v2 design where an internal oracle redistributes liquidity for an automated ‘Uniswap v3’-esque liquidity providing. Aside from ETH LSDs, Curve was top of charts in TVL. In the world of DEXes, liquidity is the king. Deeper the liquidity ensures lower slippage.
 
-One of the first response to the exploit of pETH was mass exodus of liquidity. Uncertainty amongst LPs was the major reason, as Curve Finance didn’t confirm the cause of the hack and if more pools were vulnerable, until 4 hours later, when they were certain that it was contained to msETH-pETH-alETH pools. As a white hack of crv-ETH was under planning, this pool wasn’t publicly acknowledged as vulnerable until it was drained.   
+One of the first response to the exploit of pETH was mass exodus of liquidity. Uncertainty amongst LPs was the major reason, as Curve Finance didn’t confirm the cause of the hack and if more pools were vulnerable, until 4 hours later, when they were certain that it was contained to msETH-pETH-alETH pools. As a white hack of crv-ETH was under planning, this pool wasn’t publicly acknowledged as vulnerable until it was drained.
 
-Upto $1.7 Billion worth of liquidity flew out in the 24 hours following. Once the information was clear and CRV Loans drama calmed down, sizeable chunk of liquidity did return.  Yet, Curve hasn’t managed to return to the pre-exploit TVL yet. 
+Upto $1.7 Billion worth of liquidity flew out in the 24 hours following. Once the information was clear and CRV Loans drama calmed down, sizeable chunk of liquidity did return. Yet, Curve hasn’t managed to return to the pre-exploit TVL yet.
 
 ![45% of TVL dropped in 24 hours](../../assets/blog-images/crv-contagion/Untitled.png)
 
@@ -56,7 +56,7 @@ $1 Billion+ in outflows was seen on the day of hack, with $0.5 Billion returning
 
 ## Convex Concaved:
 
-One of the main narratives of the last bull-run was, CRV flywheel, which lead to the Curve Wars. CRV, can be vote locked and votes can be cast to select pools, to which CRV rewards are diverted. Moreover, these locked CRV earn half of the trading fees and hence a source of “real” yield. Since Curve was the main avenue for stablecoin liquidity, alot of protocols with stablecoins tried accumulating CRV to incentivize liquidity. 
+One of the main narratives of the last bull-run was, CRV flywheel, which lead to the Curve Wars. CRV, can be vote locked and votes can be cast to select pools, to which CRV rewards are diverted. Moreover, these locked CRV earn half of the trading fees and hence a source of “real” yield. Since Curve was the main avenue for stablecoin liquidity, alot of protocols with stablecoins tried accumulating CRV to incentivize liquidity.
 
 However, Convex Finance, the early adopter of liquid vote locking concept with its `cvxCRV`, was the clear winner. `cvxCRV` allowed participants to vote lock their CRV and earn yield, but stay liquid via the cvxCRV/CRV pool. This allowed for capital efficiency and vote markets, where CRV lockers could sell their votes in exchange for bribes. Similar structures were built by Yearn’s `yCRV` and StakeDAO’s `sdCRV`
 
@@ -64,7 +64,7 @@ However, Convex Finance, the early adopter of liquid vote locking concept with i
 
 Convex is the largest among CRV vote liquid lockers, with as much as 40% of CRV locked under Convex
 
-Yearn and StakeDAO had relatively successful other products too, unlike Convex Finance, which was basically a DeFi Lego block on top of Curve voting, most of its TVL,i.e more than 90% of it coming from locked CRV or Curve LP tokens. Hence, when storm struck Curve, Convex was caught in the contagion too. 
+Yearn and StakeDAO had relatively successful other products too, unlike Convex Finance, which was basically a DeFi Lego block on top of Curve voting, most of its TVL,i.e more than 90% of it coming from locked CRV or Curve LP tokens. Hence, when storm struck Curve, Convex was caught in the contagion too.
 
 ![Convex TVL dropped similar to Curve](../../assets/blog-images/crv-contagion/Untitled%201.png)
 
@@ -74,9 +74,9 @@ Convex TVL dropped similar to Curve
 
 and so was the price of CVX
 
-All three tokens, `cvxCRV`, `sdCRV` and `yCRV` maintain redeemability by incentivized external pools to efficiently swap to CRV. However, during stressful events, such as the one CRV went through, a deadly combination of lower liquidity and heavy dumping, as investors exit these yield generating positions- leads to de-pegging, similar to  USD stablecoin depegs, which in this case is CRV peg. 
+All three tokens, `cvxCRV`, `sdCRV` and `yCRV` maintain redeemability by incentivized external pools to efficiently swap to CRV. However, during stressful events, such as the one CRV went through, a deadly combination of lower liquidity and heavy dumping, as investors exit these yield generating positions- leads to de-pegging, similar to USD stablecoin depegs, which in this case is CRV peg.
 
-cvxCRV the largest of the CRV liquid lockers, hence suffered the most, hitting lows as much as 35% of peg. Hence a cvxCRV holder took 35% on CRV value drop and a further 35% drop by peg value. 
+cvxCRV the largest of the CRV liquid lockers, hence suffered the most, hitting lows as much as 35% of peg. Hence a cvxCRV holder took 35% on CRV value drop and a further 35% drop by peg value.
 
 ![cvxCRV dropped as much as 35% of its peg, before recovering](../../assets/blog-images/crv-contagion/Screenshot_2023-09-17_at_12.54.10.png)
 
@@ -84,14 +84,14 @@ cvxCRV dropped as much as 35% of its peg, before recovering
 
 ## Lenders War-Room:
 
-Last year around November, Avi Eisenberg tried to pull a squeeze on AAVE v2 CRV market. While the “highly profitable trading strategy” failed to materialize profit to Avi, it left AAVE $1.6 Million in bad debt. This was the first time, focus was shined on Curve founder Michael Egorov’s CRV backed loans on AAVE. Both AAVE and Curve knew, it wasn’t going to be the last either. 
+Last year around November, Avi Eisenberg tried to pull a squeeze on AAVE v2 CRV market. While the “highly profitable trading strategy” failed to materialize profit to Avi, it left AAVE $1.6 Million in bad debt. This was the first time, focus was shined on Curve founder Michael Egorov’s CRV backed loans on AAVE. Both AAVE and Curve knew, it wasn’t going to be the last either.
 
 ![CRV-ETH liquidity dwindled from $220M at peak to $46M before exploit](../../assets/blog-images/crv-contagion/Screenshot_2023-09-17_at_21.37.30.png)
 
 CRV-ETH liquidity dwindled from $220M at peak to $46M before exploit
 
-CRV liquidity has been dwindling over the past year, along with CRV’s price. Michael borrowed stables against his CRV stack, wherever possible. This meant, he built up massive borrow positions across AAVE, FRAXLend, Inverse Finance and Abracadabra. 
-On the day of hack, the effective borrow position was worth $110Million worth of stables borrowed against $340Million+ worth CRV, with $46Million worth liquidity left to absorb the debt. 
+CRV liquidity has been dwindling over the past year, along with CRV’s price. Michael borrowed stables against his CRV stack, wherever possible. This meant, he built up massive borrow positions across AAVE, FRAXLend, Inverse Finance and Abracadabra.
+On the day of hack, the effective borrow position was worth $110Million worth of stables borrowed against $340Million+ worth CRV, with $46Million worth liquidity left to absorb the debt.
 
 The moment, CRV-ETH hacked, lending protocols knew the bloodbath was on. FRAX Lend and Abracadabra were the best equipped to handle the scenario. Inverse hands were tied, while AAVE was in a dilemma with no clear de-risking strategy at their disposal.
 
@@ -103,22 +103,22 @@ Abracadabra were the most ruthless of the Lending Protocols, with a straightforw
 
 CRV/FRAX pool on FRAXLend hit 100% Utilization and a 85% APR at peak, forcing repayment.
 
-FRAXLend’s Time-Weighted Variable Interest Rate, exponentially increases borrow APR. Delphi Digital’s calculations suggested imminent liquidation in 3 days, if conditions remained same with no price action. 
-This can be validated from the onchain data above as Utilization hit 100% in late hours of 30th July, and stayed there till August 1, when an peak APR of 85% was hit. During this time, Michael did attempt to repay some 4 Million FRAX and reduce utilization. However users consistently withdrew FRAX in pool almost instantly, to bring back utilization to 100%. 
+FRAXLend’s Time-Weighted Variable Interest Rate, exponentially increases borrow APR. Delphi Digital’s calculations suggested imminent liquidation in 3 days, if conditions remained same with no price action.
+This can be validated from the onchain data above as Utilization hit 100% in late hours of 30th July, and stayed there till August 1, when an peak APR of 85% was hit. During this time, Michael did attempt to repay some 4 Million FRAX and reduce utilization. However users consistently withdrew FRAX in pool almost instantly, to bring back utilization to 100%.
 
 ![Untitled](../../assets/blog-images/crv-contagion/Untitled%205.png)
 
-Michael’s AAVE position was under light, even before the Curve exploit, as Gauntlet proposed in AAVE Governance to enforce changes to prevent Michael from borrrowing or depositing more. However, since Michael was actively managing the position with a good history of repayments and liquidity was strong, the proposal failed. 
+Michael’s AAVE position was under light, even before the Curve exploit, as Gauntlet proposed in AAVE Governance to enforce changes to prevent Michael from borrrowing or depositing more. However, since Michael was actively managing the position with a good history of repayments and liquidity was strong, the proposal failed.
 
 Since FRAXLend was the riskiest of the loans, Michael increased borrow against AAVE CRV to repay FRAX loans. The dwindling USDT reserves and FRAXLend prioritization, forced LPs of USDT pool to start withdrawing liquidity, increasing utilization and increasing Risk on AAVE. However, AAVE were aware that any attempts to stop borrowing or collateral refilling wouldn’t solve the problem at hand.
 
-Initially, Michael tried to re-adjust loans between protocols to improve position health. However, this movement onchain was a clear indicator of him not having stablecoin liquidity to save the position. Michael realized small repayments on AAVE and FRAX Lend were not going to solve the problem, as any repayment to reduce utilization was immediately sucked out to return to square one. There was only one solution. 
+Initially, Michael tried to re-adjust loans between protocols to improve position health. However, this movement onchain was a clear indicator of him not having stablecoin liquidity to save the position. Michael realized small repayments on AAVE and FRAX Lend were not going to solve the problem, as any repayment to reduce utilization was immediately sucked out to return to square one. There was only one solution.
 
 ## OTC to rescue:
 
-Onchain data made it clear, Michael was lacking stablecoin liquidity. Everytime, Michael managed to source funds and repay and reposition the loans, the repayments were immediately withdrawn to prevent the utilization ratio from falling. This meant, the net effect of repayments were effectively zero. 
+Onchain data made it clear, Michael was lacking stablecoin liquidity. Everytime, Michael managed to source funds and repay and reposition the loans, the repayments were immediately withdrawn to prevent the utilization ratio from falling. This meant, the net effect of repayments were effectively zero.
 
-It was clear, only a demonstration of liquidity would convince lenders in AAVE and FRAX from removing liquidity. 
+It was clear, only a demonstration of liquidity would convince lenders in AAVE and FRAX from removing liquidity.
 
 And thus begun the OTC sales. With rumoured stipulations of 3 to 6 month vesting, and option to sell at when CRV reaches 0.8$, $100M worth of CRV was sold at a OTC price of 0.4$ in the 48 hours of announcement, which was used to paydown the loans.
 
@@ -126,13 +126,13 @@ And thus begun the OTC sales. With rumoured stipulations of 3 to 6 month vesting
 
 Post failure of loan repositioning, OTC CRV sales allowed repayment of loans across the multiple lending protocols
 
-Prominent OTC buyers include Justin Sun, Machi Big Brother, Wintermute and Binance. The OTC trades is what finally managed to curb the volality and uncertainity around CRV. 
+Prominent OTC buyers include Justin Sun, Machi Big Brother, Wintermute and Binance. The OTC trades is what finally managed to curb the volality and uncertainity around CRV.
 
 ## Liquidations galore:
 
 For the 2nd time, Michael managed to save onchain borrow position, which mean’t there wasn’t a huge liquidation to savour onchain. However, this wasn’t the case on CEX-es
 
-In a otherwise low-volatile market, with ETH bouncing between a 50$ range, the CRV drama brought in some much need volatility. PERP activity soared on the CEX-es according to data sourced from CoinGlass. 
+In a otherwise low-volatile market, with ETH bouncing between a 50$ range, the CRV drama brought in some much need volatility. PERP activity soared on the CEX-es according to data sourced from CoinGlass.
 
 ![3X the normal OI at peak](https://images.mirror-media.xyz/publication-images/mzdZE-CWbGFvIKKmTBTsl.png?height=891&width=2722)
 
@@ -142,34 +142,24 @@ In a otherwise low-volatile market, with ETH bouncing between a 50$ range, the C
 
 0.32% or 100% APR to short CRV at peak
 
-OI interest went from $40 Million to a peak of $134 Million, as option writers were delivered the expected volatility as Michael scampered, to pay off loans. In spite of the thin liquidity, traders were willing to pay as much as 100% APR at its peak for shorting CRV on exchanges. 
+OI interest went from $40 Million to a peak of $134 Million, as option writers were delivered the expected volatility as Michael scampered, to pay off loans. In spite of the thin liquidity, traders were willing to pay as much as 100% APR at its peak for shorting CRV on exchanges.
 
 ![A total $10M positions liquidated in 4 days, with $5M in August 1 alone. ](https://images.mirror-media.xyz/publication-images/7JCYRjoVQmfsKDuIlWXud.png?height=918&width=2726)
 
-A total $10M positions liquidated in 4 days, with $5M in August 1 alone. 
+A total $10M positions liquidated in 4 days, with $5M in August 1 alone.
 
 The volatilty, which was expected to be directionally down, ended up turning opposite, as Michael managed to source funds to save borrow positions by the CRV OTC sales. This lead to as much as $5Million worth of positions being liquidated on August 1, with liquidations affecting both long and short sides with equal intensity.
 
 ## References:
 
 - Dune Dashboard tracking Curve Hack Contagion
-    
-    [CRV contagion](https://dune.com/maybeYonas/crv-contagion)
-    
+  [CRV contagion](https://dune.com/maybeYonas/crv-contagion)
 - Coinglass - CRV
-    
-    [CRV Open Interest, Funding Rate, Liquidation, Long-Short Ratio And Other Derivative Data | CoinGlass](https://www.coinglass.com/currencies/CRV)
-    
+  [CRV Open Interest, Funding Rate, Liquidation, Long-Short Ratio And Other Derivative Data | CoinGlass](https://www.coinglass.com/currencies/CRV)
 - AAVE Forum Discussion
-    
-    [Gauntlet recommendation to freeze CRV and set CRV LTV -> 0 on Aave v2](https://governance.aave.com/t/gauntlet-recommendation-to-freeze-crv-and-set-crv-ltv-0-on-aave-v2/13644/5)
-    
-    [Post Vyper Exploit - CRV Market Update and Recommendations](https://governance.aave.com/t/post-vyper-exploit-crv-market-update-and-recommendations/14214)
-    
+  [Gauntlet recommendation to freeze CRV and set CRV LTV -> 0 on Aave v2](https://governance.aave.com/t/gauntlet-recommendation-to-freeze-crv-and-set-crv-ltv-0-on-aave-v2/13644/5)
+  [Post Vyper Exploit - CRV Market Update and Recommendations](https://governance.aave.com/t/post-vyper-exploit-crv-market-update-and-recommendations/14214)
 - Autism Capital on Twitter
-    
-    [Autism Capital 🧩 on Twitter](https://x.com/AutismCapital/status/1686251750632853504?s=20)
-    
+  [Autism Capital 🧩 on Twitter](https://x.com/AutismCapital/status/1686251750632853504?s=20)
 - Delphi Digital on Twitter
-    
-    [Delphi Digital on Twitter](https://x.com/Delphi_Digital/status/1686187959303708672?s=20)
+  [Delphi Digital on Twitter](https://x.com/Delphi_Digital/status/1686187959303708672?s=20)

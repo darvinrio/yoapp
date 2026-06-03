@@ -4,20 +4,20 @@ Migrate all `miro.medium.com` image references in blog Markdown files from hot-l
 
 ## Scope
 
-| File | miro.medium Images |
-|---|---|
-| `src/content/blog/near-standards.md` | 0 (no-op) |
-| `src/content/blog/orion-money.md` | 11 |
-| `src/content/blog/apollo-dao.md` | 10 |
-| **Total** | **21** |
+| File                                 | miro.medium Images |
+| ------------------------------------ | ------------------ |
+| `src/content/blog/near-standards.md` | 0 (no-op)          |
+| `src/content/blog/orion-money.md`    | 11                 |
+| `src/content/blog/apollo-dao.md`     | 10                 |
+| **Total**                            | **21**             |
 
 Slugs are derived from filenames (Astro Content Collections default, no explicit `slug` field in frontmatter):
 
-| Filename | Slug |
-|---|---|
+| Filename            | Slug             |
+| ------------------- | ---------------- |
 | `near-standards.md` | `near-standards` |
-| `orion-money.md` | `orion-money` |
-| `apollo-dao.md` | `apollo-dao` |
+| `orion-money.md`    | `orion-money`    |
+| `apollo-dao.md`     | `apollo-dao`     |
 
 ## Target Directory Shape
 
@@ -64,9 +64,11 @@ Example:
 
 ```markdown
 <!-- Before: orion-money.md line 10 -->
+
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*RWZu33UH6wDdvwmgtxZ1hA.png)
 
 <!-- After -->
+
 ![captionless image](../../assets/blog-images/orion-money/001.png)
 ```
 
@@ -82,36 +84,36 @@ All runtime configuration is gathered into a single `CONFIG` object at script en
 
 **Only three values ever come from `.env` / `process.env`:**
 
-| Key | Env var | Notes |
-|---|---|---|
-| `API_KEY` | `OPENAI_API_KEY` | Enables labelling; if set, `ENDPOINT` and `MODEL_NAME` must also be set |
-| `ENDPOINT` | `OPENAI_ENDPOINT` | |
-| `MODEL_NAME` | `OPENAI_LABEL_MODEL` | |
+| Key          | Env var              | Notes                                                                   |
+| ------------ | -------------------- | ----------------------------------------------------------------------- |
+| `API_KEY`    | `OPENAI_API_KEY`     | Enables labelling; if set, `ENDPOINT` and `MODEL_NAME` must also be set |
+| `ENDPOINT`   | `OPENAI_ENDPOINT`    |                                                                         |
+| `MODEL_NAME` | `OPENAI_LABEL_MODEL` |                                                                         |
 
 **Every other field is an internal default, never overridden from `.env`:**
 
-| Key | Default | Notes |
-|---|---|---|
-| `LABEL_MAX_TOKENS` | `50` | |
-| `LABEL_CONCURRENCY` | `4` | Max parallel labelling requests |
-| `DOWNLOAD_RETRIES` | `3` | Exponential back-off |
-| `LABEL_RETRIES` | `3` | Exponential back-off for API calls |
-| `HTTP_USER_AGENT` | `yoapp-blog-migrator/1.0` | Polite identification to Medium CDN |
-| `BLOG_SOURCE_DIR` | `src/content/blog/` | |
-| `OUTPUT_DIR` | `src/assets/blog-images/` | |
+| Key                 | Default                   | Notes                               |
+| ------------------- | ------------------------- | ----------------------------------- |
+| `LABEL_MAX_TOKENS`  | `50`                      |                                     |
+| `LABEL_CONCURRENCY` | `4`                       | Max parallel labelling requests     |
+| `DOWNLOAD_RETRIES`  | `3`                       | Exponential back-off                |
+| `LABEL_RETRIES`     | `3`                       | Exponential back-off for API calls  |
+| `HTTP_USER_AGENT`   | `yoapp-blog-migrator/1.0` | Polite identification to Medium CDN |
+| `BLOG_SOURCE_DIR`   | `src/content/blog/`       |                                     |
+| `OUTPUT_DIR`        | `src/assets/blog-images/` |                                     |
 
 ```ts
 const CONFIG = {
-  BLOG_SOURCE_DIR:  'src/content/blog/',
-  OUTPUT_DIR:       'src/assets/blog-images/',
-  HTTP_USER_AGENT:  'yoapp-blog-migrator/1.0',
-  DOWNLOAD_RETRIES: '3',
-  LABEL_RETRIES:    '3',
-  API_KEY:          process.env.OPENAI_API_KEY,
-  ENDPOINT:         process.env.OPENAI_ENDPOINT    ?? 'https://api.openai.com/v1',
-  MODEL_NAME:       process.env.OPENAI_LABEL_MODEL  ?? 'gpt-4o-mini',
-  LABEL_MAX_TOKENS: '50',
-  LABEL_CONCURRENCY: '4',
+  BLOG_SOURCE_DIR: "src/content/blog/",
+  OUTPUT_DIR: "src/assets/blog-images/",
+  HTTP_USER_AGENT: "yoapp-blog-migrator/1.0",
+  DOWNLOAD_RETRIES: "3",
+  LABEL_RETRIES: "3",
+  API_KEY: process.env.OPENAI_API_KEY,
+  ENDPOINT: process.env.OPENAI_ENDPOINT ?? "https://api.openai.com/v1",
+  MODEL_NAME: process.env.OPENAI_LABEL_MODEL ?? "gpt-4o-mini",
+  LABEL_MAX_TOKENS: "50",
+  LABEL_CONCURRENCY: "4",
 };
 ```
 
@@ -185,7 +187,6 @@ The script must use `require('dotenv').config()`. If the `dotenv` module is not 
    e. Failure handling per image: retry up to `LABEL_RETRIES` with exponential back-off on 429/5xx. Skip on 4xx (except 429) or auth errors. Labelling failure must not block or alter the Markdown rewrite.
 
    f. Label embedding in Markdown (optional enhancement — not required for correctness):
-
    - If the original alt text is empty or `"captionless image"`, replace the alt with the generated label.
    - Otherwise (meaningful alt text already present), leave alt unchanged — the label is stored in the sidecar `.label.txt` file for future use.
 
@@ -210,19 +211,19 @@ If no label was generated (API not configured, call failed, or empty response), 
 
 ### Error Handling
 
-| Scenario | Behaviour |
-|---|---|
-| HTTP 404 on download | Log warning, leave original URL in Markdown, insert `# TODO: failed download` comment above the image line, exit non-zero at end |
-| HTTP 4xx (not 404) | Same as 404 |
-| HTTP 429 (rate limit) | Back off and retry (already in retry loop) |
-| HTTP 5xx | Retry with back-off, then treat as failure |
-| Download succeeds, file < 1 KB | Treat as failure (likely HTML error page), log warning, same as HTTP failure |
-| OpenAI API 429 | Exponential back-off within labelling step, skip image after `LABEL_RETRIES` exhausted |
-| OpenAI API 4xx (not 429) | Skip labelling for that image, do not block Markdown |
-| OpenAI API 5xx | Retry, then skip |
-| Empty/blank label response | Write `.label.txt` as empty string, do not block |
-| Duplicate URLs within a file | Sequential numbering handles naturally — each occurrence gets its own copy |
-| Duplicate URLs across files | Each file gets its own numbered copy — no deduplication |
+| Scenario                       | Behaviour                                                                                                                        |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| HTTP 404 on download           | Log warning, leave original URL in Markdown, insert `# TODO: failed download` comment above the image line, exit non-zero at end |
+| HTTP 4xx (not 404)             | Same as 404                                                                                                                      |
+| HTTP 429 (rate limit)          | Back off and retry (already in retry loop)                                                                                       |
+| HTTP 5xx                       | Retry with back-off, then treat as failure                                                                                       |
+| Download succeeds, file < 1 KB | Treat as failure (likely HTML error page), log warning, same as HTTP failure                                                     |
+| OpenAI API 429                 | Exponential back-off within labelling step, skip image after `LABEL_RETRIES` exhausted                                           |
+| OpenAI API 4xx (not 429)       | Skip labelling for that image, do not block Markdown                                                                             |
+| OpenAI API 5xx                 | Retry, then skip                                                                                                                 |
+| Empty/blank label response     | Write `.label.txt` as empty string, do not block                                                                                 |
+| Duplicate URLs within a file   | Sequential numbering handles naturally — each occurrence gets its own copy                                                       |
+| Duplicate URLs across files    | Each file gets its own numbered copy — no deduplication                                                                          |
 
 ## Duplicate Handling
 
