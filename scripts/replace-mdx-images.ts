@@ -164,7 +164,7 @@ function replaceImagesInBody(
       return `\n<Image  src={${varName}}  alt=${JSON.stringify(altText)}/>`;
     }
 
-    return `\n<Image  src={${varName}}/>`;
+    return `\n<Image  src={${varName}}  alt=""/>`;
   });
 
   return { nextBody, importLines, changed };
