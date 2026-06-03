@@ -20,7 +20,6 @@ import img011 from "../../assets/blog-images/b-asset-peg/beth_sep 1.png";
 
 ---
 
-
 The famous 20% yield of Anchor is powered by staking rewards generated from PoS assets. Currently, these are ETH and LUNA. These tokens are tokenized or bonded in the form of bETH and bLUNA, which are used as collateral to take borrows. It is the staking rewards of these tokens, that are used to fuel the 20% yield on UST deposits. A crucial piece of information here is that these staking rewards are liquidated into UST to increase the value of a-UST. Hence it is necessary that these assets hold their pegs with respect to the underlying assets. In this article, we will look into a few occasions in which these tokenized versions deviated from peg severely and will try to understand the reason behind it.
 
 ### Methodology
@@ -50,25 +49,21 @@ The main reason for de-pegging is Panic - this causes investors in the market to
 
 Thus a quick sell-pressure is the main attribute for de-pegging. This can be measured by measuring the standard deviation of the log-returns of series of price data.
 
-
-<Image  src={img001}  alt="LUNA/USDT pair on Binance"/>
+<Image src={img001} alt="LUNA/USDT pair on Binance" />
 
 LUNA/USDT pair on Binance
 
 For LUNA, thus, May 19,23 and September 7,20 are good candidates.
 
-
-<Image  src={img002}  alt="IGV54UbX.png"/>
+<Image src={img002} alt="IGV54UbX.png" />
 
 As bETH was introduced only on August 14, to masses, September 7,20 are the main candidates
 
 ## bLUNA
 
+<Image src={img003} alt="bluna_daily.png" />
 
-<Image  src={img003}  alt="bluna_daily.png"/>
-
-
-<Image  src={img004}  alt="bluna_daily.png"/>
+<Image src={img004} alt="bluna_daily.png" />
 
 In the plot above, the red line shows the lowest price attained bLUNA wrt to LUNA, while the green line is the highest price with respect to LUNA.
 
@@ -76,27 +71,23 @@ We notice extreme activity during the mid-May events with the prices hitting as 
 
 Taking look at a more granular level
 
-
-<Image  src={img005}  alt="May 19-21"/>
+<Image src={img005} alt="May 19-21" />
 
 May 19-21
 
-
-<Image  src={img006}  alt="May 23-24"/>
+<Image src={img006} alt="May 23-24" />
 
 May 23-24
 
 For most people in LUNA, May was the biggest crash and also was the scariest. Mass liquidations triggered a cascade of liquidations, sending the price of LUNA extremely south and spreading mass-panic.
 
-
-<Image  src={img007}  alt="Aug 16-23"/>
+<Image src={img007} alt="Aug 16-23" />
 
 Aug 16-23
 
 Looking at August, it seems more like a data anomaly, rather than proper de-pegging. As we are taking swap data, it could have been a high slippage swap.
 
-
-<Image  src={img008}  alt="Sep 7-12"/>
+<Image src={img008} alt="Sep 7-12" />
 
 Sep 7-12
 
@@ -106,8 +97,7 @@ Interestingly, we can see that in general, bLUNA has maintained a stable peg, wi
 
 ## bETH
 
-
-<Image  src={img009}  alt="bETH.png"/>
+<Image src={img009} alt="bETH.png" />
 
 The red color area shows the deviation of the lowest price within that hour range, while the green area shows the deviation of the highest bETH price compared to the ETH price.
 
@@ -115,11 +105,9 @@ For bETH, we see that the most significant deviations take place between, Septem
 
 So let's take a look at a more granular level
 
+<Image src={img010} alt="beth_sep.png" />
 
-<Image  src={img010}  alt="beth_sep.png"/>
-
-
-<Image  src={img011}  alt="beth_sep.png"/>
+<Image src={img011} alt="beth_sep.png" />
 
 Both the spikes are clearly registered in the more granular data. In both the case, we can see that the prices have deviated by 300 USD from the avg ETH price at that moment.
 
