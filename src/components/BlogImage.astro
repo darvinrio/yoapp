@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { src, alt, size, caption } = Astro.props;
+const altText = alt ?? "";
 const isAstroImage = typeof src === "object";
 ---
 
@@ -18,14 +19,14 @@ const isAstroImage = typeof src === "object";
         {isAstroImage ? (
           <AstroImage
             src={src}
-            {alt}
+            alt={altText}
             class="block mx-auto"
             style={size ? `width: ${size}` : undefined}
           />
         ) : (
           <img
             src={src.toString()}
-            {alt}
+            alt={altText}
             class="block mx-auto"
             style={size ? `width: ${size}` : undefined}
           />
@@ -35,14 +36,14 @@ const isAstroImage = typeof src === "object";
     ) : isAstroImage ? (
       <AstroImage
         {src}
-        {alt}
+        alt={altText}
         class="block mx-auto"
         style={size ? `width: ${size}` : undefined}
       />
     ) : (
       <img
         src={src.toString()}
-        {alt}
+        alt={altText}
         class="block mx-auto"
         style={size ? `width: ${size}` : undefined}
       />
