@@ -1,0 +1,104 @@
+---
+title: "Dune Compound v3 Patch"
+date: 2024-08-18
+description: "A technical writeup on the Dune Compound v3 patch"
+tags: ["git", "defi", "crypto", "data"]
+---
+
+The PR https://github.com/duneanalytics/spellbook/pull/6495 aims to 
+
+1. Add supply and withdrawal of the Base Asset (the existing model only covers Collateral supply and withdrawal)
+2. Add both full and partial types of supply and withdraw
+3. Add partial borrow and repay (the existing model only covers full repayment and borrows). 
+
+In compound v3, the repay and supply were put together to prevent looping. 
+so, the USDC one borrows, can’t be supplied back, only repaid. 
+Similarly, borrowing and withdrawing were put together. 
+
+Since these two were put together, and there was no amount bound, a user can repay and supply in the same event, if the amount sent to the `Comet` contract is more than their outstanding debt. 
+
+Definition: 
+
+1.  Full Repay - is a event, where the entire base asset is used to pay back the loan. 
+    1. (100 USDC is sent via `supply()` and 100 USDC is used in debt repayment)
+2. Partial Repay - is a event, where a portion of the base asset is used to pay back the loan, and the remaining is supplied
+    1. (100 USDC is sent via `supply()` and 60 USDC is used in debt repayment and 40 is supplied for lending)
+3. Full Borrow - is a event where the entire base asset sent to the user is debt
+    1. (100 USDC that the user receives from `withdraw()` is 100 USDC debt against collateral)
+4. Partial Borrow - is a event where a portion of base asset sent to user is debt, the rest is the pre-existing supply of the user
+    1. (100 USDC that the user receives from `withdraw()` is 60 USDC debt against collateral, and 40 USDC from their supply)
+
+To find these amounts, we can track `Supply`, `Withdraw` and `Transfer` events. 
+
+- `Supply` is emitted when base Asset is sent to the Comet - supply and repays
+- `Withdraw` is emitted when a base Asset is withdrawn from the Comet - borrows and withdraws
+- `Transfer` is emitted when there is a transfer of the Comet - supply and withdraws or transfers (out of scope)
+
+## Supply
+
+Say a user has 100 USDC debt, and sends 150 USDC via `supply()` as repayment, the `Comet` contract would repay 100 USDC debt and log the remaining 50 USDC as supply. 
+
+In this case, the `Supply` event logs 100, while the `Transfer` event logs 50. 
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image.png)
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%201.png)
+
+The `Transfer` event is always emitted immediately after the `Supply` event
+
+## Withdrawals:
+
+A user has supplied 50 USDC to the Comet, and now tries to withdrawal 110 USDC. Provided there are enough collaterals, the user withdraws 50 USDC from their supply, and borrows 60 USDC against their collateral.
+
+In this case, the `Withdraw` event logs 110, while the `Transfer` event logs 50. 
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%202.png)
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%203.png)
+
+The `Transfer` event is always emitted immediately after the `Withdraw` event
+
+## Comparing Existing Models:
+
+In the below queries, you can see that the new model accurately matches the existing models for full borrows and full repays, while also adding the partial borrows and partial repays.
+
+### Borrows Check:
+
+https://dune.com/queries/3996425
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%204.png)
+
+https://dune.com/queries/3996456
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%205.png)
+
+### Repays Check:
+
+https://dune.com/queries/3996448
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%206.png)
+
+https://dune.com/queries/3996453
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%207.png)
+
+## The arbitrary `10`
+
+This was a threshold added initially (back in 2022) to filter out minuscule repayments, borrows, supply and withdrawals. 
+
+The aim was to exclude actions that have for example 1/1e6 USDC repaid, while taking the count of such actions. 
+
+However, a more recent analysis has shown that this threshold could be moved. 
+I can remove it in a future commit, as that piece of code doesn’t affect the end rows in the model. 
+
+ https://dune.com/queries/3997824
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%208.png)
+
+https://dune.com/queries/3996463
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%209.png)
+
+https://dune.com/queries/3996458
+
+![image.png](../../assets/blog-images/dune-compound-v3-patch/image%2010.png)
