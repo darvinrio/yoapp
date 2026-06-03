@@ -1,0 +1,22 @@
+@layer components {
+  .img-zoom img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: zoom-in;
+    transition: transform 0.15s ease;
+  }
+  .img-zoom img:hover {
+    transform: scale(1.02);
+  }
+  .img-zoom figcaption {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+    cursor: default;
+  }
+  .dark .img-zoom figcaption {
+    color: #a1a1aa;
+  }
+}

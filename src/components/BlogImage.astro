@@ -1,0 +1,89 @@
+---
+import { Image as AstroImage } from "astro:assets";
+interface Props {
+  src: string | URL | ImageMetadata;
+  alt: string;
+  size?: string;
+  caption?: string;
+}
+
+const { src, alt, size, caption } = Astro.props;
+const isAstroImage = typeof src === "object";
+---
+
+<div class="img-zoom">
+  {
+    caption ? (
+      <figure>
+        {isAstroImage ? (
+          <AstroImage
+            src={src}
+            {alt}
+            class="block mx-auto"
+            style={size ? `width: ${size}` : undefined}
+          />
+        ) : (
+          <img
+            src={src.toString()}
+            {alt}
+            class="block mx-auto"
+            style={size ? `width: ${size}` : undefined}
+          />
+        )}
+        <figcaption>{caption}</figcaption>
+      </figure>
+    ) : isAstroImage ? (
+      <AstroImage
+        {src}
+        {alt}
+        class="block mx-auto"
+        style={size ? `width: ${size}` : undefined}
+      />
+    ) : (
+      <img
+        src={src.toString()}
+        {alt}
+        class="block mx-auto"
+        style={size ? `width: ${size}` : undefined}
+      />
+    )
+  }
+</div>
+
+<script is:inline>
+  (function () {
+    function resolveSrc(img) {
+      if (!img) return "";
+      return img.getAttribute("src") || img.currentSrc || img.src || "";
+    }
+    function initZoom() {
+      document.querySelectorAll(".img-zoom img").forEach(function (img) {
+        img.addEventListener("click", function (e) {
+          e.preventDefault();
+          var overlay = document.getElementById("img-zoom-overlay");
+          if (!overlay) {
+            overlay = document.createElement("div");
+            overlay.id = "img-zoom-overlay";
+            overlay.className =
+              "fixed inset-0 z-50 flex items-center justify-center bg-black/80";
+            overlay.addEventListener("click", function () {
+              overlay.remove();
+            });
+            document.body.appendChild(overlay);
+          }
+          overlay.innerHTML = "";
+          var zoomed = document.createElement("img");
+          zoomed.src = resolveSrc(img);
+          zoomed.alt = img.alt || "";
+          zoomed.className = "max-h-[90vh] max-w-[90vw] object-contain";
+          overlay.appendChild(zoomed);
+        });
+      });
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initZoom);
+    } else {
+      initZoom();
+    }
+  })();
+</script>
