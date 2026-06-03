@@ -107,7 +107,7 @@ Link to the notebook:
     ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%209.png)
     ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%2010.png)
     ![Untitled](../../assets/blog-images/optimism-post-rpgf/Untitled%2011.png)
-  The TVL of most Optimism only protocols have trended alongside Optimism TVL. Most TVL growth is seen on Base deployments, which trended up along with Base TVL.
+    The TVL of most Optimism only protocols have trended alongside Optimism TVL. Most TVL growth is seen on Base deployments, which trended up along with Base TVL.
 
 ## Inferences:
 
