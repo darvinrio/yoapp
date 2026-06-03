@@ -114,18 +114,18 @@ Link to the notebook:
 - Protocols with a presence on Base performed strongly. The memecoin craze at the tail end of March fuelled uptrends in liquidity metrics of Aerodrome, and Sushi. Protocols like Velodrome, which are Optimism only, thus couldn’t catch a pie of this growth.
 - Yield protocol stagnation, i.e., Yearn and Sonne metrics, signals bull market preparation. Despite the increase in asset prices, the TVL has stayed relatively the same, which implies that there is only a little new liquidity searching for passive yield.
 - Protocols that are well-established in crypto and those that received a reward from optimism for the third time or more generally remained stagnant or had relatively smaller uptrends. This could be a sign of diminishing returns as these protocols have hit equilibrium.
-  | protocol          | funding received in OP | number of times received |
+  | protocol | funding received in OP | number of times received |
   | ----------------- | ---------------------- | ------------------------ |
-  | aerodrome-finance | 104,348                | 1                        |
-  | hop-protocol      | 1,088,286              | 3                        |
-  | kromatika-finance | 324,845                | 2                        |
-  | sonne-finance     | 331,988                | 2                        |
-  | sushi             | 603,379                | 2                        |
-  | synapse           | 1,024,358              | 2                        |
-  | synthetix         | 9,241,266              | 4                        |
-  | uniswap           | 1,000,000              | 1                        |
-  | velodrome         | 5,559,379              | 7                        |
-  | yearn             | 1,099,379              | 2                        |
+  | aerodrome-finance | 104,348 | 1 |
+  | hop-protocol | 1,088,286 | 3 |
+  | kromatika-finance | 324,845 | 2 |
+  | sonne-finance | 331,988 | 2 |
+  | sushi | 603,379 | 2 |
+  | synapse | 1,024,358 | 2 |
+  | synthetix | 9,241,266 | 4 |
+  | uniswap | 1,000,000 | 1 |
+  | velodrome | 5,559,379 | 7 |
+  | yearn | 1,099,379 | 2 |
 
 ## Suggestions to the Governance:
 

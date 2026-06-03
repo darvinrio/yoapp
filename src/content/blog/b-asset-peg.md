@@ -3,13 +3,13 @@ title: "bAssets Peg"
 date: 2021-10-18
 description: "Analysis of depeg events of bAssets"
 tags: ["terra", "defi", "crypto", "flipside"]
---- 
+---
 
 The famous 20% yield of Anchor is powered by staking rewards generated from PoS assets. Currently, these are ETH and LUNA. These tokens are tokenized or bonded in the form of bETH and bLUNA, which are used as collateral to take borrows. It is the staking rewards of these tokens, that are used to fuel the 20% yield on UST deposits. A crucial piece of information here is that these staking rewards are liquidated into UST to increase the value of a-UST. Hence it is necessary that these assets hold their pegs with respect to the underlying assets. In this article, we will look into a few occasions in which these tokenized versions deviated from peg severely and will try to understand the reason behind it.
 
 ### Methodology
 
-We will analyse the prices on a minute time-scale, due to the volatile and fast nature of crypto price action. Since we can't plot a 6 month long minute-scale data, we will first condense it into hourly-scale. Then we will pick out possible candi-dates(sneaky)  we can analyze on a minute scale.
+We will analyse the prices on a minute time-scale, due to the volatile and fast nature of crypto price action. Since we can't plot a 6 month long minute-scale data, we will first condense it into hourly-scale. Then we will pick out possible candi-dates(sneaky) we can analyze on a minute scale.
 
 There are two means to retrieve the price of the bAssets. One is to use the live feed into the `Anchor Oracle` contract. Or we could use swap prices from Terra's only DEX- Terraswap.
 
@@ -28,7 +28,7 @@ For **bLUNA**:
 
 ### The price action of underlying assets:
 
-Before we delve into onchain data, we will look into market data to check for possible opportunities where de-peg might have taken place. 
+Before we delve into onchain data, we will look into market data to check for possible opportunities where de-peg might have taken place.
 
 The main reason for de-pegging is Panic - this causes investors in the market to quickly sell the token in their hand in order to shift to stable coins. This usually involves liquidating the bonded assets into the underlying assets. Hence there is one-way price action, causing the price to deviate from peg until arbitrageurs step in to take advantage of price.
 
@@ -54,7 +54,7 @@ In the plot above, the red line shows the lowest price attained bLUNA wrt to LUN
 
 We notice extreme activity during the mid-May events with the prices hitting as low as 0.5 LUNA
 
-Taking look at a more granular level 
+Taking look at a more granular level
 
 ![May 19-21](../../assets/blog-images/b-asset-peg/bluna_19.png)
 
@@ -86,7 +86,7 @@ Interestingly, we can see that in general, bLUNA has maintained a stable peg, wi
 
 The red color area shows the deviation of the lowest price within that hour range, while the green area shows the deviation of the highest bETH price compared to the ETH price.
 
-For bETH, we see that the most significant deviations take place between, September 19 and September 26. As the plot stacks both the positive and negative deviations, the bETH price has deviated by almost 300 USD from the actual ETH price. 
+For bETH, we see that the most significant deviations take place between, September 19 and September 26. As the plot stacks both the positive and negative deviations, the bETH price has deviated by almost 300 USD from the actual ETH price.
 
 So let's take a look at a more granular level
 
@@ -98,19 +98,19 @@ Both the spikes are clearly registered in the more granular data. In both the ca
 
 ## Analysis
 
-We can see that bLUNA suffered significant de-pegging on May, remained relatively stable during August and September events. bETH on the other hand suffered during the September events. 
+We can see that bLUNA suffered significant de-pegging on May, remained relatively stable during August and September events. bETH on the other hand suffered during the September events.
 
 ### bLUNA
 
-One of the main reasons for the May de-pegging was the general market crash over the quarterly Bitcoin ban from China. 
+One of the main reasons for the May de-pegging was the general market crash over the quarterly Bitcoin ban from China.
 
-The general crash and its impact on UST and Anchor protocol has been discussed by both Anchor Devs and Me 😉 
+The general crash and its impact on UST and Anchor protocol has been discussed by both Anchor Devs and Me 😉
 
-For a full detailed analysis of the events , check : 
+For a full detailed analysis of the events , check :
 
 [](https://app.flipsidecrypto.com/dashboard/ust-anchor-impact-LYHZvJ)
 
-**or** 
+**or**
 
 [https://mobile.twitter.com/anchor_protocol/status/1397400642566594563?lang=en](https://mobile.twitter.com/anchor_protocol/status/1397400642566594563?lang=en)
 
@@ -120,16 +120,17 @@ This reason is clearly mentioned in Anchor's tweet thread:
 
 [https://twitter.com/anchor_protocol/status/1397400652788113412?s=20](https://twitter.com/anchor_protocol/status/1397400652788113412?s=20)
 
-Due to onchain native swaps spread, there is a limit on the conversion of LUNA to UST via native swaps on a given day. 
+Due to onchain native swaps spread, there is a limit on the conversion of LUNA to UST via native swaps on a given day.
 
 [https://twitter.com/terra_money/status/1396780931948564482?s=20](https://twitter.com/terra_money/status/1396780931948564482?s=20)
 
-> *only 20 million UST can be minted a day under current parameters, this spread sometimes increased dramatically, and UST was occasionally trading at rates like $0.92. 
+> \*only 20 million UST can be minted a day under current parameters, this spread sometimes increased dramatically, and UST was occasionally trading at rates like $0.92.
 
 The core issue with the UST peg is this swap spread, which diverges from zero. [Proposal 90](https://station.terra.money/proposal/90) will significantly increase minting and redeem limits, up to more then 100 million, so spreads will be more resilient, and when nudged will recover much more quickly.
 
-It should only take a few days for the peg to be fully restored. It’s already very close to $1, and in any case, Proposal 90 is passing currently and ends in 12 days, increasing stability of the peg.*
-> 
+It should only take a few days for the peg to be fully restored. It’s already very close to $1, and in any case, Proposal 90 is passing currently and ends in 12 days, increasing stability of the peg.\*
+
+>
 
 refer to the link below for more info
 
@@ -142,8 +143,6 @@ This is also the reason why there were secondary crashes. As the peg of UST didn
 This de-pegging was however prevented in September. Albeit, this was mostly due to TFL stepping in with their liquidation bots, hence a sell pressure on LUNA was far greatly reduced. This was done to provide Anchor more lee-way till they implement Auction strategy for Liquidation.
 
 For a detailed analysis of TFL liquidators on Anchor , check:
-
-   
 
 [https://twitter.com/lostindefi/status/1437440448126234627](https://twitter.com/lostindefi/status/1437440448126234627)
 
