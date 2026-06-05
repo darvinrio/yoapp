@@ -17,6 +17,8 @@
   --font-title: "F5.6", sans-serif;
   --font-text: "Merriweather", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  /*--container-width: 1152px; /* 6xl */
+  --container-width: 1024px; /* 4xl */
 }
 
 html {
@@ -35,4 +37,9 @@ code,
 pre,
 .font-mono {
   font-family: var(--font-mono);
+}
+
+.container-max {
+  max-width: var(--container-width);
+  margin-inline: auto;
 }
