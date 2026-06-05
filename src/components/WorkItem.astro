@@ -1,0 +1,61 @@
+---
+import type { RoleType } from "../data/work";
+
+interface Props {
+  company: string;
+  title: string;
+  roleType: RoleType;
+  start: string;
+  end: string;
+  description: string;
+}
+
+const { company, title, roleType, start, end, description } = Astro.props;
+
+function formatDate(iso: string): string {
+  const d = new Date(iso + "T00:00:00");
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return `${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+const roleTypeLabels: Record<RoleType, string> = {
+  "full-time": "Full-time",
+  "part-time": "Part-time",
+  contract: "Contract",
+  internship: "Internship",
+  freelance: "Freelance",
+};
+
+const startDate = formatDate(start);
+const endDate = end ? formatDate(end) : "Present";
+const dateRange = `${startDate} to ${endDate}`;
+const roleLabel = roleTypeLabels[roleType];
+---
+
+<article class="border-l-2 border-teal-500 pl-4 py-2">
+  <h2 class="text-xl font-semibold text-teal-500">{company}</h2>
+  <p class="font-medium">{title}</p>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400">
+    {dateRange}
+    <span
+      class="ml-2 inline-block rounded bg-teal-500/10 px-2 py-0.5 text-xs text-teal-500"
+    >
+      {roleLabel}
+    </span>
+  </p>
+  <div class="my-3 border-t border-zinc-200 dark:border-zinc-700"></div>
+  <p class="text-zinc-700 dark:text-zinc-300">{description}</p>
+</article>
