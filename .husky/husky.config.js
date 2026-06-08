@@ -1,5 +1,5 @@
 module.exports = {
   hooks: {
-    "pre-commit": "bun format"
-  }
-}
+    "pre-commit": "bun format",
+  },
+};
