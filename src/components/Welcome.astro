@@ -1,5 +1,9 @@
 ---
 import DarkToggle from "./DarkToggle.astro";
+import HoverImage from "./HoverImage.astro";
+
+import googleLogo from "./src/assets/logos/google.svg";
+import swellLogo from "./src/assets/logos/swell-resized.svg";
 ---
 
 <div class="font-title flex items-center justify-between gap-4">
@@ -14,13 +18,17 @@ import DarkToggle from "./DarkToggle.astro";
   <DarkToggle />
 </div>
 <hr class="border-t-2 border-teal-500 mt-6" />
-<p class="mt-6 font-text">
+<p class="text-xl mt-6 font-text">
   I am a <span class="text-teal-500 font-bold">Data Analyst</span> with 4 years of
   blockchain data experience.
   <br />
   Currently I am exploring ML, Soccer Prediction Markets and GenAI.
   <br />
   Looking for roles to expand beyond Data Analytics.
+  <br />
+  I use <HoverImage text="Google" image={googleLogo} />
+  <br />
+  I previously was Data Lead at <HoverImage text="Swell" image={swellLogo} />
 </p>
 <div class="mt-10 flex flex-col gap-2 font-text">
   <a
