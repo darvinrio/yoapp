@@ -1,4 +1,5 @@
 This is a Typescript, Astro v6, Tailwind v4 Project.
+
 1. Only use `bun` and `bunx`
 
 repo commands:
