@@ -4,10 +4,11 @@ import DarkToggle from "./DarkToggle.astro";
 const links = [
   { href: "/work", label: "Work" },
   { href: "/blog", label: "Writings" },
-  { href: "/Darvin - Data Analyst.pdf", label: "Resume" },
+  { href: "/Darvin - Data Analyst.pdf", label: "Resume", newPage: true },
 ];
 
-const linkClass = "hover:text-teal-500 dark:hover:text-teal-400 transition-colors";
+const linkClass =
+  "hover:text-teal-500 dark:hover:text-teal-400 transition-colors";
 ---
 
 <nav
@@ -19,9 +20,18 @@ const linkClass = "hover:text-teal-500 dark:hover:text-teal-400 transition-color
     </a>
 
     <div class="hidden md:flex items-center gap-6 font-text">
-      {links.map(({ href, label }) => (
-        <a href={href} class={linkClass}>{label}</a>
-      ))}
+      {
+        links.map(({ href, label, newPage }) => (
+          <a
+            href={href}
+            class={linkClass}
+            target={newPage ? "_blank" : undefined}
+            rel={newPage ? "noopener noreferrer" : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
       <DarkToggle />
     </div>
 
@@ -72,9 +82,18 @@ const linkClass = "hover:text-teal-500 dark:hover:text-teal-400 transition-color
   >
     <div class="flex flex-col items-end gap-4 py-4 px-6 font-text">
       <DarkToggle />
-      {links.map(({ href, label }) => (
-        <a href={href} class={linkClass}>{label}</a>
-      ))}
+      {
+        links.map(({ href, label, newPage }) => (
+          <a
+            href={href}
+            class={linkClass}
+            target={newPage ? "_blank" : undefined}
+            rel={newPage ? "noopener noreferrer" : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
     </div>
   </div>
 </nav>
