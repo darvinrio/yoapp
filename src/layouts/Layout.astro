@@ -1,6 +1,7 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import "../styles/global.css";
+import Analytics from "@vercel/analytics/astro";
 ---
 
 <!doctype html>
@@ -19,6 +20,7 @@ import "../styles/global.css";
     />
     <title>yonas</title>
   </head>
+  <Analytics />
   <body class="text-black dark:text-mauve-200">
     <Navbar />
     <slot />
