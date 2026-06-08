@@ -37,7 +37,10 @@ const linkClass =
 
     <button
       id="menu-toggle"
+      type="button"
       aria-label="Toggle menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
       class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors"
     >
       <svg
@@ -105,10 +108,12 @@ const linkClass =
   const close = document.getElementById("icon-close");
 
   menuToggle?.addEventListener("click", () => {
-    const isOpen = !mobileMenu?.classList.contains("hidden");
-    mobileMenu?.classList.toggle("hidden");
+    const isHidden = mobileMenu?.classList.toggle("hidden");
     hamburger?.classList.toggle("hidden");
     close?.classList.toggle("hidden");
+    if (typeof isHidden === "boolean") {
+      menuToggle?.setAttribute("aria-expanded", String(!isHidden));
+    }
   });
 
   mobileMenu?.querySelectorAll("a").forEach((link) => {
