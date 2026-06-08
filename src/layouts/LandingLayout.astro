@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 ---
 
 <!doctype html>
@@ -20,6 +21,7 @@ import Analytics from "@vercel/analytics/astro";
     <title>yonas</title>
   </head>
   <Analytics />
+  <SpeedInsights />
   <body class="text-black dark:text-mauve-200">
     <slot />
   </body>
