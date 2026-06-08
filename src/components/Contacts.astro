@@ -10,9 +10,12 @@ import { contacts } from "../data/contact";
         target="_blank"
         rel="noopener noreferrer"
         aria-label={contact.name}
-        class="hover:text-teal-600 transition-colors"
+        class="transition-colors"
+        style={`--brand-color: ${contact.brandColor};`}
       >
-        <i class={`${contact.faIcon} text-2xl text-black dark:text-white`} />
+        <i
+          class={`${contact.faIcon} text-2xl text-black dark:text-white hover:[&]:text-[var(--brand-color)]`}
+        />
       </a>
     ))
   }
