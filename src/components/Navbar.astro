@@ -1,5 +1,13 @@
 ---
 import DarkToggle from "./DarkToggle.astro";
+
+const links = [
+  { href: "/work", label: "Work" },
+  { href: "/blog", label: "Writings" },
+  { href: "/Darvin - Data Analyst.pdf", label: "Resume" },
+];
+
+const linkClass = "hover:text-teal-500 dark:hover:text-teal-400 transition-colors";
 ---
 
 <nav
@@ -11,21 +19,9 @@ import DarkToggle from "./DarkToggle.astro";
     </a>
 
     <div class="hidden md:flex items-center gap-6 font-text">
-      <a
-        href="/work"
-        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-        >Work</a
-      >
-      <a
-        href="/blog"
-        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-        >Writings</a
-      >
-      <a
-        href="/Darvin - Data Analyst.pdf"
-        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-        >Resume</a
-      >
+      {links.map(({ href, label }) => (
+        <a href={href} class={linkClass}>{label}</a>
+      ))}
       <DarkToggle />
     </div>
 
@@ -76,21 +72,9 @@ import DarkToggle from "./DarkToggle.astro";
   >
     <div class="flex flex-col items-end gap-4 py-4 px-6 font-text">
       <DarkToggle />
-      <a
-        href="/work"
-        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-        >Work</a
-      >
-      <a
-        href="/blog"
-        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-        >Writings</a
-      >
-      <a
-        href="/Darvin - Data Analyst.pdf"
-        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
-        >Resume</a
-      >
+      {links.map(({ href, label }) => (
+        <a href={href} class={linkClass}>{label}</a>
+      ))}
     </div>
   </div>
 </nav>
