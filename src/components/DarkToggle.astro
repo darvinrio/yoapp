@@ -3,7 +3,7 @@
 ---
 
 <button
-  id="dark-toggle"
+  data-dark-toggle
   aria-label="Toggle dark mode"
   class="p-2 rounded-full bg-white dark:bg-zinc-700 shadow-md text-yellow-500 dark:text-yellow-300 hover:scale-110 transition-transform"
 >
@@ -47,8 +47,10 @@
   if (saved === "dark") html.classList.add("dark");
   else if (saved === "light") html.classList.remove("dark");
 
-  document.getElementById("dark-toggle")?.addEventListener("click", () => {
-    const isDark = html.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  });
+  document
+    .querySelector("[data-dark-toggle]")
+    ?.addEventListener("click", () => {
+      const isDark = html.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
 </script>

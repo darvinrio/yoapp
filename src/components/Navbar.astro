@@ -9,7 +9,8 @@ import DarkToggle from "./DarkToggle.astro";
     <a href="/" class="font-title text-xl">
       maybe<span class="text-teal-500">Yonas</span>
     </a>
-    <div class="flex items-center gap-6 font-text">
+
+    <div class="hidden md:flex items-center gap-6 font-text">
       <a
         href="/work"
         class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
@@ -27,5 +28,90 @@ import DarkToggle from "./DarkToggle.astro";
       >
       <DarkToggle />
     </div>
+
+    <button
+      id="menu-toggle"
+      aria-label="Toggle menu"
+      class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors"
+    >
+      <svg
+        id="icon-hamburger"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="block dark:text-mauve-200 text-black"
+      >
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg
+        id="icon-close"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="hidden dark:text-mauve-200 text-black"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden border-t border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+  >
+    <div class="flex flex-col items-end gap-4 py-4 px-6 font-text">
+      <a
+        href="/work"
+        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+        >Work</a
+      >
+      <a
+        href="/blog"
+        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+        >Writings</a
+      >
+      <a
+        href="/Darvin - Data Analyst.pdf"
+        class="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
+        >Resume</a
+      >
+    </div>
   </div>
 </nav>
+
+<script>
+  const menuToggle = document.getElementById("menu-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const hamburger = document.getElementById("icon-hamburger");
+  const close = document.getElementById("icon-close");
+
+  menuToggle?.addEventListener("click", () => {
+    const isOpen = !mobileMenu?.classList.contains("hidden");
+    mobileMenu?.classList.toggle("hidden");
+    hamburger?.classList.toggle("hidden");
+    close?.classList.toggle("hidden");
+  });
+
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      hamburger?.classList.remove("hidden");
+      close?.classList.add("hidden");
+    });
+  });
+</script>
