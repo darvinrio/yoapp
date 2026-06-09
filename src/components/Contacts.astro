@@ -1,5 +1,47 @@
 ---
-import { contacts } from "../data/contact";
+import type { SvgComponent } from "astro/types";
+import Dune from "../assets/logos/dune.svg";
+
+interface ContactEntry {
+  name: string;
+  href: string;
+  faIcon?: string;
+  svgIcon?: SvgComponent;
+  brandColor: string;
+}
+
+const contacts: ContactEntry[] = [
+  {
+    name: "Twitter",
+    href: "https://x.com/maybeYonas",
+    faIcon: "fa-brands fa-x-twitter",
+    brandColor: "#000000",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com/darvinrio",
+    faIcon: "fa-brands fa-github",
+    brandColor: "#333333",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/in/darvinrio",
+    faIcon: "fa-brands fa-linkedin",
+    brandColor: "#346ABF",
+  },
+  {
+    name: "Telegram",
+    href: "https://t.me/maybeyonas",
+    faIcon: "fa-brands fa-telegram",
+    brandColor: "#6AA7E6",
+  },
+  {
+    name: "Dune",
+    href: "https://dune.com/maybeYonas",
+    svgIcon: Dune,
+    brandColor: "#E06E50",
+  },
+];
 ---
 
 <div class="mt-6 flex items-center gap-4">
@@ -13,19 +55,13 @@ import { contacts } from "../data/contact";
         class="transition-colors hover:scale-110 inline-block"
         style={`--brand-color: ${contact.brandColor};`}
       >
-        {
-          contact.svgIcon ? (
-            <img
-              src={contact.svgIcon}
-              alt={contact.name}
-              class="w-6 h-6 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color)"
-            />
-          ) : (
-            <i
-              class={`${contact.faIcon} text-2xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
-            />
-          )
-        }
+        {contact.svgIcon ? (
+          <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
+        ) : (
+          <i
+            class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
+          />
+        )}
       </a>
     ))
   }
