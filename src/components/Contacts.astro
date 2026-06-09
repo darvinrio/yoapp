@@ -8,6 +8,7 @@ interface ContactEntry {
   faIcon?: string;
   svgIcon?: SvgComponent;
   brandColor: string;
+  isWorkLink?: boolean;
 }
 
 const contacts: ContactEntry[] = [
@@ -16,12 +17,6 @@ const contacts: ContactEntry[] = [
     href: "https://x.com/maybeYonas",
     faIcon: "fa-brands fa-x-twitter",
     brandColor: "#000000",
-  },
-  {
-    name: "GitHub",
-    href: "https://github.com/darvinrio",
-    faIcon: "fa-brands fa-github",
-    brandColor: "#333333",
   },
   {
     name: "LinkedIn",
@@ -36,33 +31,71 @@ const contacts: ContactEntry[] = [
     brandColor: "#6AA7E6",
   },
   {
+    name: "GitHub",
+    href: "https://github.com/darvinrio",
+    faIcon: "fa-brands fa-github",
+    brandColor: "#333333",
+    isWorkLink: true,
+  },
+  {
     name: "Dune",
     href: "https://dune.com/maybeYonas",
     svgIcon: Dune,
     brandColor: "#E06E50",
+    isWorkLink: true,
   },
 ];
 ---
 
-<div class="mt-6 flex items-center gap-4">
-  {
-    contacts.map((contact) => (
-      <a
-        href={contact.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={contact.name}
-        class="transition-colors hover:scale-110 inline-block"
-        style={`--brand-color: ${contact.brandColor};`}
-      >
-        {contact.svgIcon ? (
-          <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
-        ) : (
-          <i
-            class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
-          />
-        )}
-      </a>
-    ))
-  }
+<div class="mt-6 flex flex-col gap-4">
+  <p class="font-text">reach out to me on:</p>
+  <div class="flex items-center gap-4">
+    {
+      contacts
+        .filter((c) => !c.isWorkLink)
+        .map((contact) => (
+          <a
+            href={contact.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={contact.name}
+            class="transition-colors hover:scale-110 inline-block"
+            style={`--brand-color: ${contact.brandColor};`}
+          >
+            {contact.svgIcon ? (
+              <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
+            ) : (
+              <i
+                class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
+              />
+            )}
+          </a>
+        ))
+    }
+  </div>
+  <p class="font-text">check out my work here:</p>
+  <div class="flex items-center gap-4">
+    {
+      contacts
+        .filter((c) => c.isWorkLink)
+        .map((contact) => (
+          <a
+            href={contact.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={contact.name}
+            class="transition-colors hover:scale-110 inline-block"
+            style={`--brand-color: ${contact.brandColor};`}
+          >
+            {contact.svgIcon ? (
+              <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
+            ) : (
+              <i
+                class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
+              />
+            )}
+          </a>
+        ))
+    }
+  </div>
 </div>
