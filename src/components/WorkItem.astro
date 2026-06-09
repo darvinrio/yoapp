@@ -1,5 +1,6 @@
 ---
 import type { RoleType } from "../data/work";
+import type { SvgComponent } from "astro/types";
 
 interface Props {
   company: string;
@@ -8,10 +9,11 @@ interface Props {
   start: string;
   end: string;
   description: string;
-  logo: string;
+  logo: SvgComponent;
 }
 
 const { company, title, roleType, start, end, description, logo } = Astro.props;
+const Logo = logo;
 
 function formatDate(iso: string): string {
   const d = new Date(iso + "T00:00:00");
@@ -49,11 +51,9 @@ const roleLabel = roleTypeLabels[roleType];
 <article
   class="group border-b border-gray-200 dark:border-zinc-700 pb-6 flex gap-4 items-start"
 >
-  <img
-    src={`/src/assets/logos/${logo}`}
-    alt={`${company} logo`}
+  <Logo
     class="h-10 w-10 max-w-10 object-contain pt-1"
-  />
+    aria-label={`${company} logo`} />
   <div class="flex flex-col">
     <p class="text-gray-700 dark:text-zinc-300">{company}</p>
     <h2
