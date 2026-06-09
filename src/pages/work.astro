@@ -1,7 +1,63 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import WorkItem from "../components/WorkItem.astro";
-import { workEntries } from "../data/work";
+import SwellLogo from "../assets/logos/swell-nocolor.svg";
+import LysLogo from "../assets/logos/lys-nocolor.svg";
+import PyorLogo from "../assets/logos/pyor-nocolor.svg";
+import LeapLogo from "../assets/logos/leap-nocolor.svg";
+import FlipLogo from "../assets/logos/flip-nocolor.svg";
+import type { WorkEntry } from "../data/work";
+
+const workEntries: WorkEntry[] = [
+  {
+    company: "Swell Network",
+    title: "Data Lead",
+    roleType: "full-time",
+    start: "2024-04-02",
+    end: "2026-02-15",
+    logo: SwellLogo,
+    description:
+      "Led building data pipelines and dashboards for backing the Airdrop, Vaults and User Portfolio",
+  },
+  {
+    company: "LYS Labs",
+    title: "Data Analyst",
+    roleType: "part-time",
+    start: "2024-07-02",
+    end: "2024-12-30",
+    logo: LysLogo,
+    description: "Building Clickhouse pipelines for LST and LRT analytics",
+  },
+  {
+    company: "PYOR",
+    title: "Research Data Analyst",
+    roleType: "full-time",
+    start: "2022-11-15",
+    end: "2024-10-30",
+    logo: PyorLogo,
+    description:
+      "First Data hire, focussing on growing presence in Data and DAO Grants space",
+  },
+  {
+    company: "Leap Wallet",
+    title: "Research Analyst",
+    roleType: "contract",
+    start: "2022-10-02",
+    end: "2022-11-02",
+    logo: LeapLogo,
+    description: "Product analytics for Leap Wallet and Leap portfolio",
+  },
+  {
+    company: "Flipside",
+    title: "Data Analyst",
+    roleType: "freelance",
+    start: "2021-07-01",
+    end: "2022-09-30",
+    logo: FlipLogo,
+    description:
+      "Part of Flipside CEA Team, learning SQL and building dashboards on Terra and EVM DeFi",
+  },
+];
 ---
 
 <Layout>

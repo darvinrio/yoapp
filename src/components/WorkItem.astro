@@ -1,5 +1,6 @@
 ---
 import type { RoleType } from "../data/work";
+import type { SvgComponent } from "astro/types";
 
 interface Props {
   company: string;
@@ -8,9 +9,11 @@ interface Props {
   start: string;
   end: string;
   description: string;
+  logo: SvgComponent;
 }
 
-const { company, title, roleType, start, end, description } = Astro.props;
+const { company, title, roleType, start, end, description, logo } = Astro.props;
+const Logo = logo;
 
 function formatDate(iso: string): string {
   const d = new Date(iso + "T00:00:00");
@@ -45,18 +48,23 @@ const dateRange = `${startDate} to ${endDate}`;
 const roleLabel = roleTypeLabels[roleType];
 ---
 
-<article class="group border-b border-gray-200 dark:border-zinc-700 pb-6">
-  <h2
-    class="font-text text-2xl text-gray-700 dark:text-zinc-200 group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors"
-  >
-    {company}
-  </h2>
-  <p class="text-gray-700 dark:text-zinc-300">{title}</p>
-  <p class="text-sm text-gray-500 dark:text-zinc-400 mt-1">{dateRange}</p>
-  <span
-    class="inline-block text-xs px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-zinc-700 dark:text-teal-300 mt-2"
-  >
-    {roleLabel}
-  </span>
-  <p class="mt-2 text-gray-700 dark:text-zinc-300">{description}</p>
+<article
+  class="group border-b border-gray-200 dark:border-zinc-700 pb-6 flex gap-4 items-start"
+>
+  <Logo
+    class="fill-current h-8 w-8 md:h-10 md:w-10 object-contain pt-2 shrink-0"
+    aria-label={`${company} logo`}
+  />
+  <div class="flex flex-col">
+    <p class="text-gray-700 dark:text-zinc-300">{company}</p>
+    <h2
+      class="font-text text-2xl text-gray-700 dark:text-zinc-200 group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors"
+    >
+      {title}
+    </h2>
+    <p class="text-sm text-gray-500 dark:text-zinc-400 mt-1 mb-1">
+      {dateRange}
+    </p>
+    <p class="mt-2 text-gray-700 dark:text-zinc-300">{description}</p>
+  </div>
 </article>
