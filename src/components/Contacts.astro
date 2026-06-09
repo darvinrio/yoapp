@@ -13,9 +13,19 @@ import { contacts } from "../data/contact";
         class="transition-colors hover:scale-110 inline-block"
         style={`--brand-color: ${contact.brandColor};`}
       >
-        <i
-          class={`${contact.faIcon} text-2xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
-        />
+        {
+          contact.svgIcon ? (
+            <img
+              src={contact.svgIcon}
+              alt={contact.name}
+              class="w-6 h-6 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color)"
+            />
+          ) : (
+            <i
+              class={`${contact.faIcon} text-2xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
+            />
+          )
+        }
       </a>
     ))
   }

@@ -1,7 +1,8 @@
 export interface ContactEntry {
   name: string;
   href: string;
-  faIcon: string;
+  faIcon?: string;
+  svgIcon?: string;
   brandColor: string;
 }
 
@@ -29,5 +30,11 @@ export const contacts: ContactEntry[] = [
     href: "https://t.me/maybeyonas",
     faIcon: "fa-brands fa-telegram",
     brandColor: "#6AA7E6",
+  },
+  {
+    name: "Dune",
+    href: "https://dune.com/maybeYonas",
+    svgIcon: "/src/assets/logos/dune_logo.svg",
+    brandColor: "#E06E50",
   },
 ];
