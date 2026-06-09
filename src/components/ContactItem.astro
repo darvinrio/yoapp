@@ -24,7 +24,7 @@ const { contact }: Props = Astro.props;
 >
   {
     contact.svgIcon ? (
-      <contact.svgIcon class="w-9 h-9 invert fill-current dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
+      <contact.svgIcon class="w-9 h-9 fill-current transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
     ) : (
       <i
         class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
