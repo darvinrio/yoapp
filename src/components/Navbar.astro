@@ -14,7 +14,14 @@ const linkClass =
 <nav
   class="sticky top-0 z-50 w-full bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700"
 >
-  <div class="container-max px-4 py-3 flex items-center justify-between">
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style="background-image:url('/texture.png');background-repeat:repeat;background-position:center top;background-size:192px;opacity:0.05;"
+  >
+  </div>
+  <div
+    class="container-max px-4 py-3 flex items-center justify-between relative z-10"
+  >
     <a href="/" class="font-title text-xl">
       maybe<span class="text-teal-500">Yonas</span>
     </a>
