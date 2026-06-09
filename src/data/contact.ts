@@ -22,12 +22,12 @@ export const contacts: ContactEntry[] = [
     name: "LinkedIn",
     href: "https://linkedin.com/in/darvinrio",
     faIcon: "fa-brands fa-linkedin",
-    brandColor: "#0A66C2",
+    brandColor: "#346ABF",
   },
   {
     name: "Telegram",
     href: "https://t.me/maybeyonas",
     faIcon: "fa-brands fa-telegram",
-    brandColor: "#0088cc",
+    brandColor: "#6AA7E6",
   },
 ];
