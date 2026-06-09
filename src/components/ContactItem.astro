@@ -1,0 +1,34 @@
+---
+import type { SvgComponent } from "astro/types";
+
+interface Props {
+  contact: {
+    name: string;
+    href: string;
+    faIcon?: string;
+    svgIcon?: SvgComponent;
+    brandColor: string;
+  };
+}
+
+const { contact }: Props = Astro.props;
+---
+
+<a
+  href={contact.href}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={contact.name}
+  class="transition-colors hover:scale-110 inline-block"
+  style={`--brand-color: ${contact.brandColor};`}
+>
+  {
+    contact.svgIcon ? (
+      <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
+    ) : (
+      <i
+        class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
+      />
+    )
+  }
+</a>

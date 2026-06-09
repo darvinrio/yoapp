@@ -1,6 +1,7 @@
 ---
 import type { SvgComponent } from "astro/types";
 import Dune from "../assets/logos/dune.svg";
+import ContactItem from "./ContactItem.astro";
 
 interface ContactEntry {
   name: string;
@@ -53,24 +54,7 @@ const contacts: ContactEntry[] = [
     {
       contacts
         .filter((c) => !c.isWorkLink)
-        .map((contact) => (
-          <a
-            href={contact.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={contact.name}
-            class="transition-colors hover:scale-110 inline-block"
-            style={`--brand-color: ${contact.brandColor};`}
-          >
-            {contact.svgIcon ? (
-              <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
-            ) : (
-              <i
-                class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
-              />
-            )}
-          </a>
-        ))
+        .map((contact) => <ContactItem contact={contact} />)
     }
   </div>
   <p class="font-text">check out my work here:</p>
@@ -78,24 +62,7 @@ const contacts: ContactEntry[] = [
     {
       contacts
         .filter((c) => c.isWorkLink)
-        .map((contact) => (
-          <a
-            href={contact.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={contact.name}
-            class="transition-colors hover:scale-110 inline-block"
-            style={`--brand-color: ${contact.brandColor};`}
-          >
-            {contact.svgIcon ? (
-              <contact.svgIcon class="w-9 h-9 invert dark:invert-0 transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
-            ) : (
-              <i
-                class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
-              />
-            )}
-          </a>
-        ))
+        .map((contact) => <ContactItem contact={contact} />)
     }
   </div>
 </div>
