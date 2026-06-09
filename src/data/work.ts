@@ -5,6 +5,7 @@ export interface WorkEntry {
   start: string;
   end: string;
   description: string;
+  logo: string;
 }
 
 export type RoleType =
@@ -23,6 +24,7 @@ export const workEntries: WorkEntry[] = [
     end: "2026-02-15",
     description:
       "Led building data pipelines and dashboards for backing the Airdrop, Vaults and User Portfolio",
+    logo: "swell.svg",
   },
   {
     company: "LYS Labs",
@@ -31,6 +33,7 @@ export const workEntries: WorkEntry[] = [
     start: "2024-07-02",
     end: "2024-12-30",
     description: "Building Clickhouse pipelines for LST and LRT analytics",
+    logo: "lys.svg",
   },
   {
     company: "PYOR",
@@ -40,6 +43,7 @@ export const workEntries: WorkEntry[] = [
     end: "2024-10-30",
     description:
       "First Data hire, focussing on growing presence in Data and DAO Grants space",
+    logo: "pyor.svg",
   },
   {
     company: "Leap Wallet",
@@ -48,6 +52,7 @@ export const workEntries: WorkEntry[] = [
     start: "2022-10-02",
     end: "2022-11-02",
     description: "Product analytics for Leap Wallet and Leap portfolio",
+    logo: "leap.svg",
   },
   {
     company: "Flipside",
@@ -57,5 +62,6 @@ export const workEntries: WorkEntry[] = [
     end: "2022-09-30",
     description:
       "Part of Flipside CEA Team, learning SQL and building dashboards on Terra and EVM DeFi",
+    logo: "flip.svg",
   },
 ];
