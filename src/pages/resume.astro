@@ -1,0 +1,229 @@
+---
+// src/pages/resume.astro
+// Update the data below to match your actual experience, education, and skills
+import PageTitle from "../components/PageTitle.astro";
+import Layout from "../layouts/Layout.astro";
+
+const skills = {
+  "Data Analysis & Visualization": [
+    "Dashboard Building",
+    "Data Visualization",
+    "KPI Frameworks",
+  ],
+  "Data Engineering": [
+    "Schema Modelling",
+    "Data Pipelines",
+    "ClickHouse",
+    "Snowflake",
+  ],
+  "Machine Learning": [
+    "Clustering",
+    "Anomaly Detection",
+    "Regression Analysis",
+  ],
+};
+
+const stack = {
+  Languages: ["Python", "SQL", "TypeScript"],
+  Libraries: ["Pandas", "Polars", "Git", "Linux", "SciKit Learn"],
+  Infra: ["DBT", "Git", "Linux"],
+  Visualization: ["Matplotlib", "Dune", "Superset", "Looker"],
+};
+
+const experience = [
+  {
+    role: "Data Lead",
+    company: "Swell Network (Remote - Sydney Time)",
+    period: "Apr 2024 — Feb 2026",
+    bullets: [
+      "Built and automated a scalable ClickHouse SQL + Python pipeline ingesting data from 150+ DeFi integrations, powering real-time user portfolio monitoring, vault KPIs, and exit liquidity health monitoring.",
+      "Developed ML framework using k-Means Clustering, DBSCAN, and Louvain Community Detection to detect, flag, and penalize exploitative user behavior.",
+      "Investigated a falsely marketed integration that was later rug-pulled, flagging the returns as fake based on existing liquidity and yield dynamics and escalating to the Strategy Team with a recommendation to block the integration.",
+      "Drove $500M in protocol inflows by identifying outliers in liquidity concentration on Ethereum through on-chain analysis.",
+      "Produced monthly summaries and technical documentation for Operations and Marketing Teams, cutting operational costs by 25% and reducing Mean Ticket Resolution time from 2+ days to 4 hours.",
+      "Implemented HyperNative Risk Alerting Framework on suspicious liquidity movements, contract deployments, and code upgrades on partner integrations, providing operational risk coverage for Vault products.",
+    ],
+  },
+  {
+    role: "Research Data Analyst",
+    company: "PYOR (Remote - Bengaluru)",
+    period: "Oct 2022 — Oct 2024",
+    bullets: [
+      "Devised a quantitative analysis framework with Cohort Segmentation to evaluate ROI and user retention of $75M+ expenditure in Arbitrum DAO grants.",
+      "Built automated dbt pipelines transforming raw blockchain data into standardized growth and revenue KPIs and metrics, generating $130K in ARR.",
+      "Deployed high-traffic Dune Analytics dashboards to monitor LRT liquidity and peg health, translating ecosystem visibility into $150K in DAO grants acquired.",
+    ],
+  },
+  {
+    role: "Freelance Data Analyst",
+    company: "Independent (Remote - Bengaluru)",
+    period: "Jul 2021 — Oct 2022",
+    bullets: [
+      "Built the Anchor Protocol Risk Monitoring dashboard, detected unsustainable borrows beyond thresholds, and flagged systemic risk signals months before the eventual collapse.",
+      "Automated the RociFi Credit Risk Reports, delivering daily updates on system health and borrow activity.",
+    ],
+  },
+];
+
+const education = [
+  {
+    degree: "Master of Science - Physics",
+    school: "Christ University",
+    startYear: "2019",
+    endYear: "2021",
+    score: "8.52 CGPA",
+  },
+  {
+    degree: "Bachelor of Science - Physics",
+    school: "Christ University",
+    startYear: "2016",
+    endYear: "2019",
+    score: "8.92 CGPA",
+  },
+];
+---
+
+<Layout>
+  <main class="container-max px-4 py-12">
+    <PageTitle title="resume" backHref="/">
+      <a
+        slot="actions"
+        href="/Darvin_Data_Analyst.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block text-sm text-teal-500 dark:text-teal-400 border border-teal-500 dark:border-teal-400 mt-3 px-4 py-1.5 hover:bg-teal-500 hover:text-white dark:hover:text-zinc-900 transition-colors"
+        >download pdf ↓</a
+      >
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Left Column: Experience + Education -->
+        <div class="lg:col-span-2 space-y-10">
+          <!-- Experience -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Experience
+            </p>
+            {
+              experience.map((job) => (
+                <div class="mb-6">
+                  <div class="mb-1 flex flex-col gap-y-1">
+                    <span class="text-xl text-black dark:text-mauve-100 block">
+                      {job.role}
+                    </span>
+                    <span class="text-teal-500 dark:text-teal-400 block text-sm">
+                      {job.company}
+                    </span>
+                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide block">
+                      {job.period}
+                    </span>
+                  </div>
+                  <ul class="space-y-1 mt-2">
+                    {job.bullets.map((b) => (
+                      <li class="flex text-gray-500 dark:text-zinc-400 text-sm leading-relaxed">
+                        <span class="text-gray-300 dark:text-zinc-700 mr-2 select-none">
+                          —
+                        </span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </section>
+        </div>
+
+        <!-- Right Column: Skills + Stack + Education -->
+        <aside class="lg:col-span-1 space-y-10">
+          <!-- Skills -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Skills
+            </p>
+            <div class="space-y-4">
+              {
+                Object.entries(skills).map(([group, tags]) => (
+                  <div>
+                    <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                      {group}
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </section>
+
+          <!-- Stack -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Stack
+            </p>
+            <div class="space-y-4">
+              {
+                Object.entries(stack).map(([group, tags]) => (
+                  <div>
+                    <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                      {group}
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </section>
+
+          <!-- Education -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Education
+            </p>
+            <div class="space-y-4">
+            {
+              education.map((edu) => (
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span class="text-black dark:text-mauve-100">
+                    {edu.degree}
+                    <span class="text-gray-300 dark:text-zinc-600"> · </span>
+                  </span>
+                  <span class="text-teal-500 dark:text-teal-400 block w-full">
+                    {edu.school}
+                  </span>
+                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                    {edu.startYear} – {edu.endYear}
+                    <span class="text-gray-300 dark:text-zinc-600 mx-1">·</span>
+                  </span>
+                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                    {edu.score}
+                  </span>
+                </div>
+              ))
+            }
+            </div>
+          </section>
+        </aside>
+      </div>
+    </PageTitle>
+  </main>
+</Layout>
