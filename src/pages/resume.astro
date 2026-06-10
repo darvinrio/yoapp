@@ -122,15 +122,14 @@ const education = [
           {
             experience.map((job) => (
               <div class="mb-6">
-                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-                  <span class="text-black dark:text-mauve-100">
+                <div class="mb-1 flex flex-col gap-y-1">
+                  <span class="text-black dark:text-mauve-100 block">
                     {job.role}
-                    <span class="text-gray-300 dark:text-zinc-600"> · </span>
-                    <span class="text-teal-500 dark:text-teal-400">
-                      {job.company}
-                    </span>
                   </span>
-                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                  <span class="text-teal-500 dark:text-teal-400 block text-sm">
+                    {job.company}
+                  </span>
+                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide block">
                     {job.period}
                   </span>
                 </div>
