@@ -7,6 +7,7 @@ import PyorLogo from "../assets/logos/pyor-nocolor.svg";
 import LeapLogo from "../assets/logos/leap-nocolor.svg";
 import FlipLogo from "../assets/logos/flip-nocolor.svg";
 import type { WorkEntry } from "../data/work";
+import PageTitle from "../components/PageTitle.astro";
 
 const workEntries: WorkEntry[] = [
   {
@@ -61,7 +62,7 @@ const workEntries: WorkEntry[] = [
 
 <Layout>
   <main class="container-max px-4 py-12">
-    <h1 class="font-title text-3xl text-teal-500 mb-8">Work</h1>
+    <PageTitle title="Work" backHref="/" />
     <div class="space-y-8">
       {workEntries.map((entry) => <WorkItem {...entry} />)}
     </div>
