@@ -84,13 +84,15 @@ const education = [
   {
     degree: "Master of Science - Physics",
     school: "Christ University",
-    year: "2021",
+    startYear: "2019",
+    endYear: "2021",
     score: "8.52 CGPA",
   },
   {
     degree: "Bachelor of Science - Physics",
     school: "Christ University",
-    year: "2019",
+    startYear: "2016",
+    endYear: "2019",
     score: "8.92 CGPA",
   },
 ];
@@ -200,12 +202,13 @@ const education = [
                 <span class="text-black dark:text-mauve-100">
                   {edu.degree}
                   <span class="text-gray-300 dark:text-zinc-600"> · </span>
-                  <span class="text-teal-500 dark:text-teal-400">
-                    {edu.school}
-                  </span>
+                </span>
+                <span class="text-teal-500 dark:text-teal-400 block w-full">
+                  {edu.school}
                 </span>
                 <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
-                  {edu.year}
+                  {edu.startYear} – {edu.endYear}
+                  <span class="text-gray-300 dark:text-zinc-600 mx-1">·</span>
                 </span>
                 <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
                   {edu.score}
