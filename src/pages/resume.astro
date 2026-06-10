@@ -9,23 +9,25 @@ const skills = {
     "Dashboard Building",
     "Data Visualization",
     "KPI Frameworks",
-    "Superset",
-    "Looker",
   ],
   "Data Engineering": [
     "Schema Modelling",
     "Data Pipelines",
     "ClickHouse",
     "Snowflake",
-    "DBT",
   ],
   "Machine Learning": [
     "Clustering",
     "Anomaly Detection",
     "Regression Analysis",
   ],
-  "Programming Languages": ["Python", "SQL", "TypeScript"],
-  Tools: ["Pandas", "Polars", "Git", "Linux", "SciKit Learn"],
+};
+
+const stack = {
+  Languages: ["Python", "SQL", "TypeScript"],
+  Libraries: ["Pandas", "Polars", "Git", "Linux", "SciKit Learn"],
+  Infra: ["DBT", "Git", "Linux"],
+  Visualization: ["Matplotlib", "Dune", "Superset", "Looker"],
 };
 
 const experience = [
@@ -108,7 +110,7 @@ const education = [
               experience.map((job) => (
                 <div class="mb-6">
                   <div class="mb-1 flex flex-col gap-y-1">
-                    <span class="text-black dark:text-mauve-100 block">
+                    <span class="text-xl text-black dark:text-mauve-100 block">
                       {job.role}
                     </span>
                     <span class="text-teal-500 dark:text-teal-400 block text-sm">
@@ -134,7 +136,7 @@ const education = [
           </section>
         </div>
 
-        <!-- Right Column: Skills + Education -->
+        <!-- Right Column: Skills + Stack + Education -->
         <aside class="lg:col-span-1 space-y-10">
           <!-- Skills -->
           <section>
@@ -146,6 +148,33 @@ const education = [
             <div class="space-y-4">
               {
                 Object.entries(skills).map(([group, tags]) => (
+                  <div>
+                    <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                      {group}
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </section>
+
+          <!-- Stack -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Stack
+            </p>
+            <div class="space-y-4">
+              {
+                Object.entries(stack).map(([group, tags]) => (
                   <div>
                     <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
                       {group}
