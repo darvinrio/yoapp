@@ -1,6 +1,7 @@
 ---
 // src/pages/resume.astro
 // Update the data below to match your actual experience, education, and skills
+import PageTitle from "../components/PageTitle.astro";
 import Layout from "../layouts/Layout.astro";
 
 const skills = {
@@ -82,124 +83,116 @@ const education = [
 
 <Layout>
   <main class="container-max px-4 py-12">
-    <div class="flex items-center justify-between mb-2">
-      <h1 class="font-title text-3xl text-black dark:text-mauve-100">
-        resume<span class="text-teal-500 dark:text-teal-400">.</span>
-      </h1>
+    <PageTitle title="resume" backHref="/">
       <a
+        slot="actions"
         href="/Darvin_Data_Analyst.pdf"
         target="_blank"
         rel="noopener noreferrer"
         class="inline-block text-sm text-teal-500 dark:text-teal-400 border border-teal-500 dark:border-teal-400 mt-3 px-4 py-1.5 hover:bg-teal-500 hover:text-white dark:hover:text-zinc-900 transition-colors"
         >download pdf ↓</a
       >
-    </div>
-    <a
-      href="/"
-      class="inline-block text-sm text-gray-500 dark:text-zinc-400 hover:text-teal-500 dark:hover:text-teal-400 mt-0 mb-8 transition-colors"
-      >← back</a
-    >
-    <hr class="border-t border-teal-500 dark:border-teal-400 mb-8" />
 
-    <!-- Two Column Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-      <!-- Left Column: Experience + Education -->
-      <div class="lg:col-span-2 space-y-10">
-        <!-- Experience -->
-        <section>
-          <p
-            class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
-          >
-            Experience
-          </p>
-          {
-            experience.map((job) => (
-              <div class="mb-6">
-                <div class="mb-1 flex flex-col gap-y-1">
-                  <span class="text-black dark:text-mauve-100 block">
-                    {job.role}
-                  </span>
-                  <span class="text-teal-500 dark:text-teal-400 block text-sm">
-                    {job.company}
-                  </span>
-                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide block">
-                    {job.period}
-                  </span>
-                </div>
-                <ul class="space-y-1 mt-2">
-                  {job.bullets.map((b) => (
-                    <li class="flex text-gray-500 dark:text-zinc-400 text-sm leading-relaxed">
-                      <span class="text-gray-300 dark:text-zinc-700 mr-2 select-none">
-                        —
-                      </span>
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
-        </section>
-      </div>
-
-      <!-- Right Column: Skills + Education -->
-      <aside class="lg:col-span-1 space-y-10">
-        <!-- Skills -->
-        <section>
-          <p
-            class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
-          >
-            Skills
-          </p>
-          <div class="space-y-4">
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Left Column: Experience + Education -->
+        <div class="lg:col-span-2 space-y-10">
+          <!-- Experience -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Experience
+            </p>
             {
-              Object.entries(skills).map(([group, tags]) => (
-                <div>
-                  <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
-                    {group}
-                  </p>
-                  <div class="flex flex-wrap gap-2">
-                    {tags.map((tag) => (
-                      <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
-                        {tag}
-                      </span>
-                    ))}
+              experience.map((job) => (
+                <div class="mb-6">
+                  <div class="mb-1 flex flex-col gap-y-1">
+                    <span class="text-black dark:text-mauve-100 block">
+                      {job.role}
+                    </span>
+                    <span class="text-teal-500 dark:text-teal-400 block text-sm">
+                      {job.company}
+                    </span>
+                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide block">
+                      {job.period}
+                    </span>
                   </div>
+                  <ul class="space-y-1 mt-2">
+                    {job.bullets.map((b) => (
+                      <li class="flex text-gray-500 dark:text-zinc-400 text-sm leading-relaxed">
+                        <span class="text-gray-300 dark:text-zinc-700 mr-2 select-none">
+                          —
+                        </span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))
             }
-          </div>
-        </section>
+          </section>
+        </div>
 
-        <!-- Education -->
-        <section>
-          <p
-            class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
-          >
-            Education
-          </p>
-          {
-            education.map((edu) => (
-              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span class="text-black dark:text-mauve-100">
-                  {edu.degree}
-                  <span class="text-gray-300 dark:text-zinc-600"> · </span>
-                </span>
-                <span class="text-teal-500 dark:text-teal-400 block w-full">
-                  {edu.school}
-                </span>
-                <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
-                  {edu.startYear} – {edu.endYear}
-                  <span class="text-gray-300 dark:text-zinc-600 mx-1">·</span>
-                </span>
-                <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
-                  {edu.score}
-                </span>
-              </div>
-            ))
-          }
-        </section>
-      </aside>
-    </div>
+        <!-- Right Column: Skills + Education -->
+        <aside class="lg:col-span-1 space-y-10">
+          <!-- Skills -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Skills
+            </p>
+            <div class="space-y-4">
+              {
+                Object.entries(skills).map(([group, tags]) => (
+                  <div>
+                    <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                      {group}
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </section>
+
+          <!-- Education -->
+          <section>
+            <p
+              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+            >
+              Education
+            </p>
+            {
+              education.map((edu) => (
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span class="text-black dark:text-mauve-100">
+                    {edu.degree}
+                    <span class="text-gray-300 dark:text-zinc-600"> · </span>
+                  </span>
+                  <span class="text-teal-500 dark:text-teal-400 block w-full">
+                    {edu.school}
+                  </span>
+                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                    {edu.startYear} – {edu.endYear}
+                    <span class="text-gray-300 dark:text-zinc-600 mx-1">·</span>
+                  </span>
+                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                    {edu.score}
+                  </span>
+                </div>
+              ))
+            }
+          </section>
+        </aside>
+      </div>
+    </PageTitle>
   </main>
 </Layout>
