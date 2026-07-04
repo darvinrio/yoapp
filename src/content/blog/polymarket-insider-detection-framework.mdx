@@ -1,4 +1,15 @@
-# Polymarket Insider Trading Detection
+---
+title: "Polymarket Insider Detection"
+date: "2026-07-04"
+description: "A framework to detect and rank potential insider trading activites on Polymarket, using only public onchain data. The analysis covers trades between November 1, 2025 and April 28, 2026."
+tags: ["insider trading", "polymarket", "onchain data"]
+---
+
+import Image from "../../components/BlogImage.astro";
+import ContractFlow from "../../assets/blog-images/polymarket-insider-detection-framework/contract_control_flow.png";
+import NotionalAndYield from "../../assets/blog-images/polymarket-insider-detection-framework/notional_and_yield_farmers.png";
+import ScoresDist from "../../assets/blog-images/polymarket-insider-detection-framework/scores_dist.png";
+
 
 This report presents a framework to detect and rank potential insider trading activites on Polymarket, using only public onchain data. The analysis covers trades between November 1, 2025 and April 28, 2026. 
 
@@ -90,8 +101,7 @@ A common pre-processing step in existing works is to remove fill-level events an
 
 In our analysis, we retain the fill-orders, as they are used to compute realized spread, the price difference between the fills in a single taker order, which can be used as a signal to detect liquidity sweeps. 
 
-Flow of control in contract:
-![Contract flow](imgs/contract_control_flow.png)
+<Image src={ContractFlow} alt="Contract flow" caption="Flow of control in contract" />
 
 ### 4.3 Split and Merge trades
 
@@ -101,11 +111,13 @@ Also pointed out by Paradigm Data Partner Slivkoff, fill-order events can repres
 - **Split**: A taker and maker jointly deposit USD, and receive same amount of YES/NO tokens respectively.
 - **Merge**: A taker and maker jointly deposit same amount of YES/NO tokens, and receive USD.
 
-In our EDA, we found that split and merge trades `OrderFilled` events emits info from the maker's perspective, i.e only maker's token ID and maker's price is indexed. The taker's token ID is constructed from the full order `OrderFilled` event associated with the transaction, and the taker's price is computed as \(1 - p_{\text{maker}}\) (since, YES and NO are complementary tokens, the sum to 1 USD). 
+In our EDA, we found that split and merge trades `OrderFilled` events emits info from the maker's perspective, i.e only maker's token ID and maker's price is indexed. The taker's token ID is constructed from the full order `OrderFilled` event associated with the transaction, and the taker's price is computed as $(1 - p_{maker})$ (since, YES and NO are complementary tokens, the sum to 1 USD). 
 
 Since the shares remain constant, the USD volume of the taker's fill can be computed as:
 
-\[\text{USD volume} = \text{shares} \times (1 - p_{\text{maker}})\]
+$$
+\text{USD volume} = \text{shares} \times (1 - p_{maker})
+$$ 
 
 We can sanity check this formula to verify our Split and Merge labelling, by comparing the aggregate sum of maker USD volume for fill-orders with the aggregate sum of taker USD volume for full-orders.
 
@@ -127,8 +139,7 @@ Yield Farming is buying near-certain outcomes at prices close to 1 to capture sm
 * the trade occurs at most 48 hours before resolution
 * trade is in the **correct** direction of the market (i.e. buy a YES when market is going to resolve to YES, or vice versa)
 
-This labelling helps label around 50% of the trades in these price ranges.
-![notional_and_yield_farming](imgs/notional_and_yield_farmers.png)
+<Image src={NotionalAndYield} alt="notional_and_yield_farming" caption="labelling Notional and yield farming helps label around 50% of the trades in these price ranges" />
 
 ## 6. Detection Heuristics
 
@@ -158,9 +169,11 @@ Six heuristics are used to detect potential insider trades - two qualitative and
 
 All four quantitative heuristics use P90 percentile based scoring, instead of industry standard deviation based z-score. Z-score is not used as its best suited for normal distributions, while our dataset is extremely right skewed. Z-score would strongly underestimate outliers. 
 
-For a trade feature \(x\), from a distribution of \(\{x_1, \ldots, x_n\}\), the score is computed as:
+For a trade feature $x$, from a distribution of $\{x_1, \ldots, x_n\}$, the score is computed as:
 
-\[\text{anomaly score} = \frac{x}{P_{90}(x_1, \ldots, x_n)} - 1\]
+$$
+\text{anomaly score} = \frac{x}{P_{90}(x_1, \ldots, x_n)} - 1
+$$
 
 This score measures how many multiples of P90 does the trade exceeds the P90 threshold.
 
@@ -169,7 +182,9 @@ This score measures how many multiples of P90 does the trade exceeds the P90 thr
 **Definition**: We try to ask **"Is this trade large for this market?"**.
 The anomaly score compares a trade's USD bet size to all ther other bet sizes in the market. The scores is:
 
-\[\text{score}_{\text{market-bet}} = \frac{\text{betsize}}{P_{90}(\text{betsizes in market})} - 1\]
+$$
+\text{score}_{\text{market-bet}} = \frac{\text{betsize}}{P_{90}(\text{betsizes in market})} - 1
+$$
 
 The scores are capped at **100 points** - which is the P99 percentile of the bet size distribution.
 **False positives**: Larger portfolios might place larger bets, Yield farming trades outside of the current yield farming definition also go with larger than usual bet sizes.
@@ -179,7 +194,9 @@ The scores are capped at **100 points** - which is the P99 percentile of the bet
 
 **Definition**: We try to ask **"Is this trade large for this user?"**. The anomaly score compares a trade's USD bet size to the user's own bet size history. The score is:
 
-\[\text{score}_{\text{user-bet}} = \frac{\text{betsize}}{P_{90}(\text{betsizes by wallet})} - 1\]
+$$
+\text{score}_{\text{user-bet}} = \frac{\text{betsize}}{P_{90}(\text{betsizes by wallet})} - 1
+$$
 
 The scores are capped at **50 points** - which is the P99.9 percentile of the bet size distribution.
 
@@ -191,7 +208,9 @@ Since this fires independently from H3, a whales large trade maynot trigger H3, 
 
 **Definition**: We try to ask **"Is this trade's execution cost is higher than expected, when compared to other trades in the same market?"**. The anomaly score compares a trade's market spread to the market's own spread. A key difference is that since the distribution is extremely zero-heavy, we only compare against non-zero spread in the same market. The score is:
 
-\[\text{score}_{\text{market-spread}} = \frac{\text{spread}}{P_{90}(\text{non-zero spreads in market})} - 1\]
+$$
+\text{score}_{\text{market-spread}} = \frac{\text{spread}}{P_{90}(\text{non-zero spreads in market})} - 1
+$$
 
 Scores are capped at P99.9 value of **100 points** to avoid extreme outliers.
 
@@ -202,7 +221,9 @@ Only non-zero spreads above 1e-6 are included in the distribution, so that singl
 **Intuition**: A trade who usually executes cleanly with single fills or tight multifill spread, but suddenly accepts a wider spread, might have priortized execution confirmation over execution quality. This could indicate a change in user's behaviour in terms of urgency. 
 **Definition**: We try to ask **"Is this trade's execution cost is for this user?"**. The anomaly score compares a trade's market spread to the user's own historical spread. Similar to H5, since the distribution is extremely zero-heavy, we only compare against non-zero spread in the same market. The score is:
 
-\[\text{score}_{\text{user-spread}} = \frac{\text{spread}}{P_{90}(\text{non-zero spreads by wallet})} - 1\]
+$$
+\text{score}_{\text{user-spread}} = \frac{\text{spread}}{P_{90}(\text{non-zero spreads by wallet})} - 1
+$$
 
 Scores are capped at P99.9 value of **50 points** to avoid extreme outliers.
 **False positives**: 
