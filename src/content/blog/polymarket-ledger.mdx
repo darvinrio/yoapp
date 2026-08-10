@@ -111,10 +111,10 @@ Let's check the following transaction [0x4fce56...93dc76](https://polygonscan.co
 |Index|Maker|Taker|MakerAsset|TakerAsset|MakerAmountFilled|TakerAmountFilled|Shares|Amount|Price|FillType|
 |---|---|---|---|---|---|---|---|---|---|---|
 |Onchain|Onchain|Onchain|Onchain|Onchain|Onchain|Onchain|Dune|Dune|Dune|-|
-|---|---|---|---|---|---|---|---|---|---|---|
-|36|0xd9a591340776aced8f42b426dd1f42d0e79e8ce6|0x0c45c7c2b1ec281e2a8d0c204eb709f4bc9fba73|USD|YES|     28.413180| 3,157.020000|  3,157.020000|    $ 28.413180| $ 0.09|  Swap |
-|42|0x8e8cf968a888c72a45627be3660d1c815d4c6657|0x0c45c7c2b1ec281e2a8d0c204eb709f4bc9fba73|NO |USD|  6,842.980000| 6,781.393180|  6,842.980000| $ 6,781.393180| $ 0.90| Merge |
-|44|0x0c45c7c2b1ec281e2a8d0c204eb709f4bc9fba73|0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e|YES|USD| 10,000.000000|   90.0000000| 10,000.000000|   $ 90.0000000| $ 0.09| FullOrder | 
+||||||||||||
+|36|0xd9a591340776aced8f42b426dd1f42d0e79e8ce6|**0x0c45c7c2b1ec281e2a8d0c204eb709f4bc9fba73**|USD|YES|     28.413180| 3,157.020000|  3,157.020000|    $ 28.413180| $ 0.09|  Swap |
+|42|0x8e8cf968a888c72a45627be3660d1c815d4c6657|**0x0c45c7c2b1ec281e2a8d0c204eb709f4bc9fba73**|NO |USD|  6,842.980000| 6,781.393180|  6,842.980000| $ 6,781.393180| $ 0.90| Merge |
+|44|**0x0c45c7c2b1ec281e2a8d0c204eb709f4bc9fba73**|0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e|YES|USD| 10,000.000000|    90.000000| 10,000.000000|   $ 90.000000| $ 0.09| FullOrder | 
 
 A few takeaways from the broader structure based on examples such as above:
 1. We find that the `OrderFilled` event always contains one asset tokenID and the other is always the collateral, i.e USD.
@@ -378,16 +378,16 @@ The remaining 67 positions have either a Transfer Out or a Negrisk NO Convert. M
 Of the 1166 positions that did not match with API
 1. 138 positions belong to `0x05cd9922a5d37fae921fc5dee280a9dbc4c3b393` - The Auto Redemption contract
 2. 97 positions belong to `0xa5ef39c3d3e10d0b270233af41cac69796b12966` - The NegRisk Escrow contract
-3. 137 positions have absolute PnL less than 10$
-4. 789 positions have PnL less than -10$, all the way to -3,000,000$
-5. 17 positions have PnL above 10$, all the way to 300,000$
+3. 137 positions have absolute PnL less than 10\$
+4. 789 positions have PnL less than -10\$, all the way to -3,000,000$
+5. 17 positions have PnL above 10\$, all the way to 300,000$
 
 We check the top 2 most negative PnL and the top 2 most positive PnL positions to try and understand why the positions do not appear at the API at all. 
 It doesn't make much sense as to why they do not appear at the API at all. 
 1. `0xae8758cf74d46eb0c9d889e50f1a089b1e3bc735` wallet `NO` position on `Will Real Madrid CF win on 2026-03-07? - RC Celta de Vigo vs. Real Madrid CF` market has 392 transfer events, but the API doesn't have an entry
 2. `0x01542a212c9696da5b409cae879143b8966115a8` wallet `YES` on `Will Bitcoin reach $105,000 in January?` market has 405 transfer events , but the API only has logged the `NO` position, which itself has a `$-307,989.28` PnL. In this case, the postive PnL of the YES position would register a net positive PnL.
 
-|Trader|Token|PnL|TokenID|Condition ID|Market|Dune Query]
+|Trader|Token|PnL|TokenID|Condition ID|Market|Dune Query|
 |------|-----|-----|-----|-------|------|------|
 |0xae8758cf74d46eb0c9d889e50f1a089b1e3bc735|NO| -3,255,428.68|30460198104425192234011482627716526429118981289164193924263317826299055501303|0x832e608427a5d6db43947262d84a06bca5630a700eac7eed50e64d00b1a016df|Will Real Madrid CF win on 2026-03-07? - RC Celta de Vigo vs. Real Madrid CF|[🔗](https://dune.com/queries/8252193/12248358?LIMIT_t6f0df=10000)
 |0x742defec5672b86ae1366546977323d0b0fb33fb|YES| -3,222,068.65 |47494701246623683904467099439211712078496707997982781452643608690648347494691|0x22210ba50e974556bb194cd0f0176ae82dc2ac1b2db42e2ad2c20801ff9f5c8b|Will Brentford FC win on 2026-03-16? - Brentford FC vs. Wolverhampton Wanderers FC|[🔗](https://dune.com/queries/8252193/12253736?END_DATE_t6f0df=2026-03-18&LIMIT_t6f0df=10000&START_DATE_t6f0df=2026-03-10&TOKEN_ID_t6f0df=47494701246623683904467099439211712078496707997982781452643608690648347494691&TRADER_t6f0df=0x742defec5672b86ae1366546977323d0b0fb33fb)
