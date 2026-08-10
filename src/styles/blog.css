@@ -37,3 +37,9 @@
 .prose .table-wrap th {
   white-space: nowrap;
 }
+
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
