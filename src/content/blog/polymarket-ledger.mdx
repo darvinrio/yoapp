@@ -235,8 +235,7 @@ We do not go down these approaches cause:
 eg:
 Say a trader wants to gain a position of 10 YES tokens. They deposit 10 USD and mint 10 YES tokens + 10 NO tokens. The 2nd leg of the trade would be to sell the 10 NO tokens on the market. If they sell the 10 NO tokens for 0.1 USD per token, their recuperation is 1 USD (10 NO tokens * 0.1 USD per token). Thus, the effective cost of the 10 YES position is 0.9 USD.
 
-[TODO: better wording, or fix the naive approach]
-Our naive approach manages to match the expected pricing, but offsets the effective cost of YES tokens to the NO tokens. Instead of a single 9 USD for 10 YES tokens, we get 5 USD for 10 YES tokens and 5 USD for NO tokens sold on the market for 1 USD. Instead of a 9 USD YES position, we get two positions.
+Our naive approach manages to match the expected pricing, but offsets the effective cost of YES tokens to the NO tokens. Instead of a single 9 USD for 10 YES tokens, we get 5 USD for 10 YES tokens and 5 USD for NO tokens sold on the market for 1 USD. Instead of a 9 USD YES position at 0 USD profit, we get two positions - YES position at 4 USD profit and NO position at 4 USD loss.
 
 ### 6.4. Standalone Merges
 
@@ -263,15 +262,13 @@ Because the `PositionConverted` event itself doesn't log the correct token IDs t
 For the `YES` minting leg, we use the `BatchTransfer` event that is right before the `PositionConverted` event, i.e if `i` is the `PositionConverted` event index, then `i-1` is the `YES` `BatchTransfer` event index.
 For the `NO` burning leg, based on the figure above, the `BatchTransfer` is always between `i-3` and `i-6`, if `i` is the index of the `PositionConverted` event. This event offset is fee-schedule-dependent. Fig above shows the offset shifts under the "Both Fee & Collateral" and "No Collateral" configurations. An interesting takeaway is that we can determine the type of convert, based on the difference between indexes of the `PositionConverted` and `BatchTransfer` events.
 
-[TODO: improve readability and wording]
 The USD and share deltas are as follows:
 - USD delta is positive for the `NO` burning leg. Since for `n` NO positions burned, we receive `n-1` NO positions worth USD, the USD value of each NO position is `(n-1) * shares / n` USD.
 - The shares delta is negative for the `NO` burning leg. The shares amount remains the same as `shares`
 - The shares delta is positive for the `YES` minting leg, and the shares amount remains the same as `shares`
 - The USD delta is 0 for the `YES` minting leg.
 
-We already know that the USD received by the trader is equivalent to `n-1` NO positions for `n` NO positions burned. Thus we can price the `NO` positions as `(n-1) / n` USD per token. The `YES` positions are priced as `0`. 
-[TODO: `YES` pricing in convert seems sus, since a 0-priced position seems like a disaster waiting to happen]
+We already know that the USD received by the trader is equivalent to `n-1` NO positions for `n` NO positions burned. Thus we can price the `NO` positions as `(n-1) / n` USD per token. The `YES` positions are priced as `0`.
 
 ### 6.6. Standalone Transfers
 
