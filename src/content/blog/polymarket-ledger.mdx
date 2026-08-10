@@ -1,4 +1,14 @@
-# How to build a Polymarket Resolution dataset on Dune
+---
+title: "Building a Polymarket Resolution dataset on Dune"
+date: "2026-08-10"
+description: "A technical documentation on rebuilding the Polymarket Ledger dataset on Dune"
+tags: ["polymarket", "onchain data"]
+---
+
+import Image from "../../components/BlogImage.astro";
+import ContractFlow from "../../assets/blog-images/polymarket-ledger/contract_control_flow.png";
+import ConvertFlow from "../../assets/blog-images/polymarket-ledger/conv.png";
+
 
 ## 1. Introduction
 About a month ago, I started working on a framework to detect insider trading on Polymarket. I decided to use Dune as the data source, since it's easier to verify it by building it from first principles than by relying on the Polymarket API. One of the main features I wanted to use was PnL per position. However, I couldn't find a reliable source of this data. Multiple existing methodologies look reasonable, but break down the moment you run some basic sanity checks. The integrity of the PnL data is important to anything that's built on top of it. Hence, I decided to delve deeper into building a reliable PnL dataset on Dune with an auditable ledger, straight from onchain data. 
@@ -92,7 +102,7 @@ The article by Slivkoff also explains the 3 different types of CLOB trades:
 - **Split**: A taker and maker jointly deposit USD, and receive same amount of YES/NO tokens respectively.
 - **Merge**: A taker and maker jointly deposit same amount of YES/NO tokens, and receive USD.
 
-![OrderMatching](imgs/contract_control_flow.png)
+<Image src={ContractFlow} alt="OrderMatching" caption="`OrderMatching` contract control flow" />
 
 However, the article itself doesn't delve deeper into finer details beyond that. This is probably because the aim of that article itself was to analyze overall volume processed, and spread wasn't a focus for that. 
 
@@ -241,8 +251,8 @@ The USD and share deltas are opposite to that of standalone splits, i.e USD delt
 ### 6.5. NegRisk Converts
 
 The event structure is a bit tricky. 
-![Convert Event Emissions](imgs/conv.png)
-*Fig. 2 — `convertPositions` flow. The right-hand table shows event offsets relative to the terminal `PositionsConverted` event (`i`) across four fee/collateral configurations. For the no-fee, v1 case used here: the trader's NO burn (`BatchTransfer`) falls between `i-3` and `i-6`; the YES mint to the trader is always at `i-1`.*
+
+<Image src={ConvertFlow} alt="Convert Event Emissions" caption="Fig. 2 — `convertPositions` flow. The right-hand table shows event offsets relative to the terminal `PositionsConverted` event (`i`) across four fee/collateral configurations. For the no-fee, v1 case used here: the trader's NO burn (`BatchTransfer`) falls between `i-3` and `i-6`; the YES mint to the trader is always at `i-1`." /> 
 
 There are 3 legs for this trade:
 1. Trader burns their `NO` tokens
