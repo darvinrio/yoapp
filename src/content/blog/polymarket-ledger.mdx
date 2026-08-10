@@ -285,8 +285,8 @@ The ideal way to price these transfers would be to use the price of the token at
 | Event | USD logic | Share Logic | Pricing Logic | Why | 
 |---|---|---|---|---|
 | CLOB Trade | `$ -usd` if buy, `$ +usd` if sell | `-shares` if buy, `+shares` if sell | `usd / shares` | CLOB trades involve USD trade for Shares |
-| Split | `$ -usd` | `shares` | $1 of collateral mints 1 YES + 1 NO — priced at parity |
-| Merge | `$ +usd` | `-shares` | 1 YES + 1 NO burns for $1 of collateral — same parity |
+| Split | `$ -usd` | `shares` | `$0.5` | $1 of collateral mints 1 YES + 1 NO — priced at parity |
+| Merge | `$ +usd` | `-shares` | `$0.5` | 1 YES + 1 NO burns for $1 of collateral — same parity |
 | Convert (NO burn leg) | `$ (n-1) x shares` | `-shares` | `(n − 1) × shares / n` | Of `n` NO tokens burned, `n − 1` convert straight to USD |
 | Convert (YES mint leg) | `$0` | `shares` | `$0` | The 1 remaining unit converts to YES 'for free' — the USD value already realized on the burn leg |
 | Stray transfer | `$0`  | `-shares` if sender, `+shares` if receiver | `$0` | No USD changes hands; pure share movement between wallets |
@@ -433,7 +433,7 @@ This should be easier to resolve with a more sophisticated CLOB trades table tha
 - Resolution Summary - [Dune Query](https://dune.com/queries/8229847)
 - Resolution Ledger - [Dune Query](https://dune.com/queries/8148073)
 - Naive Ledger Summary - [Dune Query](https://dune.com/queries/8230769)
-- ERC 1155 LedgerSummary - [Dune Query](https://dune.com/queries/8230946)
+- ERC 1155 Ledger Summary - [Dune Query](https://dune.com/queries/8230946)
 - Stratified Sampling - [Dune Query](https://dune.com/queries/8233356)
 
 ## 10. SQL Mapping to Ledger
