@@ -8,8 +8,11 @@ tags: ["polymarket", "onchain data"]
 import Image from "../../components/BlogImage.astro";
 import ContractFlow from "../../assets/blog-images/polymarket-ledger/contract_control_flow.png";
 import ConvertFlow from "../../assets/blog-images/polymarket-ledger/conv.png";
+import LedgerHeader from "../../assets/blog-images/polymarket-ledger/ledger_header.png";
 
-> *AI DISCLOSURE: The idea and the prose was largely typed by a Human. However, AI was used to give a structure and a narrative to the blog post.*
+<Image src={LedgerHeader} alt="Ledger Header" />
+
+> *AI DISCLOSURE: The idea and the prose was largely typed by a Human. However, AI was used to give a structure and a narrative to the blog post. You can find the different versions [here](https://github.com/darvinrio/polymarket-insider-heuristics/tree/main/reports/ledger).*
 
 ## 1. Introduction
 About a month ago, I started working on a framework to detect insider trading on Polymarket. I decided to use Dune as the data source, since it's easier to verify it by building it from first principles than by relying on the Polymarket API. One of the main features I wanted to use was PnL per position. However, I couldn't find a reliable source of this data. Multiple existing methodologies look reasonable, but break down the moment you run some basic sanity checks. The integrity of the PnL data is important to anything that's built on top of it. Hence, I decided to delve deeper into building a reliable PnL dataset on Dune with an auditable ledger, straight from onchain data. 
@@ -159,7 +162,7 @@ Here is how the actual swap looks.
 | 2025-11-15 03:26:24 | 250    | NO         | SPLIT     | +250         | 350.00            | ✅   | 0.5   | 50.00  | [0x7ba9db.. 🔗](https://polygonscan.com/tx/0x7ba9db8e79d3f4d44ea477e0c158c315bd045a3556b727c7806cbc1197852298#eventlog) | 
 | 2025-11-15 03:32:04 | 250    | YES        | SELL      | -250         | 0                 | ✅   | 0.030 | 7.50   | [0x424240.. 🔗](https://polygonscan.com/tx/0x42424044aed3d4bc83ab792bab84cf890d40a694fb7584df30810b7cfaea02d4#eventlog) | 
 
-Before the 100 and 250 share sells of the YES token, the trader executed SPLIT, where they deposited collateral to mint YES+NO pairs, thus creating a NO position. This is what I meant by the trade itself lacking context. In a previous work of mine, I labelled trades as Yield Farming and Notional Farming based on the price of execution of the trade. The SELLs of YES token would have been flagged as Notional Farming, since the token price was low, while in truth the trade was a second leg of a potential Yield Farming trade. The trader would go on to execute one more SPLIT + YES sale before they SELL their accumulated 350 share NO position.
+Before the 100 and 250 share sells of the YES token, the trader executed SPLIT, where they deposited collateral to mint YES+NO pairs, thus creating a NO position. This is what I meant by the trade itself lacking context. In a [previous work of mine](/blog/polymarket-insider-detection-framework), I labelled trades as Yield Farming and Notional Farming based on the price of execution of the trade. The SELLs of YES token would have been flagged as Notional Farming, since the token price was low, while in truth the trade was a second leg of a potential Yield Farming trade. The trader would go on to execute one more SPLIT + YES sale before they SELL their accumulated 350 share NO position.
 
 It's obvious how quickly these non-CLOB changes can degrade your dataset. 
 1. Negative balances or Ghost sales - Where a trader seems to sell a position which they didn't own.
@@ -170,7 +173,7 @@ Both of these affect PnL strongly, introducing negative PnL from negative balanc
 
 ### 5.2. Conversion
 
-This is a special feature of NegRisk Markets. If you are all the way here and do not know what a NegRisk market is, it's an efficient way ot bundling markets with mutually exclusive outcomes together. A presidential election market is a good example, as there can be 10 candidates. Instead of 10 different markets, we have a single market. 
+This is a special feature of NegRisk Markets. If you are all the way here and do not know what a NegRisk market is, it's an efficient way of bundling markets with mutually exclusive outcomes together. A presidential election market is a good example, as there can be 10 candidates. Instead of 10 different markets, we have a single market. 
 A key feature of these markets is that, if there are `n` different outcomes, then `1` resolves to `YES` and `n-1` resolves to `NO`. An extension of this is that, if anyone holds more than 1 `NO` token, they are guaranteed to resolve all but one `NO` token. Due to this, Polymarket allows anyone to convert `n` `NO` positions to USD worth `n-1` `NO` positions by using the `convertPositions` function.
 
 ### 5.3. External ERC-1155 transfers
