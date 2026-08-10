@@ -9,6 +9,7 @@ import Image from "../../components/BlogImage.astro";
 import ContractFlow from "../../assets/blog-images/polymarket-ledger/contract_control_flow.png";
 import ConvertFlow from "../../assets/blog-images/polymarket-ledger/conv.png";
 
+> *AI DISCLOSURE: The idea and the prose was largely typed by a Human. However, AI was used to give a structure and a narrative to the blog post.*
 
 ## 1. Introduction
 About a month ago, I started working on a framework to detect insider trading on Polymarket. I decided to use Dune as the data source, since it's easier to verify it by building it from first principles than by relying on the Polymarket API. One of the main features I wanted to use was PnL per position. However, I couldn't find a reliable source of this data. Multiple existing methodologies look reasonable, but break down the moment you run some basic sanity checks. The integrity of the PnL data is important to anything that's built on top of it. Hence, I decided to delve deeper into building a reliable PnL dataset on Dune with an auditable ledger, straight from onchain data. 
@@ -252,7 +253,7 @@ The USD and share deltas are opposite to that of standalone splits, i.e USD delt
 
 The event structure is a bit tricky. 
 
-<Image src={ConvertFlow} alt="Convert Event Emissions" caption="Fig. 2 — `convertPositions` flow. The right-hand table shows event offsets relative to the terminal `PositionsConverted` event (`i`) across four fee/collateral configurations. For the no-fee, v1 case used here: the trader's NO burn (`BatchTransfer`) falls between `i-3` and `i-6`; the YES mint to the trader is always at `i-1`. /> 
+<Image src={ConvertFlow} alt="Convert Event Emissions" caption="Fig. 2 — `convertPositions` flow. The right-hand table shows event offsets relative to the terminal `PositionsConverted` event (`i`) across four fee/collateral configurations. For the no-fee, v1 case used here: the trader's NO burn (`BatchTransfer`) falls between `i-3` and `i-6`; the YES mint to the trader is always at `i-1`." /> 
 
 There are 3 legs for this trade:
 1. Trader burns their `NO` tokens.
@@ -287,7 +288,7 @@ The ideal way to price these transfers would be to use the price of the token at
 | Split | `$ -usd` | `shares` | $1 of collateral mints 1 YES + 1 NO — priced at parity |
 | Merge | `$ +usd` | `-shares` | 1 YES + 1 NO burns for $1 of collateral — same parity |
 | Convert (NO burn leg) | `$ (n-1) x shares` | `-shares` | `(n − 1) × shares / n` | Of `n` NO tokens burned, `n − 1` convert straight to USD |
-| Convert (YES mint leg) | `$0` | `shares` | `$0` | The 1 remaining unit converts to YES "for free" — the USD value already realized on the burn leg |
+| Convert (YES mint leg) | `$0` | `shares` | `$0` | The 1 remaining unit converts to YES 'for free' — the USD value already realized on the burn leg |
 | Stray transfer | `$0`  | `-shares` if sender, `+shares` if receiver | `$0` | No USD changes hands; pure share movement between wallets |
 
 ### 6.8. Assembling it all
@@ -377,8 +378,8 @@ Of the 1166 positions that did not match the API
 1. 138 positions belong to `0x05cd9922a5d37fae921fc5dee280a9dbc4c3b393` - The Auto Redemption contract
 2. 97 positions belong to `0xa5ef39c3d3e10d0b270233af41cac69796b12966` - The NegRisk Escrow contract
 3. 137 positions have absolute PnL less than 10\$
-4. 789 positions have PnL less than -10\$, all the way to -3,000,000$
-5. 17 positions have PnL above 10\$, all the way to 300,000$
+4. 789 positions have PnL less than -10\$, all the way to -3,000,000\$
+5. 17 positions have PnL above 10\$, all the way to 300,000\$
 
 We check the top 2 most negative PnL and the top 2 most positive PnL positions to try and understand why the positions do not appear at the API at all. 
 It doesn't make much sense as to why they do not appear at the API at all. 
@@ -388,9 +389,9 @@ It doesn't make much sense as to why they do not appear at the API at all.
 |Trader|Token|PnL|TokenID|Condition ID|Market|Dune Query|
 |------|-----|-----|-----|-------|------|------|
 |0xae8758cf74d46eb0c9d889e50f1a089b1e3bc735|NO| -3,255,428.68|30460198104425192234011482627716526429118981289164193924263317826299055501303|0x832e608427a5d6db43947262d84a06bca5630a700eac7eed50e64d00b1a016df|Will Real Madrid CF win on 2026-03-07? - RC Celta de Vigo vs. Real Madrid CF|[🔗](https://dune.com/queries/8252193/12248358?LIMIT_t6f0df=10000)
-|0x742defec5672b86ae1366546977323d0b0fb33fb|YES| -3,222,068.65 |47494701246623683904467099439211712078496707997982781452643608690648347494691|0x22210ba50e974556bb194cd0f0176ae82dc2ac1b2db42e2ad2c20801ff9f5c8b|Will Brentford FC win on 2026-03-16? - Brentford FC vs. Wolverhampton Wanderers FC|[🔗](https://dune.com/queries/8252193/12253736?END_DATE_t6f0df=2026-03-18&LIMIT_t6f0df=10000&START_DATE_t6f0df=2026-03-10&TOKEN_ID_t6f0df=47494701246623683904467099439211712078496707997982781452643608690648347494691&TRADER_t6f0df=0x742defec5672b86ae1366546977323d0b0fb33fb)
-|0x01542a212c9696da5b409cae879143b8966115a8|YES| 317,667.48|5890753752906002052534785499305647451620312211019774830504168272322511375782|0x542fb07feb00feddb87c1d9e93ebf439a692c6b12e81e935ef2a5cda7de70dfb|Will Bitcoin reach $105,000 in January?|[🔗](https://dune.com/queries/8252193/12248358?LIMIT_t6f0df=10000&TRADER_t6f0df=0x01542a212c9696da5b409cae879143b8966115a8&TOKEN_ID_t6f0df=5890753752906002052534785499305647451620312211019774830504168272322511375782&END_DATE_t6f0df=2026-02-02&START_DATE_t6f0df=2026-01-01)
-|0x2eb5714ff6f20f5f9f7662c556dbef5e1c9bf4d4|YES| 327,151.19|73624432805780182150964443951045800666977811185963019133914618974858599458273|0x561ffbf7de21ef3781c441f30536b026d2b301d7a4a0145a8f526f98db049ba2|Will Bitcoin reach $150,000 in March?|[🔗](https://dune.com/queries/8252193/12253736?LIMIT_t6f0df=10000&TRADER_t6f0df=0x2eb5714ff6f20f5f9f7662c556dbef5e1c9bf4d4&TOKEN_ID_t6f0df=73624432805780182150964443951045800666977811185963019133914618974858599458273&END_DATE_t6f0df=2026-04-02&START_DATE_t6f0df=2026-03-01)
+|0x742defec5672b86ae1366546977323d0b0fb33fb|YES| -3,222,068.65 |47494701246623683904467099439211712078496707997982781452643608690648347494691|0x22210ba50e974556bb194cd0f0176ae82dc2ac1b2db42e2ad2c20801ff9f5c8b|Will Brentford FC win on 2026-03-16? - Brentford FC vs. Wolverhampton Wanderers FC|[🔗](https://dune.com/queries/8252193/12253736?END_DATE_t6f0df=2026-03-18&amp;LIMIT_t6f0df=10000&amp;START_DATE_t6f0df=2026-03-10&amp;TOKEN_ID_t6f0df=47494701246623683904467099439211712078496707997982781452643608690648347494691&amp;TRADER_t6f0df=0x742defec5672b86ae1366546977323d0b0fb33fb)
+|0x01542a212c9696da5b409cae879143b8966115a8|YES| 317,667.48|5890753752906002052534785499305647451620312211019774830504168272322511375782|0x542fb07feb00feddb87c1d9e93ebf439a692c6b12e81e935ef2a5cda7de70dfb|Will Bitcoin reach $105,000 in January?|[🔗](https://dune.com/queries/8252193/12248358?LIMIT_t6f0df=10000&amp;TRADER_t6f0df=0x01542a212c9696da5b409cae879143b8966115a8&amp;TOKEN_ID_t6f0df=5890753752906002052534785499305647451620312211019774830504168272322511375782&amp;END_DATE_t6f0df=2026-02-02&amp;START_DATE_t6f0df=2026-01-01)
+|0x2eb5714ff6f20f5f9f7662c556dbef5e1c9bf4d4|YES| 327,151.19|73624432805780182150964443951045800666977811185963019133914618974858599458273|0x561ffbf7de21ef3781c441f30536b026d2b301d7a4a0145a8f526f98db049ba2|Will Bitcoin reach $150,000 in March?|[🔗](https://dune.com/queries/8252193/12253736?LIMIT_t6f0df=10000&amp;TRADER_t6f0df=0x2eb5714ff6f20f5f9f7662c556dbef5e1c9bf4d4&amp;TOKEN_ID_t6f0df=73624432805780182150964443951045800666977811185963019133914618974858599458273&amp;END_DATE_t6f0df=2026-04-02&amp;START_DATE_t6f0df=2026-03-01)
 
 ## 8. Limitations
 
