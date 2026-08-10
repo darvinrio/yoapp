@@ -4,13 +4,14 @@ import mdx from "@astrojs/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeTableWrap from "./src/plugins/rehype-table-wrap";
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [mdx()],
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
+    rehypePlugins: [rehypeKatex, rehypeTableWrap],
   },
   vite: {
     plugins: [tailwindcss()],

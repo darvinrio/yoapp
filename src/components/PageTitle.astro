@@ -14,13 +14,16 @@ const { title, backHref } = Astro.props;
     </h1>
     <slot name="actions" />
   </div>
-  {backHref && (
-    <a
-      href={backHref}
-      class="inline-block text-sm text-gray-500 dark:text-zinc-400 hover:text-teal-500 dark:hover:text-teal-400 mt-0 mb-8 transition-colors"
-      >← back</a
-    >
-  )}
+  {
+    backHref && (
+      <a
+        href={backHref}
+        class="inline-block text-sm text-gray-500 dark:text-zinc-400 hover:text-teal-500 dark:hover:text-teal-400 mt-0 mb-8 transition-colors"
+      >
+        ← back
+      </a>
+    )
+  }
   <hr class="border-t border-teal-500 dark:border-teal-400 mb-8" />
   <slot />
 </div>

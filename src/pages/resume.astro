@@ -200,26 +200,28 @@ const education = [
               Education
             </p>
             <div class="space-y-4">
-            {
-              education.map((edu) => (
-                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span class="text-black dark:text-mauve-100">
-                    {edu.degree}
-                    <span class="text-gray-300 dark:text-zinc-600"> · </span>
-                  </span>
-                  <span class="text-teal-500 dark:text-teal-400 block w-full">
-                    {edu.school}
-                  </span>
-                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
-                    {edu.startYear} – {edu.endYear}
-                    <span class="text-gray-300 dark:text-zinc-600 mx-1">·</span>
-                  </span>
-                  <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
-                    {edu.score}
-                  </span>
-                </div>
-              ))
-            }
+              {
+                education.map((edu) => (
+                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span class="text-black dark:text-mauve-100">
+                      {edu.degree}
+                      <span class="text-gray-300 dark:text-zinc-600"> · </span>
+                    </span>
+                    <span class="text-teal-500 dark:text-teal-400 block w-full">
+                      {edu.school}
+                    </span>
+                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                      {edu.startYear} – {edu.endYear}
+                      <span class="text-gray-300 dark:text-zinc-600 mx-1">
+                        ·
+                      </span>
+                    </span>
+                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                      {edu.score}
+                    </span>
+                  </div>
+                ))
+              }
             </div>
           </section>
         </aside>
