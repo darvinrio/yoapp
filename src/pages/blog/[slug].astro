@@ -34,7 +34,7 @@ const { Content } = await render(post);
       <div slot="actions" class="text-right">
         <time
           datetime={post.data.date.toISOString()}
-          class="text-sm text-gray-500 dark:text-zinc-400 mt-2 block"
+          class="text-sm text-ink-faint mt-2 block"
         >
           {
             post.data.date.toLocaleDateString("en-US", {
@@ -47,7 +47,7 @@ const { Content } = await render(post);
         <div class="mt-3 flex flex-wrap gap-2 justify-end">
           {
             post.data.tags.map((tag: string) => (
-              <span class="text-xs px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-zinc-700 dark:text-teal-300">
+              <span class="text-xs px-2 py-0.5 rounded-full bg-accent-soft text-accent-soft-ink">
                 {tag}
               </span>
             ))

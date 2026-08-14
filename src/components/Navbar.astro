@@ -7,13 +7,10 @@ const links = [
   { href: "/resume", label: "Resume" },
 ];
 
-const linkClass =
-  "hover:text-teal-500 dark:hover:text-teal-400 transition-colors";
+const linkClass = "hover:text-accent transition-colors";
 ---
 
-<nav
-  class="sticky top-0 z-50 w-full bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700"
->
+<nav class="sticky top-0 z-50 w-full bg-surface border-b border-line">
   <div
     class="absolute inset-0 pointer-events-none"
     style="background-image:url('/texture.png');background-repeat:repeat;background-position:center top;background-size:192px;opacity:0.05;"
@@ -23,7 +20,7 @@ const linkClass =
     class="container-max px-4 py-3 flex items-center justify-between relative z-10"
   >
     <a href="/" class="font-title text-xl">
-      maybe<span class="text-teal-500">Yonas</span>
+      maybe<span class="text-accent">Yonas</span>
     </a>
 
     <div class="hidden md:flex items-center gap-6 font-text">
@@ -48,7 +45,7 @@ const linkClass =
       aria-label="Toggle menu"
       aria-controls="mobile-menu"
       aria-expanded="false"
-      class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors"
+      class="md:hidden p-2 rounded-lg hover:bg-surface-hover transition-colors"
     >
       <svg
         id="icon-hamburger"
@@ -61,7 +58,7 @@ const linkClass =
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="block dark:text-mauve-200 text-black"
+        class="block text-ink"
       >
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -78,7 +75,7 @@ const linkClass =
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="hidden dark:text-mauve-200 text-black"
+        class="hidden text-ink"
       >
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -88,7 +85,7 @@ const linkClass =
 
   <div
     id="mobile-menu"
-    class="hidden md:hidden border-t border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+    class="hidden md:hidden border-t border-line bg-surface"
   >
     <div class="flex flex-col items-end gap-4 py-4 px-6 font-text">
       <DarkToggle />

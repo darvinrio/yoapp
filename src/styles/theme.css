@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-hover: #f3f4f6;
+  --color-control: #ffffff;
+  --color-ink: #000000;
+  --color-ink-strong: #000000;
+  --color-ink-muted: #374151;
+  --color-ink-faint: #6b7280;
+  --color-ink-faintest: #9ca3af;
+  --color-line: #e5e7eb;
+  --color-line-strong: #d1d5db;
+  --color-accent: #14b8a6;
+  --color-accent-bright: #14b8a6;
+  --color-accent-soft: #ccfbf1;
+  --color-accent-soft-ink: #0f766e;
+  --color-on-accent: #ffffff;
+  --color-warning: #eab308;
+}
+
+.dark {
+  --color-surface: #27272a;
+  --color-surface-raised: #18181b;
+  --color-surface-hover: #3f3f46;
+  --color-control: #3f3f46;
+  --color-ink: #e8e5ef;
+  --color-ink-strong: #f1eef7;
+  --color-ink-muted: #d4d4d8;
+  --color-ink-faint: #a1a1aa;
+  --color-ink-faintest: #71717a;
+  --color-line: #3f3f46;
+  --color-line-strong: #52525b;
+  --color-accent: #2dd4bf;
+  --color-accent-bright: #5eead4;
+  --color-accent-soft: #3f3f46;
+  --color-accent-soft-ink: #5eead4;
+  --color-on-accent: #18181b;
+  --color-warning: #fde047;
+}

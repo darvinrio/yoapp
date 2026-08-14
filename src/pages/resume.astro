@@ -91,7 +91,7 @@ const education = [
         href="/Darvin_Data_Analyst.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block text-sm text-teal-500 dark:text-teal-400 border border-teal-500 dark:border-teal-400 mt-3 px-4 py-1.5 hover:bg-teal-500 hover:text-white dark:hover:text-zinc-900 transition-colors"
+        class="inline-block text-sm text-accent border border-accent mt-3 px-4 py-1.5 hover:bg-accent hover:text-on-accent transition-colors"
         >download pdf ↓</a
       >
 
@@ -102,7 +102,7 @@ const education = [
           <!-- Experience -->
           <section>
             <p
-              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
             >
               Experience
             </p>
@@ -110,22 +110,18 @@ const education = [
               experience.map((job) => (
                 <div class="mb-6">
                   <div class="mb-1 flex flex-col gap-y-1">
-                    <span class="text-xl text-black dark:text-mauve-100 block">
+                    <span class="text-xl text-ink-strong block">
                       {job.role}
                     </span>
-                    <span class="text-teal-500 dark:text-teal-400 block text-sm">
-                      {job.company}
-                    </span>
-                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide block">
+                    <span class="text-accent block text-sm">{job.company}</span>
+                    <span class="text-sm text-ink-faintest tracking-wide block">
                       {job.period}
                     </span>
                   </div>
                   <ul class="space-y-1 mt-2">
                     {job.bullets.map((b) => (
-                      <li class="flex text-gray-500 dark:text-zinc-400 text-sm leading-relaxed">
-                        <span class="text-gray-300 dark:text-zinc-700 mr-2 select-none">
-                          —
-                        </span>
+                      <li class="flex text-ink-faint text-sm leading-relaxed">
+                        <span class="text-line-strong mr-2 select-none">—</span>
                         <span>{b}</span>
                       </li>
                     ))}
@@ -141,7 +137,7 @@ const education = [
           <!-- Skills -->
           <section>
             <p
-              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
             >
               Skills
             </p>
@@ -149,12 +145,12 @@ const education = [
               {
                 Object.entries(skills).map(([group, tags]) => (
                   <div>
-                    <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                    <p class="text-xs text-ink-faintest uppercase tracking-wider mb-2">
                       {group}
                     </p>
                     <div class="flex flex-wrap gap-2">
                       {tags.map((tag) => (
-                        <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
+                        <span class="text-sm text-accent-bright border border-line bg-surface-raised px-2.5 py-1">
                           {tag}
                         </span>
                       ))}
@@ -168,7 +164,7 @@ const education = [
           <!-- Stack -->
           <section>
             <p
-              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
             >
               Stack
             </p>
@@ -176,12 +172,12 @@ const education = [
               {
                 Object.entries(stack).map(([group, tags]) => (
                   <div>
-                    <p class="text-xs text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                    <p class="text-xs text-ink-faintest uppercase tracking-wider mb-2">
                       {group}
                     </p>
                     <div class="flex flex-wrap gap-2">
                       {tags.map((tag) => (
-                        <span class="text-sm text-teal-500 dark:text-teal-300 border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2.5 py-1">
+                        <span class="text-sm text-accent-bright border border-line bg-surface-raised px-2.5 py-1">
                           {tag}
                         </span>
                       ))}
@@ -195,7 +191,7 @@ const education = [
           <!-- Education -->
           <section>
             <p
-              class="text-xs font-mono uppercase tracking-widest text-teal-500 dark:text-teal-400 mb-3"
+              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
             >
               Education
             </p>
@@ -203,20 +199,16 @@ const education = [
               {
                 education.map((edu) => (
                   <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <span class="text-black dark:text-mauve-100">
+                    <span class="text-ink-strong">
                       {edu.degree}
-                      <span class="text-gray-300 dark:text-zinc-600"> · </span>
+                      <span class="text-line-strong"> · </span>
                     </span>
-                    <span class="text-teal-500 dark:text-teal-400 block w-full">
-                      {edu.school}
-                    </span>
-                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                    <span class="text-accent block w-full">{edu.school}</span>
+                    <span class="text-sm text-ink-faintest tracking-wide">
                       {edu.startYear} – {edu.endYear}
-                      <span class="text-gray-300 dark:text-zinc-600 mx-1">
-                        ·
-                      </span>
+                      <span class="text-line-strong mx-1">·</span>
                     </span>
-                    <span class="text-sm text-gray-400 dark:text-zinc-500 tracking-wide">
+                    <span class="text-sm text-ink-faintest tracking-wide">
                       {edu.score}
                     </span>
                   </div>

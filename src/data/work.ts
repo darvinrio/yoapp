@@ -11,8 +11,4 @@ export interface WorkEntry {
 }
 
 export type RoleType =
-  | "full-time"
-  | "part-time"
-  | "contract"
-  | "internship"
-  | "freelance";
+  "full-time" | "part-time" | "contract" | "internship" | "freelance";

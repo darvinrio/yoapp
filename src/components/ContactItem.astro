@@ -19,7 +19,7 @@ const { contact }: Props = Astro.props;
   target="_blank"
   rel="noopener noreferrer"
   aria-label={contact.name}
-  class="transition-colors hover:scale-110 inline-block bg-white dark:bg-zinc-800 rounded-full p-1"
+  class="transition-colors hover:scale-110 inline-block bg-surface rounded-full p-1"
   style={`--brand-color: ${contact.brandColor};`}
 >
   {
@@ -27,7 +27,7 @@ const { contact }: Props = Astro.props;
       <contact.svgIcon class="w-9 h-9 fill-current transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
     ) : (
       <i
-        class={`${contact.faIcon} text-4xl text-black dark:text-white hover:[&]:text-(--brand-color)`}
+        class={`${contact.faIcon} text-4xl text-ink hover:[&]:text-(--brand-color)`}
       />
     )
   }

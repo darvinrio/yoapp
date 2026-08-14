@@ -1,7 +1,4 @@
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-
-@custom-variant dark (&:where(.dark, .dark *));
+@import "./theme.css";
 
 @font-face {
   font-family: "F5.6";
