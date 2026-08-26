@@ -15,6 +15,13 @@
             "output": ["text"],
           },
         },
+        "stealth/ox-alpha": {
+          "name": "Ox Alpha",
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"],
+          },
+        },
       },
     },
   },
