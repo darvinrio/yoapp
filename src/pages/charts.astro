@@ -1,0 +1,70 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Chart from "../components/Chart.astro";
+import PageTitle from "../components/PageTitle.astro";
+import crvPrice from "../data/charts/crv-price.json";
+import univ3Twap from "../data/charts/univ3-twap.json";
+import hyphenTvl from "../data/charts/hyphen-tvl.json";
+import bridgeVolume from "../data/charts/bridge-volume.json";
+import tokenAllocation from "../data/charts/token-allocation.json";
+import poolCorrelation from "../data/charts/pool-correlation.json";
+---
+
+<Layout>
+  <main class="container-max px-4 py-12">
+    <PageTitle title="Charts" backHref="/">
+      <p class="text-sm text-ink-faint mt-2 max-w-md text-right">
+        Demo page for the chart component — every type, with export, tooltips
+        and dark mode.
+      </p>
+    </PageTitle>
+
+    <Chart
+      data={crvPrice}
+      type="line"
+      title="CRV price, monthly"
+      subtitle="A single-series line"
+      caption="Price bleeds through 2023, with one March bounce."
+      description="Spot close, first of month. Source: CoinGecko."
+    />
+
+    <Chart
+      data={univ3Twap}
+      type="multi-line"
+      title="Oracle deviation, weekly"
+      subtitle="Uniswap v3 TWAP vs Chainlink"
+      caption="TWAP deviation spikes with volatility but stays under 32bps."
+      description="Computed from on-chain TWAP observations vs aggregator rounds."
+    />
+
+    <Chart
+      data={bridgeVolume}
+      type="bar"
+      title="Hyphen bridge volume out"
+      caption="Volume grew ~40% month over month in Q3."
+    />
+
+    <Chart
+      data={hyphenTvl}
+      type="stacked-bar"
+      title="Hyphen TVL by chain"
+      caption="Ethereum still holds the majority of bridged TVL."
+      description="End-of-month balances, all major pools."
+    />
+
+    <Chart
+      data={tokenAllocation}
+      type="pie"
+      title="Token allocation"
+      subtitle="10B supply"
+      caption="Community + treasury control over 60% of supply."
+    />
+
+    <Chart
+      data={poolCorrelation}
+      type="scatter"
+      title="Fee APR vs liquidity concentration"
+      caption="Concentrated pools earn structurally more per dollar of TVL."
+    />
+  </main>
+</Layout>

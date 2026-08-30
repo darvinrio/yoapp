@@ -1,0 +1,11 @@
+{
+  "labels": ["Team", "Investors", "Community", "Treasury", "Advisors"],
+  "series": [
+    {
+      "name": "Allocation",
+      "values": [18, 27, 31, 9, 3],
+      "highlight": [false, false, true, false, false]
+    }
+  ],
+  "formatY": "compact"
+}

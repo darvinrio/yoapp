@@ -1,0 +1,30 @@
+/* Chart palette — beside theme.css, same token conventions.
+   --chart-1 mirrors --color-accent. Dark overrides brighten for zinc-900 surfaces. */
+
+:root {
+  --chart-1: #14b8a6;
+  --chart-2: #f59e0b;
+  --chart-3: #38bdf8;
+  --chart-4: #f43f5e;
+  --chart-5: #a78bfa;
+  --chart-6: #84cc16;
+  --chart-7: #fb923c;
+  --chart-8: #94a3b8;
+  --chart-grid: #e5e7eb;
+  --chart-axis: #d1d5db;
+  --chart-tick: #6b7280;
+}
+
+.dark {
+  --chart-1: #2dd4bf;
+  --chart-2: #fbbf24;
+  --chart-3: #7dd3fc;
+  --chart-4: #fb7185;
+  --chart-5: #c4b5fd;
+  --chart-6: #a3e635;
+  --chart-7: #fdba74;
+  --chart-8: #cbd5e1;
+  --chart-grid: #3f3f46;
+  --chart-axis: #52525b;
+  --chart-tick: #a1a1aa;
+}
