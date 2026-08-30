@@ -1,11 +1,11 @@
 ---
-import "../styles/chart.css";
+import "../../styles/chart.css";
 import {
   defaultColorToken,
   isPaletteToken,
   type ChartData,
   type ChartType,
-} from "./charts/schema";
+} from "./schema";
 
 export interface Props {
   data: ChartData;
@@ -226,7 +226,7 @@ const showLegendRow = !isPie && legend.length > 1;
 </figure>
 
 <script>
-  import { initCharts } from "./charts/chart-client";
+  import { initCharts } from "./chart-client";
   initCharts();
 </script>
 
