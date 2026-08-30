@@ -25,7 +25,7 @@ const {
   subtitle,
   caption,
   description,
-  handle = "@maybeYonas",
+  handle = "maybeYonas",
   height = 320,
 } = Astro.props as Props;
 
@@ -158,12 +158,13 @@ const showLegendRow = !isPie && legend.length > 1;
     </div>
     {
       handle && (
-        <span class="chart-handle font-mono">
+        <!-- <span class="chart-handle font-mono">
           {handle.endsWith("Yonas") ? handle.slice(0, -5) : handle}
           {handle.endsWith("Yonas") && (
             <span class="chart-handle-accent">Yonas</span>
           )}
-        </span>
+        </span> -->
+        <span class="font-title">maybe<span class="text-accent">Yonas</span></span>
       )
     }
   </figcaption>
