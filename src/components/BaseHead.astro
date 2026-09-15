@@ -53,6 +53,24 @@ const imageURL = new URL(image, Astro.site);
 <meta name="twitter:image" content={imageURL} />
 <meta name="twitter:site" content={TWITTER_SITE} />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link
+  rel="icon"
+  type="image/x-icon"
+  href="/favicon.ico"
+  sizes="16x16 32x32 48x48"
+/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta
+  name="theme-color"
+  media="(prefers-color-scheme: light)"
+  content="#ffffff"
+/>
+<meta
+  name="theme-color"
+  media="(prefers-color-scheme: dark)"
+  content="#27272a"
+/>
 {
   structuredData.map((node) => (
     <script type="application/ld+json" set:html={JSON.stringify(node)} />
