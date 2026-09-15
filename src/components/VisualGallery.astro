@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import { visualizations } from "../data/visualizations";
+---
+
+<div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
+  {
+    visualizations.map((viz) => (
+      <button type="button" class="viz-tile">
+        <Image src={viz.image} alt={viz.caption} loading="lazy" />
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .viz-tile {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--color-surface);
+    cursor: zoom-in;
+    text-align: left;
+    break-inside: avoid;
+  }
+  .viz-tile img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.15s ease;
+  }
+  .viz-tile:hover img {
+    transform: scale(1.02);
+  }
+</style>
