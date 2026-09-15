@@ -19,9 +19,9 @@ interface Props {
   <head>
     <BaseHead {...Astro.props} />
   </head>
-  <Analytics />
-  <SpeedInsights />
   <body class="text-ink">
+    <Analytics />
+    <SpeedInsights />
     <slot />
     <div
       style="position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url('/texture.png');background-repeat:repeat;background-position:center top;background-size:192px;opacity:0.05;"
