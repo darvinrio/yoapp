@@ -451,3 +451,22 @@ Output: `/rss.xml`, listed in robots-reachable llms.txt (§10). No XSL styleshee
 - Dynamic/edge OG rendering (`@vercel/og` functions)
 - RSS XSL styling, JSON Feed, Atom variants
 - Rich snippets beyond Person/WebSite/BlogPosting (breadcrumbs, FAQ, etc.)
+
+---
+
+## Execution Task Split
+
+Execution plan. Ordering rationale: icons (T2) land before the Font Awesome stylesheet removal is finalised (T1 keeps it transitionally so the landing page never renders broken contacts); the OG generator (T3) lands before the favicon set (T4) so `@resvg/resvg` is available for SVG→PNG rasterisation without adding packages outside the locked dependency list. Each task ends in a buildable, human-verifiable state (page/route or dist artifact).
+
+| Task | Spec sections | Scope | New packages | Human reviewer criterion | Commit |
+| ---- | ------------- | ----- | ------------ | ------------------------ | ------ |
+| 1 | §1 §2 §3 §9 | `site` in `astro.config.mjs`; create `BaseHead.astro` (charset/viewport/generator, title rule, description defaults, canonical, OG, Twitter, JSON-LD nodes); Layout/LandingLayout/PostLayout accept + forward meta props and drop inline head markup (LandingLayout temporarily keeps the cdnjs Font Awesome link until T2); wire index/blog/blog/[slug]/resume/work incl. Person+WebSite and BlogPosting structured data | none | `bun build` passes; `dist/index.html` + one post show correct title rule, canonical, og/twitter tags, and JSON-LD that parses | — |
+| 2 | §7 | 5 icon components in `src/components/icons/`; Contacts.astro swaps `faIcon` → `svgIcon`; ContactItem drops the `<i>` branch + `faIcon` field; remove cdnjs Font Awesome link from LandingLayout | none | Landing page contact icons render as inline SVG with brand colours; no cdnjs reference anywhere in `dist/` | — |
+| 3 | §5 | `bun add satori @resvg/resvg`; vendor 2 TTFs into `scripts/fonts/`; `scripts/generate-og.ts` with template constants; generate committed `public/og.png` (1200×630) | `satori`, `@resvg/resvg` | `public/og.png` exists, is 1200×630, renders the reference design (accent bar, flag, wordmark, two-line headline, footer tagline) | — |
+| 4 | §4 | `favicon.ico` (16/32/48, PNG-in-ICO packer, no extra deps), `apple-touch-icon.png` (180), `icon-192.png`, `icon-512.png`, `site.webmanifest` — rasterised from `public/favicon.svg` via `@resvg/resvg`; BaseHead gains icon + manifest + `theme-color` links | none | `dist/` contains all 5 files; head shows icon/manifest/theme-color tags; favicon renders in a browser tab | — |
+| 5 | §6 | 7 latin woff2 files into `public/fonts/`; `@font-face` blocks in `global.css`; both layouts drop Google Fonts links; BaseHead preloads merriweather-300 + jetbrains-mono-400 | none | `dist/` has 7 woff2 files; zero `fonts.googleapis.com`/`fonts.gstatic.com` references in `dist/`; pages still render with Merriweather/JetBrains Mono | — |
+| 6 | §8 §10 §11 §12 | `bun add @astrojs/sitemap @astrojs/rss`; sitemap integration in `astro.config.mjs`; `public/robots.txt`; `src/pages/llms.txt.ts`; `src/pages/rss.xml.ts` | `@astrojs/sitemap`, `@astrojs/rss` | `dist/` contains `robots.txt`, `llms.txt` (13 post lines, absolute URLs), `rss.xml` (13 items), `sitemap-index.xml` + `sitemap-0.xml` (16 pages) | — |
+| 7 | §13 | `src/pages/404.astro` using Layout, site styling, link home | none | `dist/404.html` exists, styled, links back to `/` | — |
+| 8 | Verification | Full `bun build`; Behaviour Checklist sweep across `dist/` artifacts; `bun format` | none | Every row of the Behaviour Checklist table verified against `dist/` | — |
+
+Commit hashes are recorded after each task's human-approved commit (agent may commit + push per human instruction on this execution).
