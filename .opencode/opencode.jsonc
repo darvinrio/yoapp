@@ -6,6 +6,7 @@
       "name": "Nous Portal",
       "options": {
         "baseURL": "https://inference-api.nousresearch.com/v1",
+        "apiKey": "{env:NOUSPORTAL_API_KEY}"
       },
       "models": {
         "stepfun/step-3.7-flash:free": {
@@ -24,5 +25,10 @@
         },
       },
     },
+    "openrouter": {
+      "options": {
+        "apiKey": "{env:OPENROUTER_API_KEY}"
+      }
+    }
   },
 }
