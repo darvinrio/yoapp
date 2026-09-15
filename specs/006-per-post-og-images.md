@@ -6,17 +6,17 @@ This is the parked future work listed in specs/005-seo-geo-agent-friendly.md (No
 
 ## Decisions (locked during interview)
 
-| Decision           | Value                                                                                                                            |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| Scope              | Per-post OG images only — full og/twitter meta set already exists (spec 005)                                                     |
-| Mechanism          | Prerendered Astro endpoint `src/pages/og/[slug].png.ts` → stable `/og/<slug>.png` URLs, rendered during `astro build`            |
-| Rejected options   | Extending `scripts/generate-og.ts` (silent stale-image failure mode, git binary churn); `src/assets/` hashed URLs (breaks social caches) |
-| Card design        | Brand frame identical to site card; post title as headline (wrap ≤3 lines, size step-down, ellipsis clamp); footer = `date · tags`; no description |
-| Template home      | `src/lib/og-brand.ts` shared brand module; `scripts/generate-og.ts` migrated to import it in the same task (single source of brand truth) |
-| Schema             | No change to `src/content.config.ts`; `BaseHead`'s `image` prop remains the page-level escape hatch                              |
-| RSS                | No per-item enclosure (kept text-only per spec 005 minimalism)                                                                   |
-| og:image meta      | Add `og:image:width`, `og:image:height`, `og:image:alt` to `BaseHead.astro`                                                       |
-| Slug source        | `post.id` (same slug as the blog route)                                                                                          |
+| Decision         | Value                                                                                                                                              |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope            | Per-post OG images only — full og/twitter meta set already exists (spec 005)                                                                       |
+| Mechanism        | Prerendered Astro endpoint `src/pages/og/[slug].png.ts` → stable `/og/<slug>.png` URLs, rendered during `astro build`                              |
+| Rejected options | Extending `scripts/generate-og.ts` (silent stale-image failure mode, git binary churn); `src/assets/` hashed URLs (breaks social caches)           |
+| Card design      | Brand frame identical to site card; post title as headline (wrap ≤3 lines, size step-down, ellipsis clamp); footer = `date · tags`; no description |
+| Template home    | `src/lib/og-brand.ts` shared brand module; `scripts/generate-og.ts` migrated to import it in the same task (single source of brand truth)          |
+| Schema           | No change to `src/content.config.ts`; `BaseHead`'s `image` prop remains the page-level escape hatch                                                |
+| RSS              | No per-item enclosure (kept text-only per spec 005 minimalism)                                                                                     |
+| og:image meta    | Add `og:image:width`, `og:image:height`, `og:image:alt` to `BaseHead.astro`                                                                        |
+| Slug source      | `post.id` (same slug as the blog route)                                                                                                            |
 
 ## Adjacent Tasks
 
@@ -25,30 +25,30 @@ This is the parked future work listed in specs/005-seo-geo-agent-friendly.md (No
 
 ## Key Constants & Config
 
-| Constant            | Value                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------- |
-| Endpoint route      | `/og/[slug].png` (prerendered; slug = `post.id`)                                          |
-| Card dimensions     | 1200 × 630                                                                                |
-| Background          | `#18181b`                                                                                 |
-| Accent              | `#2dd4bf` (top bar, flag glyph, wordmark dot)                                             |
-| Text primary        | `#f1eef7` (wordmark, title)                                                               |
-| Text muted          | `#a1a1aa` (footer)                                                                        |
-| Divider             | `#3f3f46` (2px above footer)                                                              |
-| Headline font       | Merriweather Bold — `scripts/fonts/Merriweather-Bold.ttf` (weight 700)                    |
-| Footer font         | JetBrains Mono Regular — `scripts/fonts/JetBrainsMono-Regular.ttf` (weight 400)           |
-| Brand frame         | 8px top accent bar; 72×72 flag glyph + `maybeYonas.` wordmark (44px); divider + mono footer (24px) — identical geometry to the site card |
-| Title fitting       | Default 64px; step down for long titles (tunable buckets, e.g. >60 chars → 48px, >110 chars → 38px); hard clamp at 3 lines with ellipsis so nothing overflows the frame |
-| Footer content      | `<Mon DD, YYYY> · <tag1> · <tag2>…` (date only when a post has no tags)                   |
-| New meta tags       | `og:image:width` = 1200, `og:image:height` = 630, `og:image:alt` = page title             |
-| New packages        | None — satori + @resvg/resvg already installed                                            |
-| New files           | `src/lib/og-brand.ts`, `src/pages/og/[slug].png.ts`                                       |
-| Touched files       | `scripts/generate-og.ts` (imports shared module), `src/components/BaseHead.astro` (3 meta lines), `src/pages/blog/[slug].astro` (pass `image` prop) |
+| Constant        | Value                                                                                                                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Endpoint route  | `/og/[slug].png` (prerendered; slug = `post.id`)                                                                                                                        |
+| Card dimensions | 1200 × 630                                                                                                                                                              |
+| Background      | `#18181b`                                                                                                                                                               |
+| Accent          | `#2dd4bf` (top bar, flag glyph, wordmark dot)                                                                                                                           |
+| Text primary    | `#f1eef7` (wordmark, title)                                                                                                                                             |
+| Text muted      | `#a1a1aa` (footer)                                                                                                                                                      |
+| Divider         | `#3f3f46` (2px above footer)                                                                                                                                            |
+| Headline font   | Merriweather Bold — `scripts/fonts/Merriweather-Bold.ttf` (weight 700)                                                                                                  |
+| Footer font     | JetBrains Mono Regular — `scripts/fonts/JetBrainsMono-Regular.ttf` (weight 400)                                                                                         |
+| Brand frame     | 8px top accent bar; 72×72 flag glyph + `maybeYonas.` wordmark (44px); divider + mono footer (24px) — identical geometry to the site card                                |
+| Title fitting   | Default 64px; step down for long titles (tunable buckets, e.g. >60 chars → 48px, >110 chars → 38px); hard clamp at 3 lines with ellipsis so nothing overflows the frame |
+| Footer content  | `<Mon DD, YYYY> · <tag1> · <tag2>…` (date only when a post has no tags)                                                                                                 |
+| New meta tags   | `og:image:width` = 1200, `og:image:height` = 630, `og:image:alt` = page title                                                                                           |
+| New packages    | None — satori + @resvg/resvg already installed                                                                                                                          |
+| New files       | `src/lib/og-brand.ts`, `src/pages/og/[slug].png.ts`                                                                                                                     |
+| Touched files   | `scripts/generate-og.ts` (imports shared module), `src/components/BaseHead.astro` (3 meta lines), `src/pages/blog/[slug].astro` (pass `image` prop)                     |
 
 ## TODO
 
-| Task | Scope                                                                                                                                                                                                                                                                                         | Human reviewer criterion                                                                                                                                                                                                 | Commit    |
-| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
-| 1    | Create `src/lib/og-brand.ts`: brand constants (colors, dimensions), flag glyph, header/footer builders, font loader, satori→PNG render helper. Refactor `scripts/generate-og.ts` to import from it — pure refactor, zero behavior change, no new packages.                                      | `bun scripts/generate-og.ts` regenerates `public/og.png` rendering pixel-identical to the committed version (diff visually or by file hash); site card unchanged everywhere it is referenced (home, blog index, work, resume, 404) | `306ec0f` |
+| Task | Scope                                                                                                                                                                                                                                                                                                             | Human reviewer criterion                                                                                                                                                                                                                                                                                  | Commit    |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 1    | Create `src/lib/og-brand.ts`: brand constants (colors, dimensions), flag glyph, header/footer builders, font loader, satori→PNG render helper. Refactor `scripts/generate-og.ts` to import from it — pure refactor, zero behavior change, no new packages.                                                        | `bun scripts/generate-og.ts` regenerates `public/og.png` rendering pixel-identical to the committed version (diff visually or by file hash); site card unchanged everywhere it is referenced (home, blog index, work, resume, 404)                                                                        | `306ec0f` |
 | 2    | Create `src/pages/og/[slug].png.ts` prerendered endpoint: `getStaticPaths` over the blog collection, per-card layout (brand frame + wrapped title via fitting buckets + `date · tags` footer). Wire `image={/og/<id>.png}` in `src/pages/blog/[slug].astro`. Add `og:image:width/height/alt` to `BaseHead.astro`. | Dev server: `/og/<each-slug>.png` renders a correct card for all 13 posts (short titles, the 48-char longest title, tag-less posts); post page HTML head shows absolute `og:image` + width/height/alt; non-post pages still use `/og.png`; `bun build` emits `dist/og/<slug>.png` ×13 with zero functions | `ca57aeb` |
 
 Commit hashes are recorded after each task's human-approved commit (todo auto-updates the hash when asked to continue with the next task).
