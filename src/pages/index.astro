@@ -2,9 +2,34 @@
 import LandingLayout from "../layouts/LandingLayout.astro";
 import "../styles/global.css";
 import Welcome from "../components/Welcome.astro";
+
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Yonas",
+  alternateName: "maybeYonas",
+  jobTitle: "Analytics Engineer",
+  description: "Analytics Engineer with 4 years of blockchain data experience.",
+  url: new URL("/", Astro.site).toString(),
+  email: "mailto:todarvinrio@gmail.com",
+  sameAs: [
+    "https://x.com/maybeYonas",
+    "https://linkedin.com/in/darvinrio",
+    "https://t.me/maybeyonas",
+    "https://github.com/darvinrio",
+    "https://dune.com/maybeYonas",
+  ],
+};
+
+const website = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "maybeYonas",
+  url: new URL("/", Astro.site).toString(),
+};
 ---
 
-<LandingLayout>
+<LandingLayout structuredData={[person, website]}>
   <main class="px-6 py-8 md:px-12 md:py-12">
     <section class="container-max">
       <Welcome />

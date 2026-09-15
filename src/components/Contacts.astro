@@ -1,13 +1,17 @@
 ---
 import type { SvgComponent } from "astro/types";
 import Dune from "../assets/logos/dune.svg";
+import EnvelopeIcon from "./icons/EnvelopeIcon.astro";
+import GitHubIcon from "./icons/GitHubIcon.astro";
+import LinkedInIcon from "./icons/LinkedInIcon.astro";
+import TelegramIcon from "./icons/TelegramIcon.astro";
+import XIcon from "./icons/XIcon.astro";
 import ContactItem from "./ContactItem.astro";
 
 interface ContactEntry {
   name: string;
   href: string;
-  faIcon?: string;
-  svgIcon?: SvgComponent;
+  svgIcon: SvgComponent;
   brandColor: string;
   isWorkLink?: boolean;
 }
@@ -16,25 +20,25 @@ const contacts: ContactEntry[] = [
   {
     name: "Twitter",
     href: "https://x.com/maybeYonas",
-    faIcon: "fa-brands fa-x-twitter",
+    svgIcon: XIcon,
     brandColor: "#000000",
   },
   {
     name: "LinkedIn",
     href: "https://linkedin.com/in/darvinrio",
-    faIcon: "fa-brands fa-linkedin",
+    svgIcon: LinkedInIcon,
     brandColor: "#346ABF",
   },
   {
     name: "Telegram",
     href: "https://t.me/maybeyonas",
-    faIcon: "fa-brands fa-telegram",
+    svgIcon: TelegramIcon,
     brandColor: "#6AA7E6",
   },
   {
     name: "GitHub",
     href: "https://github.com/darvinrio",
-    faIcon: "fa-brands fa-github",
+    svgIcon: GitHubIcon,
     brandColor: "#333333",
     isWorkLink: true,
   },
@@ -48,7 +52,7 @@ const contacts: ContactEntry[] = [
   {
     name: "Email",
     href: "mailto:todarvinrio@gmail.com",
-    faIcon: "fa-solid fa-envelope",
+    svgIcon: EnvelopeIcon,
     brandColor: "#EA4335",
   },
 ];
