@@ -46,6 +46,7 @@ const blogPosting = {
 <PostLayout
   title={post.data.title}
   description={post.data.description}
+  image={`/og/${post.id}.png`}
   type="article"
   publishedTime={post.data.date}
   structuredData={[blogPosting]}
