@@ -5,8 +5,7 @@ interface Props {
   contact: {
     name: string;
     href: string;
-    faIcon?: string;
-    svgIcon?: SvgComponent;
+    svgIcon: SvgComponent;
     brandColor: string;
   };
 }
@@ -22,13 +21,7 @@ const { contact }: Props = Astro.props;
   class="transition-colors hover:scale-110 inline-block bg-surface rounded-full p-1"
   style={`--brand-color: ${contact.brandColor};`}
 >
-  {
-    contact.svgIcon ? (
-      <contact.svgIcon class="w-9 h-9 fill-current transition-colors hover:[&]:text-(--brand-color) pb-0.5" />
-    ) : (
-      <i
-        class={`${contact.faIcon} text-4xl text-ink hover:[&]:text-(--brand-color)`}
-      />
-    )
-  }
+  <contact.svgIcon
+    class="w-9 h-9 fill-current transition-colors hover:[&]:text-(--brand-color) pb-0.5"
+  />
 </a>
