@@ -9,7 +9,10 @@ const posts: CollectionEntry<"blog">[] = (await getCollection("blog")).sort(
 );
 ---
 
-<Layout>
+<Layout
+  title="Writings"
+  description="Writings on on-chain data, DeFi analytics, and prediction markets by maybeYonas."
+>
   <main class="container-max px-4 py-12 font-text">
     <PageTitle title="Writings" backHref="/" />
     <ul class="flex flex-col gap-6">

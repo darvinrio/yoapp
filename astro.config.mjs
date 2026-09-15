@@ -8,6 +8,7 @@ import rehypeTableWrap from "./src/plugins/rehype-table-wrap";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://mayonas.vercel.app",
   integrations: [mdx()],
   markdown: {
     remarkPlugins: [remarkMath],

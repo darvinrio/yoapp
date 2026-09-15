@@ -1,9 +1,18 @@
 ---
 import Layout from "./Layout.astro";
 import "katex/dist/katex.min.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  structuredData?: object[];
+}
 ---
 
-<Layout>
+<Layout {...Astro.props}>
   <main class="container-max px-4 py-12">
     <slot />
   </main>
