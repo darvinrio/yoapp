@@ -22,7 +22,38 @@ const formatMonthYear = (iso?: string) => {
   if (!year || !month || month < 1 || month > 12) return undefined;
   return `${MONTHS[month - 1]} ${year}`;
 };
+
+const uniqueTags = [...new Set(visualizations.flatMap((viz) => viz.tags))];
 ---
+
+<div
+  class="mb-6 flex flex-wrap gap-2"
+  role="group"
+  aria-label="Filter visualizations by tag"
+>
+  <button
+    type="button"
+    class="viz-chip"
+    data-viz-filter
+    data-viz-tag=""
+    aria-pressed="true"
+  >
+    All
+  </button>
+  {
+    uniqueTags.map((tag) => (
+      <button
+        type="button"
+        class="viz-chip"
+        data-viz-filter
+        data-viz-tag={tag}
+        aria-pressed="false"
+      >
+        {tag}
+      </button>
+    ))
+  }
+</div>
 
 <div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
   {
@@ -32,6 +63,7 @@ const formatMonthYear = (iso?: string) => {
         class="viz-tile"
         data-viz-tile
         data-viz-index={index}
+        data-viz-tags={JSON.stringify(viz.tags)}
         aria-haspopup="dialog"
       >
         <Image src={viz.image} alt={viz.caption} loading="lazy" />
@@ -153,6 +185,7 @@ const formatMonthYear = (iso?: string) => {
     ? Array.from(lightbox.querySelectorAll("[data-viz-slide]"))
     : [];
   const tiles = Array.from(document.querySelectorAll("[data-viz-tile]"));
+  const chips = Array.from(document.querySelectorAll("[data-viz-filter]"));
   const closeButton = lightbox?.querySelector("[data-viz-close]");
   const prevButton = lightbox?.querySelector("[data-viz-prev]");
   const nextButton = lightbox?.querySelector("[data-viz-next]");
@@ -160,13 +193,41 @@ const formatMonthYear = (iso?: string) => {
 
   let current = -1;
   let returnFocus = null;
+  let activeTag: string | null = null;
 
   const isOpen = () => !!lightbox && !lightbox.classList.contains("hidden");
 
   const visibleIndexes = () =>
     tiles
-      .map((tile, index) => (tile.classList.contains("hidden") ? -1 : index))
+      .map((tile, index) =>
+        tile.classList.contains("viz-hidden") ? -1 : index,
+      )
       .filter((index) => index >= 0);
+
+  const syncChips = () => {
+    chips.forEach((chip) => {
+      const tag = chip.getAttribute("data-viz-tag") ?? "";
+      chip.setAttribute(
+        "aria-pressed",
+        String(activeTag === null ? tag === "" : tag === activeTag),
+      );
+    });
+  };
+
+  const setFilter = (tag: string | null) => {
+    if (isOpen()) close();
+    activeTag = tag;
+    tiles.forEach((tile) => {
+      const tags: string[] = JSON.parse(
+        tile.getAttribute("data-viz-tags") ?? "[]",
+      );
+      tile.classList.toggle(
+        "viz-hidden",
+        activeTag !== null && !tags.includes(activeTag),
+      );
+    });
+    syncChips();
+  };
 
   const show = (index: number) => {
     slides.forEach((slide, i) => slide.classList.toggle("hidden", i !== index));
@@ -207,6 +268,13 @@ const formatMonthYear = (iso?: string) => {
     });
   });
 
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const tag = chip.getAttribute("data-viz-tag") ?? "";
+      setFilter(tag === "" || tag === activeTag ? null : tag);
+    });
+  });
+
   closeButton?.addEventListener("click", close);
   backdrop?.addEventListener("click", close);
   prevButton?.addEventListener("click", () => step(-1));
@@ -225,6 +293,30 @@ const formatMonthYear = (iso?: string) => {
 </script>
 
 <style>
+  .viz-chip {
+    border: 1px solid var(--color-line);
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--color-ink-muted);
+    background: transparent;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .viz-chip:hover {
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .viz-chip[aria-pressed="true"] {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  .viz-tile.viz-hidden {
+    display: none;
+  }
   .viz-tile {
     display: block;
     width: 100%;
