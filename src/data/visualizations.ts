@@ -1,32 +1,37 @@
 import type { ImageMetadata } from "astro";
 
-import lineChart from "../assets/visualizations/placeholder-stablecoin-mcap-line.svg";
-import barChart from "../assets/visualizations/placeholder-dao-users-bars.svg";
-import areaChart from "../assets/visualizations/placeholder-l2-tvl-area.svg";
+import kelp_pendle from "../assets/visualizations/kelp_pendle.png";
+import renzo_pendle from "../assets/visualizations/renzo_pendle.png";
+import weeth_pendle from "../assets/visualizations/weeth_pendle.png";
 
 export interface Visualization {
   image: ImageMetadata;
   caption: string;
   date?: string;
+  tweetUrl?: string;
   tags: string[];
 }
 
 export const visualizations: Visualization[] = [
   {
-    image: lineChart,
-    caption: "Stablecoin market cap, trailing 12 months",
-    date: "2026-03-01",
-    tags: ["defi", "metrics"],
+    image: kelp_pendle,
+    caption: "@KelpDAO posting an impressive $80K fee generated from $120M swap volume, on a $130M TVL",
+    date: "2024-02-21",
+    tweetUrl: "https://x.com/maybeYonas/status/1760023562579259580?s=20",
+    tags: ["defi", "onchain data"],
   },
   {
-    image: barChart,
-    caption: "Weekly active users across the top 10 DAOs",
-    date: "2026-02-14",
-    tags: ["dao", "metrics"],
+    image: renzo_pendle,
+    caption: "@ether_fi generating $100K fee from a whopping $450M swap volume, based on a $275M TVL pool",
+    date: "2024-02-21",
+    tweetUrl: "https://x.com/maybeYonas/status/1760023566928707948?s=20",
+    tags: ["defi", "onchain data"],
   },
   {
-    image: areaChart,
-    caption: "Cumulative TVL across Ethereum L2s",
+    image: weeth_pendle,
+    caption: "@Renzo_Protocol generating $40K fees of a $90M swap volume, on a capital of $94M",
+    date: "2024-02-21",
+    tweetUrl: "https://x.com/maybeYonas/status/1760023570519077245?s=20",
     tags: ["defi", "onchain data"],
   },
 ];
