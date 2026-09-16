@@ -1,8 +1,8 @@
 import type { ImageMetadata } from "astro";
 
-import kelp_pendle from "../assets/visualizations/kelp_pendle.png";
-import renzo_pendle from "../assets/visualizations/renzo_pendle.png";
-import weeth_pendle from "../assets/visualizations/weeth_pendle.png";
+import kelp_pendle from "../assets/visualizations/kelp_pendle.jpeg";
+import renzo_pendle from "../assets/visualizations/renzo_pendle.jpeg";
+import weeth_pendle from "../assets/visualizations/weeth_pendle.jpeg";
 
 export interface Visualization {
   image: ImageMetadata;
