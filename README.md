@@ -5,6 +5,7 @@ bun commands:
 ```bash
 bun dev     # starts the development server
 bun format  # formats the code
+bun dev -- --host
 ```
 
 env commands:
