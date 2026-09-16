@@ -18,24 +18,24 @@ import symbiotic_lrt_dynamics from "../assets/visualizations/symbiotic_lrt_dynam
 import symbiotic_cap_rise from "../assets/visualizations/symbiotic_cap_rise.png";
 import babylon_btc from "../assets/visualizations/babylon_btc.jpeg";
 import symbiotic_btc_user_dom from "../assets/visualizations/symbiotic_btc_user_dom.jpeg";
-import babylon_cap_rise from "../assets/visualizations/babylon_cap_rise.png";
-import babylon_lombard_dom from "../assets/visualizations/babylon_lombard_dom.png";
+import babylon_cap_rise from "../assets/visualizations/babylon_cap_rise.jpeg";
+import babylon_lombard_dom from "../assets/visualizations/babylon_lombard_dom.jpeg";
 import babylon_mainnet_launch from "../assets/visualizations/babylon_mainnet_launch.png";
-import babylon_lrt_dom from "../assets/visualizations/babylon_lrt_dom.png";
-import babylon_lombard_no_points from "../assets/visualizations/babylon_lombard_no_points.png";
-import cbbtc_conc from "../assets/visualizations/cbbtc_conc.png";
-import babylon_caps_raised from "../assets/visualizations/babylon_caps_raised.png";
+import babylon_lrt_dom from "../assets/visualizations/babylon_lrt_dom.jpeg";
+import babylon_lombard_no_points from "../assets/visualizations/babylon_lombard_no_points.jpeg";
+import cbbtc_conc from "../assets/visualizations/cbbtc_conc.jpeg";
+import babylon_caps_raised from "../assets/visualizations/babylon_caps_raised.jpeg";
 import babylon_btc_chucking from "../assets/visualizations/babylon_btc_chucking.png";
 import prs from "../assets/visualizations/prs.png";
-import hwhype_performance from "../assets/visualizations/hwhype_performance.png";
-import poly_soccer_pdelta from "../assets/visualizations/poly_soccer_pdelta.png";
-import poly_wc_pnl_dist from "../assets/visualizations/poly_wc_pnl_dist.png";
-import poly_pnl_treemap from "../assets/visualizations/poly_pnl_treemap.png";
-import poly_wc_top_trader from "../assets/visualizations/poly_wc_top_trader.png";
-import poly_wc_worst_trader from "../assets/visualizations/poly_wc_worst_trader.png";
-import poly_wc_worst_trader_breakdown from "../assets/visualizations/poly_wc_worst_trader_breakdown.png";
+import hwhype_performance from "../assets/visualizations/hwhype_performance.jpeg";
+import poly_soccer_pdelta from "../assets/visualizations/poly_soccer_pdelta.jpeg";
+import poly_wc_pnl_dist from "../assets/visualizations/poly_wc_pnl_dist.jpeg";
+import poly_pnl_treemap from "../assets/visualizations/poly_pnl_treemap.jpeg";
+import poly_wc_top_trader from "../assets/visualizations/poly_wc_top_trader.jpeg";
+import poly_wc_worst_trader from "../assets/visualizations/poly_wc_worst_trader.jpeg";
+import poly_wc_worst_trader_breakdown from "../assets/visualizations/poly_wc_worst_trader_breakdown.jpeg";
 import poly_wc_worst_trader_wins from "../assets/visualizations/poly_wc_worst_trader_wins.png";
-import poly_wc_worst_trader_loses from "../assets/visualizations/poly_wc_worst_trader_loses.png";
+import poly_wc_worst_trader_loses from "../assets/visualizations/poly_wc_worst_trader_loses.jpeg";
 
 export interface Visualization {
   image: ImageMetadata;
@@ -49,7 +49,8 @@ export interface Visualization {
 export const visualizations: Visualization[] = [
   {
     image: kelp_pendle,
-    caption: "@KelpDAO posting an impressive $80K fee generated from $120M swap volume, on a $130M TVL",
+    caption:
+      "@KelpDAO posting an impressive $80K fee generated from $120M swap volume, on a $130M TVL",
     date: "2024-02-21",
     tweetUrl: "https://x.com/maybeYonas/status/1760023562579259580?s=20",
     dataSource: "https://dune.com/maybeyonas/kelp-dao",
@@ -57,7 +58,8 @@ export const visualizations: Visualization[] = [
   },
   {
     image: renzo_pendle,
-    caption: "@Renzo_Protocol generating $40K fees of a $90M swap volume, on a capital of $94M",
+    caption:
+      "@Renzo_Protocol generating $40K fees of a $90M swap volume, on a capital of $94M",
     date: "2024-02-21",
     tweetUrl: "https://x.com/maybeYonas/status/1760023566928707948?s=20",
     dataSource: "https://dune.com/maybeyonas/renzo-protocol",
@@ -65,7 +67,8 @@ export const visualizations: Visualization[] = [
   },
   {
     image: weeth_pendle,
-    caption: "@ether_fi generating $100K fee from a whopping $450M swap volume, based on a $275M TVL pool",
+    caption:
+      "@ether_fi generating $100K fee from a whopping $450M swap volume, based on a $275M TVL pool",
     date: "2024-02-21",
     tweetUrl: "https://x.com/maybeYonas/status/1760023570519077245?s=20",
     dataSource: "https://dune.com/maybeyonas/etherfi",
@@ -112,7 +115,8 @@ export const visualizations: Visualization[] = [
   },
   {
     image: eth_gwei_price_corr,
-    caption: "A consistent positive correlation between ETH price and GWEI price",
+    caption:
+      "A consistent positive correlation between ETH price and GWEI price",
     date: "2024-04-25",
     tweetUrl: "https://x.com/maybeYonas/status/1783209229291303097?s=20",
     dataSource: "https://dune.com/maybeyonas/eth-price-vs-gas-fees",
@@ -120,7 +124,8 @@ export const visualizations: Visualization[] = [
   },
   {
     image: eigen_operator_dom,
-    caption: "@Eigenpiexyz_io broke into the top 10 operator list last week. the operator is being run in conjunction with @P2Pvalidator. Generally, network effects imply, there isn't much chance for a new operator to break into top 10, unless something big happens",
+    caption:
+      "@Eigenpiexyz_io broke into the top 10 operator list last week. the operator is being run in conjunction with @P2Pvalidator. Generally, network effects imply, there isn't much chance for a new operator to break into top 10, unless something big happens",
     date: "2024-06-04",
     tweetUrl: "https://x.com/maybeYonas/status/1798019950340444290?s=20",
     dataSource: "https://dune.com/pyor_xyz/eigenlayer-operator-analyzer",
@@ -128,7 +133,8 @@ export const visualizations: Visualization[] = [
   },
   {
     image: eigen_operator_dom_asset,
-    caption: "Inflow of around 200K stETH into eigen layer and delegated to @Eigenpiexyz_io operator, flows likely from his highness @justinsuntron",
+    caption:
+      "Inflow of around 200K stETH into eigen layer and delegated to @Eigenpiexyz_io operator, flows likely from his highness @justinsuntron",
     date: "2024-06-04",
     tweetUrl: "https://x.com/maybeYonas/status/1798019954450870365?s=20",
     dataSource: "https://dune.com/pyor_xyz/eigenlayer-operator-analyzer",
@@ -295,7 +301,8 @@ export const visualizations: Visualization[] = [
   },
   {
     image: poly_wc_worst_trader,
-    caption: "Visualizing PnL breakdown of worst trader of Polymarket World Cup",
+    caption:
+      "Visualizing PnL breakdown of worst trader of Polymarket World Cup",
     date: "2026-09-08",
     tags: [],
   },
@@ -317,5 +324,4 @@ export const visualizations: Visualization[] = [
     date: "2026-09-08",
     tags: [],
   },
-
 ];
