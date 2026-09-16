@@ -5,6 +5,7 @@ bun commands:
 ```bash
 bun dev     # starts the development server
 bun format  # formats the code
+bun dev -- --host
 ```
 
 env commands:
@@ -30,4 +31,9 @@ git branch --merged | grep -v '\*' | xargs -n 1 git branch -d
 
 # prune origin deleted branches
 git remote prune origin
+```
+
+```bash
+# co authoring
+Co-authored-by: maybeYonas <todarvinrio@gmail.com>
 ```
