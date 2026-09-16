@@ -32,3 +32,8 @@ git branch --merged | grep -v '\*' | xargs -n 1 git branch -d
 # prune origin deleted branches
 git remote prune origin
 ```
+
+```bash
+# co authoring
+Co-authored-by: maybeYonas <todarvinrio@gmail.com>
+```
