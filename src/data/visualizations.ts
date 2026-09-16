@@ -54,7 +54,7 @@ export const visualizations: Visualization[] = [
     date: "2024-02-21",
     tweetUrl: "https://x.com/maybeYonas/status/1760023562579259580?s=20",
     dataSource: "https://dune.com/maybeyonas/kelp-dao",
-    tags: ["defi", "onchain data"],
+    tags: ["kelp", "pendle", "lrt", "eth", "eigen"],
   },
   {
     image: renzo_pendle,
@@ -63,7 +63,7 @@ export const visualizations: Visualization[] = [
     date: "2024-02-21",
     tweetUrl: "https://x.com/maybeYonas/status/1760023566928707948?s=20",
     dataSource: "https://dune.com/maybeyonas/renzo-protocol",
-    tags: ["defi", "onchain data"],
+    tags: ["renzo", "pendle", "lrt", "eth", "eigen"],
   },
   {
     image: weeth_pendle,
@@ -72,7 +72,7 @@ export const visualizations: Visualization[] = [
     date: "2024-02-21",
     tweetUrl: "https://x.com/maybeYonas/status/1760023570519077245?s=20",
     dataSource: "https://dune.com/maybeyonas/etherfi",
-    tags: ["defi", "onchain data"],
+    tags: ["etherfi", "pendle", "lrt", "eth", "eigen"],
   },
   {
     image: swell_pearls,
@@ -80,14 +80,14 @@ export const visualizations: Visualization[] = [
     date: "2024-03-13",
     tweetUrl: "https://x.com/maybeYonas/status/1767774703010390131?s=20",
     dataSource: "https://dune.com/maybeyonas/points",
-    tags: ["defi", "onchain data"],
+    tags: ["swell", "points"],
   },
   {
     image: io_net_sus,
     caption: "IO Network having low activity before its TGE",
     date: "2024-04-04",
     tweetUrl: "https://x.com/maybeYonas/status/1775875660268896459?s=20",
-    tags: ["defi", "onchain data"],
+    tags: ["io", "gpu"],
   },
   {
     image: swell_l2,
@@ -95,7 +95,7 @@ export const visualizations: Visualization[] = [
     date: "2024-04-13",
     tweetUrl: "https://x.com/maybeYonas/status/1779093138818072998?s=20",
     dataSource: "https://dune.com/swell-network/swell-l2",
-    tags: ["defi", "onchain data"],
+    tags: ["swell", "points"],
   },
   {
     image: swell_l2_asset_dom,
@@ -103,7 +103,7 @@ export const visualizations: Visualization[] = [
     date: "2024-04-13",
     tweetUrl: "https://x.com/maybeYonas/status/1779093138818072998?s=20",
     dataSource: "https://dune.com/swell-network/swell-l2",
-    tags: ["defi", "onchain data"],
+    tags: ["swell", "points"],
   },
   {
     image: renzo_balancer_pool_depeg,
@@ -111,7 +111,7 @@ export const visualizations: Visualization[] = [
     date: "2024-04-24",
     tweetUrl: "https://x.com/maybeYonas/status/1783125344536449055?s=20",
     dataSource: "https://dune.com/maybeyonas/renzo-protocol",
-    tags: ["defi", "onchain data"],
+    tags: ["renzo", "lrt", "eth", "eigen"],
   },
   {
     image: eth_gwei_price_corr,
@@ -120,7 +120,7 @@ export const visualizations: Visualization[] = [
     date: "2024-04-25",
     tweetUrl: "https://x.com/maybeYonas/status/1783209229291303097?s=20",
     dataSource: "https://dune.com/maybeyonas/eth-price-vs-gas-fees",
-    tags: ["defi", "onchain data"],
+    tags: ["eth"],
   },
   {
     image: eigen_operator_dom,
@@ -129,7 +129,7 @@ export const visualizations: Visualization[] = [
     date: "2024-06-04",
     tweetUrl: "https://x.com/maybeYonas/status/1798019950340444290?s=20",
     dataSource: "https://dune.com/pyor_xyz/eigenlayer-operator-analyzer",
-    tags: ["defi", "onchain data"],
+    tags: ["eigen"],
   },
   {
     image: eigen_operator_dom_asset,
@@ -138,7 +138,7 @@ export const visualizations: Visualization[] = [
     date: "2024-06-04",
     tweetUrl: "https://x.com/maybeYonas/status/1798019954450870365?s=20",
     dataSource: "https://dune.com/pyor_xyz/eigenlayer-operator-analyzer",
-    tags: ["defi", "onchain data"],
+    tags: ["eigen"],
   },
   {
     image: symbiotic_inflows,
@@ -146,7 +146,7 @@ export const visualizations: Visualization[] = [
     date: "2024-07-04",
     tweetUrl: "https://x.com/maybeYonas/status/1808502595436138791?s=20",
     dataSource: "https://dune.com/pyor_xyz/symbiotic",
-    tags: ["defi", "onchain data"],
+    tags: ["symbiotic"],
   },
   {
     image: symbiotic_mellow_etherfi_dom,
@@ -154,7 +154,7 @@ export const visualizations: Visualization[] = [
     date: "2024-07-04",
     tweetUrl: "https://x.com/maybeYonas/status/1808601099664044096?s=20",
     dataSource: "https://dune.com/pyor_xyz/symbiotic",
-    tags: ["defi", "onchain data"],
+    tags: ["symbiotic", "mellow", "etherfi"],
   },
   {
     image: symbiotic_asset_dom,
@@ -162,7 +162,7 @@ export const visualizations: Visualization[] = [
     date: "2024-07-04",
     tweetUrl: "https://x.com/maybeYonas/status/1808601099664044096?s=20",
     dataSource: "https://dune.com/pyor_xyz/symbiotic",
-    tags: ["defi", "onchain data"],
+    tags: ["symbiotic"],
   },
   {
     image: symbiotic_lrt_dynamics,
@@ -170,7 +170,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-15",
     tweetUrl: "https://x.com/maybeYonas/status/1823858734453678456?s=20",
     dataSource: "https://dune.com/pyor_xyz/symbiotic",
-    tags: ["defi", "onchain data"],
+    tags: ["symbiotic", "mellow", "etherfi"],
   },
   {
     image: symbiotic_cap_rise,
@@ -178,7 +178,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-16",
     tweetUrl: "https://x.com/maybeYonas/status/1824169968268669101?s=20",
     dataSource: "https://dune.com/pyor_xyz/symbiotic",
-    tags: ["defi", "onchain data"],
+    tags: ["symbiotic"],
   },
   {
     image: babylon_btc,
@@ -186,7 +186,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-21",
     tweetUrl: "https://x.com/maybeYonas/status/1826012973745451461?s=20",
     dataSource: "https://dune.com/pyor_xyz/btc-restaking",
-    tags: ["defi", "onchain data"],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: symbiotic_btc_user_dom,
@@ -194,7 +194,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-20",
     tweetUrl: "https://x.com/maybeYonas/status/1825917970259833322?s=20",
     dataSource: "https://dune.com/pyor_xyz/btc-restaking",
-    tags: ["defi", "onchain data"],
+    tags: ["symbiotic", "btc"],
   },
   {
     image: babylon_cap_rise,
@@ -202,7 +202,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-22",
     tweetUrl: "https://x.com/maybeYonas/status/1826522045040980190?s=20",
     dataSource: "https://dune.com/pyor_xyz/btc-restaking",
-    tags: ["defi", "onchain data"],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: babylon_lombard_dom,
@@ -210,7 +210,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-22",
     tweetUrl: "https://x.com/maybeYonas/status/1826596303314313512?s=20",
     dataSource: "https://dune.com/pyor_xyz/btc-restaking",
-    tags: [],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: babylon_mainnet_launch,
@@ -218,7 +218,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-26",
     tweetUrl: "https://x.com/maybeYonas/status/1828098439009239297?s=20",
     dataSource: "https://dune.com/pyor_xyz/babylon-chain",
-    tags: [],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: babylon_lrt_dom,
@@ -226,7 +226,7 @@ export const visualizations: Visualization[] = [
     date: "2024-08-27",
     tweetUrl: "https://x.com/maybeYonas/status/1828354663923568721?s=20",
     dataSource: "https://dune.com/pyor_xyz/babylon-chain",
-    tags: [],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: babylon_lombard_no_points,
@@ -234,7 +234,7 @@ export const visualizations: Visualization[] = [
     date: "2024-09-11",
     tweetUrl: "https://x.com/maybeYonas/status/1833618990649806948?s=20",
     dataSource: "https://dune.com/pyor_xyz/babylon-chain",
-    tags: [],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: cbbtc_conc,
@@ -250,7 +250,7 @@ export const visualizations: Visualization[] = [
     date: "2024-10-09",
     tweetUrl: "https://x.com/maybeYonas/status/1843721670395404501?s=20",
     dataSource: "https://dune.com/pyor_xyz/babylon-chain",
-    tags: [],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: babylon_btc_chucking,
@@ -258,7 +258,7 @@ export const visualizations: Visualization[] = [
     date: "2024-10-09",
     tweetUrl: "https://x.com/maybeYonas/status/1843726132849553531?s=20",
     dataSource: "https://dune.com/pyor_xyz/babylon-chain",
-    tags: [],
+    tags: ["babylon", "lrt", "btc"],
   },
   {
     image: prs,
@@ -272,56 +272,56 @@ export const visualizations: Visualization[] = [
     date: "2026-01-14",
     tweetUrl: "https://x.com/maybeYonas/status/2011375119822983472?s=20",
     dataSource: "https://dune.com/hyperwave/hyperwave-hwhype",
-    tags: [],
+    tags: ["hyperliquid"],
   },
   {
     image: poly_soccer_pdelta,
     caption: "Visualizing distribution of Price delta as match progresses",
     date: "2026-03-20",
-    tags: [],
+    tags: ["polymarket", "soccer"],
   },
   {
     image: poly_wc_pnl_dist,
     caption: "Visualizing PnL distribution of Polymarket World Cup Traders",
     date: "2026-09-01",
     tweetUrl: "https://x.com/maybeYonas/status/2094795654833070424?s=20",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
   {
     image: poly_pnl_treemap,
     caption: "Visualizing PnL treemap of Polymarket World Cup Trader",
     date: "2026-09-07",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
   {
     image: poly_wc_top_trader,
     caption: "Visualizing PnL breakdown of top trader of Polymarket World Cup",
     date: "2026-09-07",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
   {
     image: poly_wc_worst_trader,
     caption:
       "Visualizing PnL breakdown of worst trader of Polymarket World Cup",
     date: "2026-09-08",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
   {
     image: poly_wc_worst_trader_breakdown,
     caption: "Tabular PnL breakdown of worst trader of Polymarket World Cup",
     date: "2026-09-08",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
   {
     image: poly_wc_worst_trader_wins,
     caption: "Visualizing wins of worst trader of Polymarket World Cup",
     date: "2026-09-08",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
   {
     image: poly_wc_worst_trader_loses,
     caption: "Visualizing loses of worst trader of Polymarket World Cup",
     date: "2026-09-08",
-    tags: [],
+    tags: ["polymarket", "soccer", "world-cup"],
   },
 ];
