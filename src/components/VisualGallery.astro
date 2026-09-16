@@ -23,7 +23,18 @@ const formatMonthYear = (iso?: string) => {
   return `${MONTHS[month - 1]} ${year}`;
 };
 
-const uniqueTags = [...new Set(visualizations.flatMap((viz) => viz.tags))];
+const sortedVisualizations = [...visualizations].sort(
+  (a, b) => (b.date ?? "").localeCompare(a.date ?? ""),
+);
+
+const uniqueTags = [...new Set(sortedVisualizations.flatMap((viz) => viz.tags))];
+
+const COLUMN_COUNT = 3;
+const vizColumns: { viz: (typeof visualizations)[number]; index: number }[][] =
+  Array.from({ length: COLUMN_COUNT }, () => []);
+sortedVisualizations.forEach((viz, index) => {
+  vizColumns[index % COLUMN_COUNT].push({ viz, index });
+});
 ---
 
 <div
@@ -55,19 +66,24 @@ const uniqueTags = [...new Set(visualizations.flatMap((viz) => viz.tags))];
   }
 </div>
 
-<div class="columns-1 sm:columns-2 lg:columns-3 gap-6">
+<div class="flex flex-col sm:flex-row sm:gap-6">
   {
-    visualizations.map((viz, index) => (
-      <button
-        type="button"
-        class="viz-tile"
-        data-viz-tile
-        data-viz-index={index}
-        data-viz-tags={JSON.stringify(viz.tags)}
-        aria-haspopup="dialog"
-      >
-        <Image src={viz.image} alt={viz.caption} loading="lazy" />
-      </button>
+    vizColumns.map((column) => (
+      <div class="contents sm:flex sm:min-w-0 sm:flex-1 sm:flex-col">
+        {column.map(({ viz, index }) => (
+          <button
+            type="button"
+            class="viz-tile"
+            data-viz-tile
+            data-viz-index={index}
+            data-viz-tags={JSON.stringify(viz.tags)}
+            aria-haspopup="dialog"
+            style={`order: ${index};`}
+          >
+            <Image src={viz.image} alt={viz.caption} loading="lazy" />
+          </button>
+        ))}
+      </div>
     ))
   }
 </div>
@@ -131,7 +147,7 @@ const uniqueTags = [...new Set(visualizations.flatMap((viz) => viz.tags))];
         </button>
         <div class="flex min-w-0 flex-1 justify-center">
           {
-            visualizations.map((viz) => (
+            sortedVisualizations.map((viz) => (
               <figure
                 data-viz-slide
                 data-viz-caption={viz.caption}
@@ -208,10 +224,9 @@ const uniqueTags = [...new Set(visualizations.flatMap((viz) => viz.tags))];
 
     const visibleIndexes = () =>
       tiles
-        .map((tile, index) =>
-          tile.classList.contains("viz-hidden") ? -1 : index,
-        )
-        .filter((index) => index >= 0);
+        .filter((tile) => !tile.classList.contains("viz-hidden"))
+        .map((tile) => Number(tile.getAttribute("data-viz-index")))
+        .sort((a, b) => a - b);
 
     const syncChips = () => {
       chips.forEach((chip) => {
@@ -339,7 +354,6 @@ const uniqueTags = [...new Set(visualizations.flatMap((viz) => viz.tags))];
       background: var(--color-surface);
       cursor: zoom-in;
       text-align: left;
-      break-inside: avoid;
     }
     .viz-tile img {
       display: block;
