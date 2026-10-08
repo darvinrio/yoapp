@@ -36,6 +36,8 @@ import poly_wc_worst_trader from "../assets/visualizations/poly_wc_worst_trader.
 import poly_wc_worst_trader_breakdown from "../assets/visualizations/poly_wc_worst_trader_breakdown.jpeg";
 import poly_wc_worst_trader_wins from "../assets/visualizations/poly_wc_worst_trader_wins.png";
 import poly_wc_worst_trader_loses from "../assets/visualizations/poly_wc_worst_trader_loses.jpeg";
+import rocifi from "../assets/visualizations/rocifi.png"
+import birmingham from "../assets/visualizations/birmingham.png"
 
 export interface Visualization {
   image: ImageMetadata;
@@ -47,6 +49,14 @@ export interface Visualization {
 }
 
 export const visualizations: Visualization[] = [
+  {
+    image: rocifi,
+    caption:
+      "Analyzing Credit distribution on Rocifi - Undercollateralized Lending",
+    date: "2022-11-30",
+    dataSource: "https://dune.com/roci_fi/rocifi-v2-credit-dashboard",
+    tags: ["rocifi", "credit"],
+  },
   {
     image: kelp_pendle,
     caption:
@@ -273,6 +283,13 @@ export const visualizations: Visualization[] = [
     tweetUrl: "https://x.com/maybeYonas/status/2011375119822983472?s=20",
     dataSource: "https://dune.com/hyperwave/hyperwave-hwhype",
     tags: ["hyperliquid"],
+  },
+  {
+    image: birmingham,
+    caption:
+      "Playing as Birmingham FC in Football Manager",
+    date: "2026-03-10",
+    tags: ["football", "birmingham"],
   },
   {
     image: poly_soccer_pdelta,
