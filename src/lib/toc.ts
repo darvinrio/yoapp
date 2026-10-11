@@ -28,7 +28,7 @@ export const MIN_TOC_ENTRIES = 3;
  * filtering on a fixed depth would hand those three an empty contents list.
  *
  * Only one level below that minimum is kept. Beyond two levels the rail is a
- * column of near-identical small text — hy-phen-avalance's `####` rows add
+ * column of near-identical small text — hyphen-avalance's `####` rows add
  * three lines that no one scans for.
  */
 export function buildToc(
@@ -51,8 +51,8 @@ export function buildToc(
       continue;
     }
 
-    // Exactly one level below the post's own top level, and no deeper. hy-
-    // phen-avalance's four `####` rows are sub-subsections: they add rows to a
+    // Exactly one level below the post's own top level, and no deeper. The four
+    // `####` rows in hyphen-avalance are sub-subsections: they add rows to a
     // 13rem column without adding anything a reader navigates by.
     if (heading.depth === minDepth + 1) {
       current.children.push({ slug: heading.slug, text: heading.text });

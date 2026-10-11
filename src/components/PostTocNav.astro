@@ -16,7 +16,7 @@ const labelId = `${idPrefix}-contents-label`;
 <!-- Both instances of this nav ship on a post page. The one that does not
      match the viewport is display:none, which drops it from the accessibility
      tree entirely, so a reader is never offered two copies of the same list. -->
-<nav aria-labelledby={labelId} class="not-prose" data-toc-nav>
+<nav aria-labelledby={labelId} data-toc-nav>
   <p
     id={labelId}
     class="font-mono text-meta uppercase tracking-[0.12em] text-ink-faint"
