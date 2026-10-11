@@ -12,16 +12,27 @@ interface ContactEntry {
   name: string;
   href: string;
   svgIcon: SvgComponent;
+  /** Brand identity ink, shown on hover only — never at rest. */
   brandColor: string;
+  /**
+   * X and GitHub are near-black marks, so their brand ink is unreadable on the
+   * dark surface. Set on the black entries to swap hover ink to the theme's
+   * strong ink in dark mode; the swatch is resolved at the point of use, so
+   * light mode still gets a black brand.
+   */
+  invertInDark?: boolean;
   isWorkLink?: boolean;
 }
 
+// Brand hexes here are third-party brand identities, not palette tokens: the
+// site itself paints nothing outside theme.css.
 const contacts: ContactEntry[] = [
   {
     name: "Twitter",
     href: "https://x.com/maybeYonas",
     svgIcon: XIcon,
     brandColor: "#000000",
+    invertInDark: true,
   },
   {
     name: "LinkedIn",
@@ -40,6 +51,7 @@ const contacts: ContactEntry[] = [
     href: "https://github.com/darvinrio",
     svgIcon: GitHubIcon,
     brandColor: "#333333",
+    invertInDark: true,
     isWorkLink: true,
   },
   {
@@ -56,23 +68,45 @@ const contacts: ContactEntry[] = [
     brandColor: "#EA4335",
   },
 ];
+
+const label = "font-mono text-meta uppercase tracking-[0.18em] text-ink-faint";
+
+// The label column only appears from md, where 17rem fits the longest label
+// ("check out my work here:") on one line; below that the label sits above its
+// own icon row rather than wrapping inside a narrow column.
+const groupRow = "grid gap-2 md:grid-cols-[17rem_1fr] md:items-center md:gap-6";
 ---
 
-<div class="mt-6 flex flex-col gap-4">
-  <p class="font-text">reach out to me on:</p>
-  <div class="flex items-center gap-4">
-    {
-      contacts
-        .filter((c) => !c.isWorkLink)
-        .map((contact) => <ContactItem contact={contact} />)
-    }
+<!-- Two label/icon rows rather than two stacked sentences, so the icons of
+     each group sit on one line and both groups start at the same left edge. -->
+<div class="mt-14 border-t border-line pt-8">
+  <div class={groupRow}>
+    <p class={label}>reach out to me on:</p>
+    <ul class="flex flex-wrap items-center gap-3">
+      {
+        contacts
+          .filter((c) => !c.isWorkLink)
+          .map((contact) => (
+            <li>
+              <ContactItem contact={contact} />
+            </li>
+          ))
+      }
+    </ul>
   </div>
-  <p class="font-text">check out my work here:</p>
-  <div class="flex items-center gap-4">
-    {
-      contacts
-        .filter((c) => c.isWorkLink)
-        .map((contact) => <ContactItem contact={contact} />)
-    }
+
+  <div class={`mt-5 ${groupRow}`}>
+    <p class={label}>check out my work here:</p>
+    <ul class="flex flex-wrap items-center gap-3">
+      {
+        contacts
+          .filter((c) => c.isWorkLink)
+          .map((contact) => (
+            <li>
+              <ContactItem contact={contact} />
+            </li>
+          ))
+      }
+    </ul>
   </div>
 </div>

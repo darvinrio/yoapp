@@ -1,5 +1,6 @@
 ---
 import DarkToggle from "./DarkToggle.astro";
+import DisplayFontToggle from "./DisplayFontToggle.astro";
 
 const links = [
   { href: "/work", label: "Work" },
@@ -8,75 +9,87 @@ const links = [
   { href: "/resume", label: "Resume" },
 ];
 
-const linkClass = "hover:text-accent transition-colors";
+// Trailing slashes differ between dev, preview and the static host, so strip
+// them before matching. A nested route (/blog/<slug>) keeps its parent active.
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+
+const isActive = (href: string) =>
+  pathname === href || pathname.startsWith(`${href}/`);
 ---
 
-<nav class="sticky top-0 z-50 w-full bg-surface border-b border-line">
-  <div
-    class="absolute inset-0 pointer-events-none"
-    style="background-image:url('/texture.png');background-repeat:repeat;background-position:center top;background-size:192px;opacity:0.05;"
-  >
-  </div>
-  <div
-    class="container-max px-4 py-3 flex items-center justify-between relative z-10"
-  >
-    <a href="/" class="font-title text-xl">
+<nav
+  aria-label="Main"
+  class="sticky top-0 z-50 w-full border-b border-line bg-surface-raised"
+>
+  <div class="container-max flex items-center justify-between gap-6 px-4 py-3">
+    <!-- "/" is reached through the wordmark, not a nav item: the current page
+         is announced here and no nav link claims to be active on the home page. -->
+    <a
+      href="/"
+      aria-current={pathname === "/" ? "page" : undefined}
+      class="font-title shrink-0 text-xl"
+    >
       maybe<span class="text-accent">Yonas</span>
     </a>
 
-    <div class="hidden md:flex items-center gap-6 font-text">
-      {
-        links.map(({ href, label, newPage }) => (
-          <a
-            href={href}
-            class={linkClass}
-            target={newPage ? "_blank" : undefined}
-            rel={newPage ? "noopener noreferrer" : undefined}
-          >
-            {label}
-          </a>
-        ))
-      }
-      <DarkToggle />
+    <div class="hidden items-center gap-7 md:flex">
+      <ul class="nav-row flex items-center gap-7 font-text">
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                class="nav-link"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="nav-controls" role="group" aria-label="Display settings">
+        <DarkToggle />
+        <DisplayFontToggle />
+      </div>
     </div>
 
     <button
       id="menu-toggle"
       type="button"
-      aria-label="Toggle menu"
+      aria-label="Menu"
       aria-controls="mobile-menu"
       aria-expanded="false"
-      class="md:hidden p-2 rounded-lg hover:bg-surface-hover transition-colors"
+      class="menu-toggle flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink md:hidden"
     >
       <svg
-        id="icon-hamburger"
+        class="nav-icon-menu"
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="block text-ink"
       >
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="18" x2="21" y2="18"></line>
       </svg>
       <svg
-        id="icon-close"
+        class="nav-icon-close"
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="hidden text-ink"
       >
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -86,46 +99,143 @@ const linkClass = "hover:text-accent transition-colors";
 
   <div
     id="mobile-menu"
-    class="hidden md:hidden border-t border-line bg-surface"
+    hidden
+    class="border-t border-line bg-surface-raised md:hidden"
   >
-    <div class="flex flex-col items-end gap-4 py-4 px-6 font-text">
-      <DarkToggle />
-      {
-        links.map(({ href, label, newPage }) => (
-          <a
-            href={href}
-            class={linkClass}
-            target={newPage ? "_blank" : undefined}
-            rel={newPage ? "noopener noreferrer" : undefined}
-          >
-            {label}
-          </a>
-        ))
-      }
+    <div class="container-max px-4 py-4 font-text">
+      <ul class="nav-list flex flex-col gap-1">
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                class="nav-link block rounded-lg px-3 py-2 hover:bg-surface-hover"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-4 flex items-center gap-2 border-t border-line pt-4">
+        <DarkToggle />
+        <DisplayFontToggle />
+      </div>
     </div>
   </div>
 </nav>
 
 <script>
-  const menuToggle = document.getElementById("menu-toggle");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const hamburger = document.getElementById("icon-hamburger");
-  const close = document.getElementById("icon-close");
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
 
-  menuToggle?.addEventListener("click", () => {
-    const isHidden = mobileMenu?.classList.toggle("hidden");
-    hamburger?.classList.toggle("hidden");
-    close?.classList.toggle("hidden");
-    if (typeof isHidden === "boolean") {
-      menuToggle?.setAttribute("aria-expanded", String(!isHidden));
-    }
-  });
+  if (toggle instanceof HTMLButtonElement && menu instanceof HTMLElement) {
+    const setExpanded = (expanded: boolean) =>
+      toggle.setAttribute("aria-expanded", String(expanded));
 
-  mobileMenu?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mobileMenu.classList.add("hidden");
-      hamburger?.classList.remove("hidden");
-      close?.classList.add("hidden");
+    // Opening moves focus into the panel so the keyboard follows the visual
+    // change; closing hands it back to the button that opened it.
+    const open = () => {
+      if (!menu.hidden) return;
+      menu.hidden = false;
+      setExpanded(true);
+      const first = menu.querySelector<HTMLElement>("a, button");
+      first?.focus();
+    };
+
+    const close = (restoreFocus: boolean) => {
+      if (menu.hidden) return;
+      menu.hidden = true;
+      setExpanded(false);
+      if (restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => {
+      if (menu.hidden) open();
+      else close(false);
     });
-  });
+
+    menu.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest("a")) close(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || menu.hidden) return;
+      event.preventDefault();
+      close(true);
+    });
+
+    // The panel is display:none from md up, so a resize must not strand it in
+    // an open, aria-expanded state.
+    window
+      .matchMedia("(min-width: 768px)")
+      .addEventListener("change", (event) => {
+        if (event.matches) close(false);
+      });
+  }
 </script>
+
+<style>
+  .nav-link {
+    position: relative;
+    color: var(--color-ink-muted);
+    transition: color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--color-ink);
+  }
+
+  /* Desktop: active state is a teal label with a rule beneath it. */
+  .nav-row .nav-link[aria-current="page"] {
+    color: var(--color-accent);
+  }
+
+  .nav-row .nav-link[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.4375rem;
+    height: 2px;
+    border-radius: 9999px;
+    background-color: var(--color-accent);
+  }
+
+  /* Mobile: active state is a filled, teal-tinted row. */
+  .nav-list .nav-link[aria-current="page"] {
+    background-color: var(--color-accent-soft);
+    color: var(--color-accent-soft-ink);
+  }
+
+  /* One bordered cluster so the two display toggles read as a single control
+     surface instead of two loose pills. */
+  .nav-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.1875rem;
+    border: 1px solid var(--color-line);
+    border-radius: 9999px;
+  }
+
+  /* Glyph swap is driven by aria-expanded, so there is one source of truth for
+     the open state rather than a second one kept in JS. */
+  .nav-icon-menu {
+    display: block;
+  }
+
+  .nav-icon-close {
+    display: none;
+  }
+
+  .menu-toggle[aria-expanded="true"] .nav-icon-menu {
+    display: none;
+  }
+
+  .menu-toggle[aria-expanded="true"] .nav-icon-close {
+    display: block;
+  }
+</style>

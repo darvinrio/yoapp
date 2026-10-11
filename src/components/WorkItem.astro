@@ -15,8 +15,12 @@ interface Props {
 const { company, title, roleType, start, end, description, logo } = Astro.props;
 const Logo = logo;
 
+function parseDate(iso: string): Date {
+  return new Date(iso + "T00:00:00");
+}
+
 function formatDate(iso: string): string {
-  const d = new Date(iso + "T00:00:00");
+  const d = parseDate(iso);
   const months = [
     "Jan",
     "Feb",
@@ -46,23 +50,125 @@ const startDate = formatDate(start);
 const endDate = end ? formatDate(end) : "Present";
 const dateRange = `${startDate} to ${endDate}`;
 const roleLabel = roleTypeLabels[roleType];
+
+// The gutter carries the start year only: roles overlap (PYOR ran to Oct 2024
+// alongside Swell from Apr 2024), so a year-range gutter could not sort into a
+// single column. The exact months stay on the meta line beside the role.
+const startYear = parseDate(start).getUTCFullYear();
 ---
 
-<article class="group border-b border-line pb-6 flex gap-4 items-start">
-  <Logo
-    class="fill-current h-8 w-8 md:h-10 md:w-10 object-contain pt-2 shrink-0"
-    aria-label={`${company} logo`}
-  />
-  <div class="flex flex-col">
-    <p class="text-ink-muted">{company}</p>
-    <h2
-      class="font-text text-2xl text-ink-strong group-hover:text-accent transition-colors"
-    >
-      {title}
-    </h2>
-    <p class="text-sm text-ink-faint mt-1 mb-1">
+<!-- Three columns on every breakpoint: year gutter, spine, entry. The gutter is
+     3.75rem rather than the 2.75rem it started at, because it has to hold a
+     4-digit year at 13px JetBrains Mono (36.4px, counting the 0.1em tracking)
+     plus clearance from the spine dot — see .timeline-year. The entry still gets
+     a readable measure on a phone, and the spine is what separates the rows:
+     there is no per-row border. -->
+<article
+  class="timeline-row grid grid-cols-[3.75rem_1.25rem_minmax(0,1fr)] md:grid-cols-[3.75rem_1.5rem_minmax(0,1fr)]"
+>
+  <time class="timeline-year" datetime={start}>{startYear}</time>
+  <div class="timeline-spine" aria-hidden="true"></div>
+
+  <div class="timeline-body min-w-0">
+    <div class="flex items-start gap-4">
+      <!-- Utilities, not scoped CSS: the logo is an imported .svg component, so
+           its root element is not guaranteed to carry this component's scope
+           attribute. -->
+      <Logo
+        class="mt-1 h-8 w-8 shrink-0 fill-current text-ink-faint md:h-10 md:w-10"
+        aria-hidden="true"
+      />
+      <div class="min-w-0">
+        <h2 class="font-title text-h2 text-ink-strong">{title}</h2>
+        <p class="mt-1 text-body text-ink">
+          {company}
+          <span class="text-ink-faint">· {roleLabel}</span>
+        </p>
+      </div>
+    </div>
+    <p class="mt-4 font-mono text-meta tracking-[0.12em] text-ink-faint">
       {dateRange}
     </p>
-    <p class="mt-2 text-ink-muted">{description}</p>
+    <p class="entry-description mt-3 text-body text-ink-muted">{description}</p>
   </div>
 </article>
+
+<style>
+  /* One optical axis for the row: the vertical centre of the h2 line box. The
+     gutter year and the spine dot are both positioned off it, so the three
+     columns line up without per-element guesswork. text-h2 is 1.5rem at 1.25
+     line-height, so half of that line box is 0.9375rem. */
+  .timeline-row {
+    --axis: 0.9375rem;
+    --row-gap: 3.5rem;
+  }
+
+  /* padding-right is load-bearing, not cosmetic. The spine's dot is centred on
+     the rule, so it hangs 0.3125rem (5px) to the left of that border, and its
+     3px surface ring reaches 8px. The year is right-aligned in a column whose
+     right edge *is* that border, so without padding the ring painted over the
+     final digit — one digit of 13px JetBrains Mono is only 7.8px wide, so the
+     last character was entirely swallowed.
+
+     1rem of padding puts 16px between the last digit and the border, clearing
+     the 8px ring by 8px, and the 3.75rem gutter keeps the full 36.4px of text
+     inside the column at every breakpoint. */
+  .timeline-year {
+    padding-top: calc(var(--axis) - 0.6rem);
+    padding-right: 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    letter-spacing: 0.1em;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--color-ink-faint);
+  }
+
+  /* The rule lives on the spine cell, which is a stretched grid item, so it
+     spans the full row — including the gap, which is why the gap is padding on
+     the entry column rather than a margin or a row border: a margin would sit
+     outside the row the rule has to span, and a border would double the
+     separator. line-strong rather than line, because a 1px hairline at line is
+     1.43:1 in dark mode and all but vanishes. */
+  .timeline-spine {
+    position: relative;
+    border-left: 1px solid var(--color-line-strong);
+  }
+
+  /* Half a rem wider than the dot's own radius, so the dot centres on the
+     rule rather than hanging off it. */
+  .timeline-spine::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--axis) - 0.25rem);
+    left: -0.3125rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--color-accent);
+    /* The ring is the page colour, which punches the rule out from behind the
+       dot instead of letting the two overlap. */
+    box-shadow: 0 0 0 3px var(--color-surface);
+  }
+
+  .timeline-body {
+    padding-bottom: var(--row-gap);
+  }
+
+  /* The last row terminates at its dot: no rule hanging below nothing, and no
+     trailing gap after the final entry. */
+  .timeline-row:last-child .timeline-spine {
+    border-left-color: transparent;
+  }
+
+  .timeline-row:last-child .timeline-body {
+    padding-bottom: 0;
+  }
+
+  /* Descriptions are one or two lines; the cap keeps a long one from running
+     the full width of the content column. */
+  .entry-description {
+    max-width: 62ch;
+  }
+</style>

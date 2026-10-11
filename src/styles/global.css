@@ -1,11 +1,44 @@
 @import "./theme.css";
 
+/* Type scale. Declared in @theme (rather than :root) so Tailwind registers the
+   names and emits `text-h1`, `text-h2`, `text-meta`, … as real utilities.
+   Size and line-height are two separate declarations instead of the
+   `2.25rem / 1.15` shorthand on purpose: the shorthand value cannot be handed
+   to `font-size` from plain CSS, and the scale has to be usable both ways —
+   as a utility class and as `var(--text-h1)` inside global.css.
+   Every step is @applied by the heading defaults below, which is what keeps
+   Tailwind from tree-shaking a scale step nothing reaches yet. */
+@theme {
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.05; /* landing hero only */
+  --text-h1: 2.25rem;
+  --text-h1--line-height: 1.15; /* page title */
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.25; /* section heading */
+  --text-h3: 1.125rem;
+  --text-h3--line-height: 1.35; /* subsection */
+  --text-body: 1rem;
+  --text-body--line-height: 1.65; /* prose */
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.5; /* dates, tags, captions */
+}
+
 @font-face {
   font-family: "F5.6";
   src:
     url("/fonts/F5.6-Regular.woff2") format("woff2"),
     url("/fonts/F5.6-Regular.woff") format("woff");
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Alternate display face. Variable wght 200-800. Deliberately not preloaded:
+   font-display: swap means it is only fetched once a human opts in. */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/fonts/bricolage-grotesque-latin-var.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
@@ -71,12 +104,33 @@
   --font-text: "Merriweather", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
   /*--container-width: 1152px; /* 6xl */
+  /* One container width for the whole site: navbar, every page and the footer
+     all frame content at this measure. A page that opts out of it visually
+     bursts out of its own chrome — an earlier 1280px gallery did exactly that,
+     256px proud of the navbar and footer framing it. */
   --container-width: 1024px; /* 4xl */
+  /* Narrow measure for short intro copy only — the / landing hero's lede and the
+   404 explanation. Long-form posts deliberately do NOT use this: they run the
+   full --container-width column. 1ch is the advance of "0" in Merriweather,
+   which is much wider than this face's average glyph, so the ch value reads
+   higher than the character count it actually produces. Two independent
+   measurements of the face put the ratio at 1.15-1.31 chars per ch; 57ch is the
+   only value that lands inside the intended 65-75 character window under both
+   (75 and 66 chars). It sits in :root rather than @theme because
+     .container-prose consumes it from plain CSS — a @theme variable that no
+     utility references is tree-shaken away. */
+  --container-prose: 57ch;
+}
+
+/* Runtime display-font switch: one class on <html>, same strategy as .dark. */
+html.font-bricolage {
+  --font-title: "Bricolage Grotesque", sans-serif;
 }
 
 html {
   font-family: var(--font-text);
   font-weight: 300;
+  line-height: var(--text-body--line-height);
 }
 
 /*h1,
@@ -84,6 +138,107 @@ h2,
 h3,*/
 .font-title {
   font-family: var(--font-title);
+}
+
+/* Heading sizes come from the --text-* scale, in @layer base on purpose:
+   @tailwindcss/typography emits .prose into the utilities layer, which outranks
+   base, so these defaults stop at the door of the 13 MDX posts and never
+   override the em-based sizes that face ships with. */
+@layer base {
+  h1 {
+    @apply text-h1;
+  }
+  h2 {
+    @apply text-h2;
+  }
+  h3 {
+    @apply text-h3;
+  }
+  h4 {
+    @apply text-body;
+  }
+  h5,
+  h6 {
+    @apply text-meta;
+  }
+}
+
+/* Heading weight and ink, unlayered so they win everywhere. No line-height here:
+   a bare declaration would outrank the utilities layer and flatten the leading
+   that `text-h1` / `text-h2` set, and would clip the leading .prose chooses for
+   its own headings.
+   Weight is pinned to 400 on purpose — F5.6 ships weight 400 only, so any
+   heavier value on a .font-title element would be synthetic (faux) bold.
+   Hierarchy comes from size, ink and spacing instead. Font family is
+   deliberately NOT set here: the display face is opted into per element
+   (.font-title), and .prose inherits Merriweather for MDX headings. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 400;
+  color: var(--color-ink-strong);
+}
+
+/* Skip-link target: focused programmatically, not a keyboard stop. */
+#main-content:focus {
+  outline: none;
+}
+
+/* One focus ring for the whole site. `:focus-visible` rather than `:focus` so
+   a pointer click never paints a ring while every Tab stop does — and so the
+   ring stays off elements that are only focused to absorb the skip link, which
+   the rule above silences. The colour is the accent token because teal is
+   functional-only in this palette and focus is the clearest functional use of
+   it. Offset rather than a box-shadow so nothing reflows when it appears.
+
+   The skip link is the one deliberate exception: it is painted on an accent
+   fill, so an accent ring on top of it would be invisible. It keeps its own
+   ink-strong ring, declared with its own chrome in Layout.astro. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion. Transitions here are all short colour and border fades, but a
+   human who has asked the OS to cut motion should get none of them — including
+   the ones declared in component <style> blocks and in Tailwind utilities,
+   which is why this is a bare-element !important sweep rather than a per-rule
+   opt-out.
+
+   1ms rather than 0s: the site's own `transition` and `animation` shorthand
+   declarations stay in place and only their duration collapses, so anything
+   listening for transitionend / animationend still receives its event. The
+   finite iteration count matters for the same reason — an infinite animation
+   must not survive this guard as a busy loop. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Grain — exactly one application for the whole site. Declared only under
+   .dark, so light mode never fetches /texture.png, and z-index -1 paints it
+   behind content instead of over it (the old overlay sat at z-index 0, on top
+   of prose, and was duplicated inside the navbar). */
+.dark body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/texture.png");
+  background-repeat: repeat;
+  background-position: center top;
+  background-size: 192px;
+  opacity: 0.03;
 }
 
 code,
@@ -95,4 +250,13 @@ pre,
 .container-max {
   max-width: var(--container-width);
   margin-inline: auto;
+}
+
+/* Narrow column for short intro copy. Deliberately not the `max-w-prose`
+   utility: Tailwind's own theme already ships --max-width-prose: 65ch and owns
+   that class name, so a --container-prose token behind it would never be
+   reached. Used by the / hero lede and the 404 explanation, NOT by blog posts
+   — those span the full --container-width. */
+.container-prose {
+  max-width: var(--container-prose);
 }

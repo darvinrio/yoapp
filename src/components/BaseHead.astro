@@ -29,6 +29,25 @@ const imageURL = new URL(image, Astro.site);
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
+<script is:inline>
+  // Blocking, render-critical: must run before first paint or dark-mode users
+  // see a white flash. Applies both persisted classes to <html> up front.
+  (() => {
+    const root = document.documentElement;
+    const theme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    root.classList.toggle(
+      "dark",
+      theme === "dark" || (theme !== "light" && prefersDark),
+    );
+    root.classList.toggle(
+      "font-bricolage",
+      localStorage.getItem("displayFont") === "bricolage",
+    );
+  })();
+</script>
 <meta name="generator" content={Astro.generator} />
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
@@ -64,15 +83,18 @@ const imageURL = new URL(image, Astro.site);
 />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
+<!-- Literal hex, not a token: a meta tag is read by the UA before any
+     stylesheet resolves, so there is no custom property to read here. Both
+     values are --color-surface for the theme they name. -->
 <meta
   name="theme-color"
   media="(prefers-color-scheme: light)"
-  content="#ffffff"
+  content="#fafafa"
 />
 <meta
   name="theme-color"
   media="(prefers-color-scheme: dark)"
-  content="#27272a"
+  content="#18181b"
 />
 <link
   rel="preload"

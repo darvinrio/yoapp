@@ -13,7 +13,16 @@ interface Props {
 ---
 
 <Layout {...Astro.props}>
-  <main class="container-max px-4 py-12">
+  <!-- Posts span the full --container-width column, the same measure every other
+       page uses, so a post's h1 and first paragraph start on exactly the edge
+       the navbar wordmark and the /blog index titles do.
+
+       The previous .container-prose wrapper capped the column at 57ch (~580px),
+       which is the classic comfortable reading measure but left roughly 400px of
+       the column empty beside every post. If that ever reads too wide again,
+       the dial-back is one max-width on .prose — do not reintroduce a second
+       width token for it. -->
+  <main id="main-content" tabindex="-1" class="container-max px-4 py-12">
     <slot />
   </main>
 </Layout>

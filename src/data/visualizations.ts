@@ -36,8 +36,8 @@ import poly_wc_worst_trader from "../assets/visualizations/poly_wc_worst_trader.
 import poly_wc_worst_trader_breakdown from "../assets/visualizations/poly_wc_worst_trader_breakdown.jpeg";
 import poly_wc_worst_trader_wins from "../assets/visualizations/poly_wc_worst_trader_wins.png";
 import poly_wc_worst_trader_loses from "../assets/visualizations/poly_wc_worst_trader_loses.jpeg";
-import rocifi from "../assets/visualizations/rocifi.png"
-import birmingham from "../assets/visualizations/birmingham.png"
+import rocifi from "../assets/visualizations/rocifi.png";
+import birmingham from "../assets/visualizations/birmingham.png";
 
 export interface Visualization {
   image: ImageMetadata;
@@ -286,8 +286,7 @@ export const visualizations: Visualization[] = [
   },
   {
     image: birmingham,
-    caption:
-      "Playing as Birmingham FC in Football Manager",
+    caption: "Playing as Birmingham FC in Football Manager",
     date: "2026-03-10",
     tags: ["football", "birmingham"],
   },

@@ -4,41 +4,41 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-surface: #ffffff;
+  --color-surface: #fafafa;
   --color-surface-raised: #ffffff;
-  --color-surface-hover: #f3f4f6;
-  --color-control: #ffffff;
-  --color-ink: #000000;
-  --color-ink-strong: #000000;
-  --color-ink-muted: #374151;
-  --color-ink-faint: #6b7280;
-  --color-ink-faintest: #9ca3af;
-  --color-line: #e5e7eb;
-  --color-line-strong: #d1d5db;
-  --color-accent: #14b8a6;
-  --color-accent-bright: #14b8a6;
+  --color-surface-sunken: #f4f4f5;
+  --color-surface-hover: #f4f4f5;
+  --color-ink-strong: #09090b;
+  --color-ink: #18181b;
+  --color-ink-muted: #52525b;
+  --color-ink-faint: #68686f;
+  --color-line: #e4e4e7;
+  --color-line-strong: #d4d4d8;
+  --color-accent: #0f766e;
+  --color-accent-bright: #0d9486;
   --color-accent-soft: #ccfbf1;
   --color-accent-soft-ink: #0f766e;
   --color-on-accent: #ffffff;
+  --color-control: #ffffff;
   --color-warning: #eab308;
 }
 
 .dark {
-  --color-surface: #27272a;
-  --color-surface-raised: #18181b;
+  --color-surface: #18181b;
+  --color-surface-raised: #27272a;
+  --color-surface-sunken: #0f0f11;
   --color-surface-hover: #3f3f46;
-  --color-control: #3f3f46;
-  --color-ink: #e8e5ef;
-  --color-ink-strong: #f1eef7;
-  --color-ink-muted: #d4d4d8;
-  --color-ink-faint: #a1a1aa;
-  --color-ink-faintest: #71717a;
-  --color-line: #3f3f46;
-  --color-line-strong: #52525b;
+  --color-ink-strong: #fafafa;
+  --color-ink: #e4e4e7;
+  --color-ink-muted: #a1a1aa;
+  --color-ink-faint: #94949d;
+  --color-line: #2e2e34;
+  --color-line-strong: #3f3f46;
   --color-accent: #2dd4bf;
   --color-accent-bright: #5eead4;
-  --color-accent-soft: #3f3f46;
-  --color-accent-soft-ink: #5eead4;
-  --color-on-accent: #18181b;
+  --color-accent-soft: rgba(45, 212, 191, 0.12);
+  --color-accent-soft-ink: #2dd4bf;
+  --color-on-accent: #0f172a;
+  --color-control: #3f3f46;
   --color-warning: #fde047;
 }

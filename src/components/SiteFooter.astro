@@ -1,0 +1,79 @@
+---
+const navLinks = [
+  { href: "/work", label: "Work" },
+  { href: "/visualizations", label: "Visuals" },
+  { href: "/blog", label: "Writings" },
+  { href: "/resume", label: "Resume" },
+];
+
+const socials = [
+  { href: "https://github.com/darvinrio", label: "GitHub" },
+  { href: "https://x.com/maybeYonas", label: "Twitter" },
+  { href: "https://linkedin.com/in/darvinrio", label: "LinkedIn" },
+  { href: "https://dune.com/maybeYonas", label: "Dune" },
+];
+
+const year = new Date().getFullYear();
+
+const eyebrow = "font-mono text-xs uppercase tracking-widest text-ink-faint";
+const link =
+  "text-sm text-ink-muted hover:text-accent transition-colors hover:underline";
+---
+
+<footer class="mt-16 border-t border-line bg-surface-raised">
+  <div class="container-max px-4 py-10">
+    <div class="flex flex-col gap-10 md:flex-row md:justify-between">
+      <div class="max-w-sm">
+        <p class="font-title text-lg">
+          maybe<span class="text-accent">Yonas</span>
+        </p>
+        <p class="mt-2 text-sm text-ink-faint leading-relaxed">
+          Analytics Engineer with 4 years of blockchain data experience.
+          On-chain data, prediction markets, open research.
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <p class={eyebrow}>Site</p>
+        <ul class="mt-4 flex flex-col gap-2">
+          {
+            navLinks.map(({ href, label }) => (
+              <li>
+                <a href={href} class={link}>
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <nav aria-label="Social">
+        <p class={eyebrow}>Elsewhere</p>
+        <ul class="mt-4 flex flex-col gap-2">
+          {
+            socials.map(({ href, label }) => (
+              <li>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={link}
+                >
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <div
+      class="mt-10 flex flex-col gap-1 border-t border-line pt-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {year} Yonas</p>
+      <p>Built with Astro</p>
+    </div>
+  </div>
+</footer>

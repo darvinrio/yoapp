@@ -1,42 +1,168 @@
-@layer components {
-  .img-zoom img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: zoom-in;
-    transition: transform 0.15s ease;
-  }
-  .img-zoom img:hover {
-    transform: scale(1.02);
-  }
-  .img-zoom figcaption {
-    text-align: center;
-    font-size: 0.875rem;
-    color: var(--color-ink-faint);
-    margin-top: 0.5rem;
-    cursor: default;
-  }
+/* Prose chrome for the 13 MDX posts.
+ *
+ * Everything here is unlayered on purpose. @tailwindcss/typography emits `.prose`
+ * into the utilities layer, and this file is loaded *before* the Tailwind
+ * stylesheet, so a declaration inside `@layer components` would lose to the
+ * plugin on source order. Unlayered author styles outrank every layer, which is
+ * what lets the token remap below replace the plugin's zinc palette outright —
+ * including in dark mode, where `dark:prose-invert` only re-points the same
+ * `--tw-prose-*` properties and is therefore outranked the same way.
+ */
+
+/* Palette. Every value is a theme token, so `.prose` follows .dark with no
+   second set of declarations. */
+.prose {
+  --tw-prose-body: var(--color-ink);
+  --tw-prose-headings: var(--color-ink-strong);
+  --tw-prose-lead: var(--color-ink-muted);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-ink-strong);
+  --tw-prose-counters: var(--color-ink-faint);
+  --tw-prose-bullets: var(--color-ink-faint);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-accent);
+  --tw-prose-captions: var(--color-ink-faint);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-pre-bg: var(--color-surface-sunken);
+  --tw-prose-th-borders: var(--color-line-strong);
+  --tw-prose-td-borders: var(--color-line);
+  --tw-prose-kbd: var(--color-ink);
+  --tw-prose-kbd-shadows: var(--color-line-strong);
 }
 
+/* Shiki dual theme. `markdown.shikiConfig` in astro.config.mjs selects
+   github-light / github-dark with `defaultColor: false`, so every token arrives
+   as a `--shiki-light` / `--shiki-dark` custom property and Shiki writes no
+   `color` or `background-color` inline at all — which is what finally lets
+   --tw-prose-pre-bg above reach the <pre> and put the block on surface-sunken
+   like the rest of the palette.
+
+   Two rules, because the theme is a class on <html> rather than a media query:
+   light is the default pair, `.dark` swaps it. `color` inherits from the <pre>
+   down to every token span, so it is set once on the <pre>; the var() fallback
+   keeps --tw-prose-pre-code as the ink for a <pre> that Shiki never touched. */
+.astro-code {
+  color: var(--shiki-light, var(--tw-prose-pre-code));
+}
+
+.dark .astro-code {
+  color: var(--shiki-dark, var(--tw-prose-pre-code));
+}
+
+/* Quotation carries on the accent rule rather than on a slant: Merriweather is
+   loaded upright only (300/400/700/900), so the face's `italic` would be a
+   synthetic oblique. */
+.prose blockquote {
+  font-style: normal;
+  font-weight: 400;
+  border-inline-start-width: 2px;
+}
+
+/* Inline code is a quiet chip. `code` inside `pre` is excluded because Shiki
+   owns that text colour and weight. */
+.prose :not(pre) > code {
+  font-size: 0.9em;
+  font-weight: 400;
+  padding: 0.1em 0.3em;
+  border-radius: 0.25rem;
+  background-color: var(--color-surface-sunken);
+}
+
+/* Screenshots and charts get an edge so they read as figures rather than as
+   holes in the text. Border-box sizing (preflight) keeps a full-measure image
+   inside the column. */
+.prose img {
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+}
+
+/* Click-to-zoom affordance from BlogImage. The old hover scaled the image 2%,
+   which pushed a full-measure figure past the column and could scroll the page
+   sideways; the border does the same job without moving the layout. */
+.img-zoom img {
+  display: block;
+  margin-inline: auto;
+  cursor: zoom-in;
+  border-color: var(--color-line-strong);
+  transition: border-color 0.15s ease;
+}
+
+.img-zoom img:hover {
+  border-color: var(--color-accent);
+}
+
+/* Captions are meta, not body: mono at --text-meta, faint, centred under the
+   figure. */
+.img-zoom figcaption {
+  margin-top: 0.625rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  letter-spacing: 0.04em;
+  color: var(--color-ink-faint);
+  cursor: default;
+}
+
+/* Tables. The wrapper is the scroll container, so the card chrome — border,
+   radius, header fill — belongs to it and the table inside is chrome-free.
+   overflow-y is left to compute from overflow-x (auto/auto), which is what lets
+   border-radius clip the header fill at the corners. */
 .prose .table-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   margin-bottom: 1.5em;
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+  background-color: var(--color-surface-raised);
 }
 
 .prose .table-wrap table {
   width: 100%;
   table-layout: auto;
   margin: 0;
+  border-collapse: collapse;
 }
 
+/* Cells never reflow; the card scrolls horizontally instead. Posts now run the
+   full --container-width column, so most of these tables fit without scrolling,
+   but the widest still exceed it and must not be allowed to widen the page. */
 .prose .table-wrap td,
 .prose .table-wrap th {
   white-space: nowrap;
+  padding: 0.625rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--color-line);
 }
 
+.prose .table-wrap thead th {
+  border-top: 0;
+  border-bottom: 1px solid var(--color-line-strong);
+  background-color: var(--color-surface-sunken);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* Zebra striping on the sunken fill, so the eye can follow a row across a wide
+   table instead of losing it between two cells. */
+.prose .table-wrap tbody tr:nth-child(even) {
+  background-color: var(--color-surface-sunken);
+}
+
+/* KaTeX display blocks stay in the reading measure and scroll sideways rather
+   than pushing the page wide. */
 .prose .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
+  overscroll-behavior-x: contain;
   padding: 0.25rem 0;
 }

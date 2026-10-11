@@ -23,11 +23,13 @@ const formatMonthYear = (iso?: string) => {
   return `${MONTHS[month - 1]} ${year}`;
 };
 
-const sortedVisualizations = [...visualizations].sort(
-  (a, b) => (b.date ?? "").localeCompare(a.date ?? ""),
+const sortedVisualizations = [...visualizations].sort((a, b) =>
+  (b.date ?? "").localeCompare(a.date ?? ""),
 );
 
-const uniqueTags = [...new Set(sortedVisualizations.flatMap((viz) => viz.tags))];
+const uniqueTags = [
+  ...new Set(sortedVisualizations.flatMap((viz) => viz.tags)),
+];
 
 const COLUMN_COUNT = 3;
 const vizColumns: { viz: (typeof visualizations)[number]; index: number }[][] =
@@ -66,10 +68,14 @@ sortedVisualizations.forEach((viz, index) => {
   }
 </div>
 
-<div class="flex flex-col sm:flex-row sm:gap-6">
+<!-- Row spacing comes from gap rather than a margin on each tile: below sm the
+     columns are display:contents, so this container's gap is what separates the
+     tiles in visual (index) order, and from sm up the same gap separates the
+     three columns while each column's own gap separates its tiles. -->
+<div class="flex flex-col gap-6 sm:flex-row">
   {
     vizColumns.map((column) => (
-      <div class="contents sm:flex sm:min-w-0 sm:flex-1 sm:flex-col">
+      <div class="contents gap-6 sm:flex sm:min-w-0 sm:flex-1 sm:flex-col">
         {column.map(({ viz, index }) => (
           <button
             type="button"
@@ -95,7 +101,7 @@ sortedVisualizations.forEach((viz, index) => {
   aria-label="Visualization"
   class="hidden fixed inset-0 z-[60]"
 >
-  <div data-viz-backdrop class="absolute inset-0 bg-black/80"></div>
+  <div data-viz-backdrop class="absolute inset-0 bg-black/85"></div>
 
   <div
     class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 pointer-events-none"
@@ -106,7 +112,7 @@ sortedVisualizations.forEach((viz, index) => {
           type="button"
           data-viz-close
           aria-label="Close viewer"
-          class="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-ink shadow-md transition-colors hover:bg-surface-hover"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-line-strong bg-surface-raised text-ink transition-colors hover:bg-surface-hover"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +135,7 @@ sortedVisualizations.forEach((viz, index) => {
           type="button"
           data-viz-prev
           aria-label="Previous image"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink shadow-md transition-colors hover:bg-surface-hover"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-surface-raised text-ink transition-colors hover:bg-surface-hover"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -157,19 +163,22 @@ sortedVisualizations.forEach((viz, index) => {
                   src={viz.image}
                   alt={viz.caption}
                   loading="lazy"
-                  class="mx-auto block max-h-[70vh] w-auto max-w-full rounded-lg"
+                  class="mx-auto block max-h-[70vh] w-auto max-w-full rounded-lg border border-line-strong"
                 />
-                <figcaption class="mt-3 rounded-lg border border-line bg-surface p-4 text-left">
-                  <p class="font-medium text-ink">{viz.caption}</p>
+                {/* Caption bar: the caption at body size in ink, the date at the
+                    meta step in mono, tags as the same chips the index and post
+                    headers use. */}
+                <figcaption class="mt-3 rounded-lg border border-line bg-surface-raised p-4 text-left">
+                  <p class="text-body text-ink">{viz.caption}</p>
                   {formatMonthYear(viz.date) && (
-                    <p class="mt-1 text-sm text-ink-faint">
+                    <p class="mt-1.5 font-mono text-meta uppercase tracking-[0.12em] text-ink-faint">
                       {formatMonthYear(viz.date)}
                     </p>
                   )}
                   {viz.tags.length > 0 && (
-                    <ul class="mt-2 flex flex-wrap gap-1.5">
+                    <ul class="mt-3 flex flex-wrap gap-1.5">
                       {viz.tags.map((tag) => (
-                        <li class="text-xs px-2 py-0.5 rounded-full bg-accent-soft text-accent-soft-ink">
+                        <li class="rounded-full bg-accent-soft px-2.5 py-1 text-meta text-accent-soft-ink">
                           {tag}
                         </li>
                       ))}
@@ -184,7 +193,7 @@ sortedVisualizations.forEach((viz, index) => {
           type="button"
           data-viz-next
           aria-label="Next image"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-ink shadow-md transition-colors hover:bg-surface-hover"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong bg-surface-raised text-ink transition-colors hover:bg-surface-hover"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -319,11 +328,19 @@ sortedVisualizations.forEach((viz, index) => {
   </script>
 
   <style>
+    /* Filter chips. Mono at the meta step, so thirty-odd tags read as one
+       control strip rather than competing with the charts below. The pressed
+       state is the accent-soft fill on an accent border: it keeps the tag's
+       tint in dark mode, which a solid accent fill does not, and
+       accent-soft-ink on accent-soft clears 4.86:1 in light. */
     .viz-chip {
       border: 1px solid var(--color-line);
       border-radius: 9999px;
-      padding: 0.25rem 0.75rem;
-      font-size: 0.875rem;
+      padding: 0.375rem 0.875rem;
+      font-family: var(--font-mono);
+      font-size: var(--text-meta);
+      line-height: var(--text-meta--line-height);
+      letter-spacing: 0.06em;
       color: var(--color-ink-muted);
       background: transparent;
       transition:
@@ -333,36 +350,41 @@ sortedVisualizations.forEach((viz, index) => {
     }
     .viz-chip:hover {
       border-color: var(--color-line-strong);
+      background-color: var(--color-surface-raised);
       color: var(--color-ink);
     }
     .viz-chip[aria-pressed="true"] {
       border-color: var(--color-accent);
-      background: var(--color-accent);
-      color: var(--color-on-accent);
+      background-color: var(--color-accent-soft);
+      color: var(--color-accent-soft-ink);
     }
     .viz-tile.viz-hidden {
       display: none;
     }
+    /* No margin here: spacing between tiles is the container/column gap, so a
+       hidden tile does not leave a gap behind it and the last tile in a column
+       carries no trailing space. */
     .viz-tile {
       display: block;
       width: 100%;
       padding: 0;
-      margin: 0 0 1.5rem;
       border: 1px solid var(--color-line);
-      border-radius: 0.5rem;
+      border-radius: 0.75rem;
       overflow: hidden;
-      background: var(--color-surface);
+      background: var(--color-surface-raised);
       cursor: zoom-in;
       text-align: left;
+      transition: border-color 0.15s ease;
+    }
+    /* Hover lifts the edge rather than scaling the chart: a 2% zoom on a figure
+       crops the plot area and the axis labels off the tile. */
+    .viz-tile:hover {
+      border-color: var(--color-line-strong);
     }
     .viz-tile img {
       display: block;
       width: 100%;
       height: auto;
-      transition: transform 0.15s ease;
-    }
-    .viz-tile:hover img {
-      transform: scale(1.02);
     }
   </style>
 </div>
