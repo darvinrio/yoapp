@@ -44,9 +44,10 @@ const panelId = "toc-disclosure-panel";
 
     <button
       type="button"
-      class="ml-auto flex h-11 items-center gap-2 rounded-full border border-line-strong bg-surface-raised px-4 text-meta text-ink-muted shadow-lg transition-colors hover:bg-surface-hover hover:text-ink"
+      class="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-surface-raised text-ink-muted shadow-lg transition-colors hover:bg-surface-hover hover:text-ink"
       aria-expanded="false"
       aria-controls={panelId}
+      data-toc-disclosure-toggle
     >
       <!-- Glyph swap is driven by aria-expanded, the same source of truth
            Navbar.astro uses, so the icon cannot disagree with the panel. -->
@@ -83,15 +84,22 @@ const panelId = "toc-disclosure-panel";
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
-      <span>Contents</span>
+      <!-- Glyph only. The panel still needs an accessible name, which the
+           screen-reader-only span supplies — dropping the visible label does
+           not leave the control unnamed. -->
+      <span class="sr-only">Contents</span>
     </button>
   </div>
 </div>
 
 <script>
   const root = document.querySelector<HTMLElement>("[data-toc-disclosure]");
+  // Scoped to the pill's own hook, NOT a bare `button[aria-expanded]`. The
+  // panel's group chevrons are buttons with aria-expanded too and they come
+  // first in the DOM, so the generic selector bound the handler to the first
+  // chevron and left the pill itself completely dead.
   const toggle = root?.querySelector<HTMLButtonElement>(
-    "button[aria-expanded]",
+    "[data-toc-disclosure-toggle]",
   );
   const panel = root?.querySelector<HTMLElement>("[data-toc-panel]");
 
@@ -161,11 +169,13 @@ const panelId = "toc-disclosure-panel";
     display: none;
   }
 
-  .toc-disclosure button[aria-expanded="true"] .toc-disclosure__icon--menu {
+  [data-toc-disclosure-toggle][aria-expanded="true"]
+    .toc-disclosure__icon--menu {
     display: none;
   }
 
-  .toc-disclosure button[aria-expanded="true"] .toc-disclosure__icon--close {
+  [data-toc-disclosure-toggle][aria-expanded="true"]
+    .toc-disclosure__icon--close {
     display: block;
   }
 
