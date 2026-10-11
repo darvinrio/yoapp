@@ -120,6 +120,22 @@
      .container-prose consumes it from plain CSS — a @theme variable that no
      utility references is tree-shaken away. */
   --container-prose: 57ch;
+  /* Height reserved above an anchored heading, and the `top` a sticky element
+     hangs from. One token for both, because they answer the same question —
+     "where does content start once the navbar is out of the way?" — and two
+     hand-written values would silently drift apart.
+
+     The navbar measures 69px tall: the 36px (h-9) display toggles wrapped in
+     .nav-controls' 1px border + 0.1875rem padding = 44px, plus the row's
+     py-3 (24px) and its 1px bottom border. 6rem = 96px clears that with 27px
+     to spare. 5rem was the first guess and lands at only 11px of clearance,
+     which is too tight for the sticky table-of-contents rail to read as
+     anything other than more navbar.
+
+     In :root rather than @theme for the same reason as --container-prose: plain
+     CSS consumes these (blog.css and the rail's own <style>), and a @theme
+     variable no utility references gets tree-shaken away. */
+  --sticky-offset: 6rem;
 }
 
 /* Runtime display-font switch: one class on <html>, same strategy as .dark. */
@@ -127,10 +143,16 @@ html.font-bricolage {
   --font-title: "Bricolage Grotesque", sans-serif;
 }
 
+/* Smooth anchor scrolling, for the in-page jumps a post's table of contents
+   makes. The prefers-reduced-motion sweep at the bottom of this file already
+   forces `scroll-behavior: auto !important`, so a reduced-motion visitor gets an
+   instant jump with no second declaration here — that guard is what lets this
+   one stay unconditional. */
 html {
   font-family: var(--font-text);
   font-weight: 300;
   line-height: var(--text-body--line-height);
+  scroll-behavior: smooth;
 }
 
 /*h1,
