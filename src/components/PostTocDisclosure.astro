@@ -42,9 +42,15 @@ const panelId = "toc-disclosure-panel";
       <PostTocNav toc={toc} idPrefix="toc-disclosure" />
     </div>
 
+    <!-- The one accented control on a post. A neutral pill sank into the page
+         furniture, and on a phone the floating chrome is the only visible cue
+         that a post can be navigated at all — a solid accent fill on
+         accent/on-accent (the skip link's pairing) makes it read as the primary
+         affordance, and unlike accent-soft it keeps its weight in dark mode
+         where the soft tint sits close to the raised surface. -->
     <button
       type="button"
-      class="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-line-strong bg-surface-raised text-ink-muted shadow-lg transition-colors hover:bg-surface-hover hover:text-ink"
+      class="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-accent bg-accent text-on-accent shadow-lg transition-colors hover:bg-accent-bright hover:border-accent-bright"
       aria-expanded="false"
       aria-controls={panelId}
       data-toc-disclosure-toggle
