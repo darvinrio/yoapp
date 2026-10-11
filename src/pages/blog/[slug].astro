@@ -64,7 +64,9 @@ const blogPosting = {
     {toc && <PostTocNav toc={toc} idPrefix="toc-rail" />}
   </Fragment>
 
-  <article class="font-text">
+  <!-- pb-28 only when the floating pill is present; without it the article
+       keeps its own py-12 rhythm. -->
+  <article class:list={["font-text", toc && "pb-28"]}>
     <!-- The title, the back link and the accent rule come from PageTitle, which
          keeps its own default slot empty here. Reading a post header top to
          bottom: h1, back link, accent rule, then one line of meta, then the
@@ -98,12 +100,6 @@ const blogPosting = {
       </ul>
     </header>
 
-    <!-- Below 2xl there is no gutter to put a rail in, so the same list arrives
-         inline instead. It sits between the meta line and the body because that
-         is where a reader meets the article's structure, not after the h1 and
-         before they know what the post is. -->
-    {toc && <PostTocDisclosure toc={toc} />}
-
     <!-- Ragged-right, not justified. The prose column is ~57ch and these posts
          carry no hyphenation, so justifying it stretched the word spacing on
          most lines instead of evening out the margins. -->
@@ -111,4 +107,15 @@ const blogPosting = {
       <Content />
     </div>
   </article>
+
+  <!-- Below 2xl there is no gutter to hold a rail, so the same list arrives as
+       a floating pill instead. It sits outside <article> because it is page
+       chrome rather than post content, and it is position:fixed, so its place
+       in the flow does not matter.
+
+       The padding on the article above is what keeps the pill from permanently
+       covering the post's last line: fixed bottom-right chrome sits over
+       whatever is at the bottom of the viewport, and without the clearance the
+       final paragraph could never be scrolled fully clear of it. -->
+  {toc && <PostTocDisclosure toc={toc} />}
 </PostLayout>

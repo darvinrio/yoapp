@@ -11,57 +11,80 @@ const panelId = "toc-disclosure-panel";
 ---
 
 <!-- Below 2xl this is the only table of contents a reader gets; at 2xl and up
-     the rail in the gutter takes over and this is display:none. -->
-<div class="toc-disclosure mb-8" data-toc-disclosure>
-  <button
-    type="button"
-    class="flex w-full items-center gap-2.5 rounded-lg border border-line px-3 py-2.5 text-left text-meta text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink"
-    aria-expanded="false"
-    aria-controls={panelId}
-  >
-    <!-- Glyph swap is driven by aria-expanded, the same source of truth
-         Navbar.astro uses, so the icon cannot disagree with the panel. -->
-    <svg
-      class="toc-disclosure__icon toc-disclosure__icon--menu"
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-    <svg
-      class="toc-disclosure__icon toc-disclosure__icon--close"
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-    <span>Contents</span>
-  </button>
+     the rail in the gutter takes over and this is display:none.
 
-  <!-- No display utility on the panel or the nav's sublists: an author-level
-       `display` declaration outranks the `hidden` attribute's UA rule and would
-       leave both permanently expanded. -->
-  <div id={panelId} class="pt-4" data-toc-panel hidden>
-    <PostTocNav toc={toc} idPrefix="toc-disclosure" />
+     The wrapper spans the viewport and must not eat clicks meant for the prose
+     underneath it, so it takes no pointer events and only the pill and panel
+     opt back in. -->
+<div
+  class="toc-disclosure pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-end px-4 pb-4 sm:px-6 sm:pb-6"
+  data-toc-disclosure
+>
+  <!-- flex-col-reverse puts the panel visually above the pill while keeping it
+       later in the DOM, so Tab goes pill -> panel links rather than skipping
+       the list a reader just opened. -->
+  <div
+    class="pointer-events-auto flex w-full max-w-sm flex-col-reverse items-stretch gap-3"
+  >
+    <!-- No display utility on the panel: an author-level `display` outranks the
+         `hidden` attribute's UA rule and would leave it permanently open.
+
+         data-toc-scroll makes this a scroll box the scroll-spy knows how to keep
+         the active row inside, exactly as the rail is. Without it a long post's
+         panel highlights a section the reader cannot currently see. -->
+    <div
+      id={panelId}
+      hidden
+      class="toc-disclosure__panel max-h-[min(60vh,28rem)] overflow-y-auto overscroll-contain rounded-xl border border-line bg-surface-raised p-4 shadow-lg"
+      data-toc-panel
+      data-toc-scroll
+    >
+      <PostTocNav toc={toc} idPrefix="toc-disclosure" />
+    </div>
+
+    <button
+      type="button"
+      class="ml-auto flex h-11 items-center gap-2 rounded-full border border-line-strong bg-surface-raised px-4 text-meta text-ink-muted shadow-lg transition-colors hover:bg-surface-hover hover:text-ink"
+      aria-expanded="false"
+      aria-controls={panelId}
+    >
+      <!-- Glyph swap is driven by aria-expanded, the same source of truth
+           Navbar.astro uses, so the icon cannot disagree with the panel. -->
+      <svg
+        class="toc-disclosure__icon toc-disclosure__icon--menu"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg
+        class="toc-disclosure__icon toc-disclosure__icon--close"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      <span>Contents</span>
+    </button>
   </div>
 </div>
 
@@ -77,9 +100,9 @@ const panelId = "toc-disclosure-panel";
       toggle.setAttribute("aria-expanded", String(expanded));
 
     // Deliberately unlike Navbar's menu, opening does NOT move focus into the
-    // panel. That menu is a full-width overlay; this one pushes the article
-    // down in the reading flow, so pulling focus out of the prose would lose a
-    // keyboard reader's place in the document.
+    // panel. This is a popover over the page rather than a view that replaces
+    // it, so pulling focus out of the prose would lose a keyboard reader's
+    // place in the document.
     const close = (restoreFocus: boolean) => {
       if (panel.hidden) return;
       panel.hidden = true;
@@ -103,6 +126,14 @@ const panelId = "toc-disclosure-panel";
       if (target instanceof Element && target.closest("a[data-toc-link]")) {
         close(false);
       }
+    });
+
+    // A popover implies dismissal by clicking away. Navbar's menu is a
+    // full-width overlay that covers the page, so it has no outside to click.
+    document.addEventListener("pointerdown", (event) => {
+      const target = event.target;
+      if (target instanceof Node && root.contains(target)) return;
+      close(false);
     });
 
     document.addEventListener("keydown", (event) => {
