@@ -1,13 +1,11 @@
 ---
-import {
-  getCollection,
-  getEntry,
-  render,
-  type CollectionEntry,
-} from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
 import "../../styles/blog.css";
 import PageTitle from "../../components/PageTitle.astro";
+import PostTocNav from "../../components/PostTocNav.astro";
+import PostTocDisclosure from "../../components/PostTocDisclosure.astro";
+import { buildToc } from "../../lib/toc";
 
 export async function getStaticPaths() {
   const posts: CollectionEntry<"blog">[] = await getCollection("blog");
@@ -25,7 +23,13 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props as { post: CollectionEntry<"blog"> };
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+// render() already hands back { depth, slug, text } for every heading in the
+// post, so the contents list needs no remark plugin and no new dependency.
+// buildToc returns null on posts too short to be worth navigating, and that one
+// null gates both the rail and the inline disclosure.
+const toc = buildToc(headings);
 
 const blogPosting = {
   "@context": "https://schema.org",
@@ -51,6 +55,15 @@ const blogPosting = {
   publishedTime={post.data.date}
   structuredData={[blogPosting]}
 >
+  <!-- The rail lives outside the article on purpose: PostLayout parks it in the
+       right gutter at 2xl so the prose column keeps its exact --container-width
+       measure and its alignment with the navbar wordmark and /blog index.
+       Renders nothing when buildToc returned null, which leaves the grid's third
+       track empty and the article still centred. -->
+  <Fragment slot="aside">
+    {toc && <PostTocNav toc={toc} idPrefix="toc-rail" />}
+  </Fragment>
+
   <article class="font-text">
     <!-- The title, the back link and the accent rule come from PageTitle, which
          keeps its own default slot empty here. Reading a post header top to
@@ -84,6 +97,12 @@ const blogPosting = {
         }
       </ul>
     </header>
+
+    <!-- Below 2xl there is no gutter to put a rail in, so the same list arrives
+         inline instead. It sits between the meta line and the body because that
+         is where a reader meets the article's structure, not after the h1 and
+         before they know what the post is. -->
+    {toc && <PostTocDisclosure toc={toc} />}
 
     <!-- Ragged-right, not justified. The prose column is ~57ch and these posts
          carry no hyphenation, so justifying it stretched the word spacing on

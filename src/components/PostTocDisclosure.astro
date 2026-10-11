@@ -1,0 +1,144 @@
+---
+import PostTocNav from "./PostTocNav.astro";
+import type { Toc } from "../lib/toc";
+
+interface Props {
+  toc: Toc;
+}
+
+const { toc } = Astro.props;
+const panelId = "toc-disclosure-panel";
+---
+
+<!-- Below 2xl this is the only table of contents a reader gets; at 2xl and up
+     the rail in the gutter takes over and this is display:none. -->
+<div class="toc-disclosure mb-8" data-toc-disclosure>
+  <button
+    type="button"
+    class="flex w-full items-center gap-2.5 rounded-lg border border-line px-3 py-2.5 text-left text-meta text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink"
+    aria-expanded="false"
+    aria-controls={panelId}
+  >
+    <!-- Glyph swap is driven by aria-expanded, the same source of truth
+         Navbar.astro uses, so the icon cannot disagree with the panel. -->
+    <svg
+      class="toc-disclosure__icon toc-disclosure__icon--menu"
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+    <svg
+      class="toc-disclosure__icon toc-disclosure__icon--close"
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+    <span>Contents</span>
+  </button>
+
+  <!-- No display utility on the panel or the nav's sublists: an author-level
+       `display` declaration outranks the `hidden` attribute's UA rule and would
+       leave both permanently expanded. -->
+  <div id={panelId} class="pt-4" data-toc-panel hidden>
+    <PostTocNav toc={toc} idPrefix="toc-disclosure" />
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-toc-disclosure]");
+  const toggle = root?.querySelector<HTMLButtonElement>("button[aria-expanded]");
+  const panel = root?.querySelector<HTMLElement>("[data-toc-panel]");
+
+  if (root && toggle && panel) {
+    const setExpanded = (expanded: boolean) =>
+      toggle.setAttribute("aria-expanded", String(expanded));
+
+    // Deliberately unlike Navbar's menu, opening does NOT move focus into the
+    // panel. That menu is a full-width overlay; this one pushes the article
+    // down in the reading flow, so pulling focus out of the prose would lose a
+    // keyboard reader's place in the document.
+    const close = (restoreFocus: boolean) => {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      setExpanded(false);
+      if (restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => {
+      if (panel.hidden) {
+        panel.hidden = false;
+        setExpanded(true);
+      } else {
+        close(false);
+      }
+    });
+
+    // Following a link closes the panel so the reader lands on the section
+    // rather than behind a list they just opened.
+    panel.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest("a[data-toc-link]")) {
+        close(false);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || panel.hidden) return;
+      event.preventDefault();
+      close(true);
+    });
+
+    // The panel is display:none from 2xl up, so growing past the breakpoint
+    // must not strand it open with aria-expanded="true".
+    window
+      .matchMedia("(min-width: 96rem)")
+      .addEventListener("change", (event) => {
+        if (event.matches) close(false);
+      });
+  }
+</script>
+
+<style>
+  .toc-disclosure__icon--menu {
+    display: block;
+  }
+
+  .toc-disclosure__icon--close {
+    display: none;
+  }
+
+  .toc-disclosure button[aria-expanded="true"] .toc-disclosure__icon--menu {
+    display: none;
+  }
+
+  .toc-disclosure button[aria-expanded="true"] .toc-disclosure__icon--close {
+    display: block;
+  }
+
+  @media (min-width: 96rem) {
+    .toc-disclosure {
+      display: none;
+    }
+  }
+</style>
