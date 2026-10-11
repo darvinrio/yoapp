@@ -20,6 +20,11 @@ export const GET: APIRoute = async ({ site }) => {
     ["Work", url("/work"), "Work experience"],
     ["Resume", url("/resume"), "Resume"],
     ["RSS", url("/rss.xml"), "Feed of new posts"],
+    [
+      "Markdown",
+      url("/blog/ezeth-depeg.md"),
+      "Any post is available as raw markdown at its URL + `.md`",
+    ],
   ];
 
   const lines = [
@@ -35,9 +40,12 @@ export const GET: APIRoute = async ({ site }) => {
     "",
     "## Writings",
     "",
+    // Each entry carries its own markdown URL rather than making the reader
+    // append `.md` to the human URL: an agent following this file should never
+    // have to guess at a convention.
     ...posts.map(
       (post) =>
-        `- [${post.data.title}](${url(`/blog/${post.id}`)}): ${post.data.date.toISOString().slice(0, 10)} — ${post.data.description}`,
+        `- [${post.data.title}](${url(`/blog/${post.id}`)}): ${post.data.date.toISOString().slice(0, 10)} — ${post.data.description} ([markdown](${url(`/blog/${post.id}.md`)}))`,
     ),
   ];
 

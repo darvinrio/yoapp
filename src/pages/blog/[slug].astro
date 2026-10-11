@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
 import "../../styles/blog.css";
 import PageTitle from "../../components/PageTitle.astro";
+import PostActions from "../../components/PostActions.astro";
 import PostTocNav from "../../components/PostTocNav.astro";
 import PostTocDisclosure from "../../components/PostTocDisclosure.astro";
 import { buildToc } from "../../lib/toc";
@@ -98,6 +99,15 @@ const blogPosting = {
           ))
         }
       </ul>
+
+      <!-- Absolute, not the page's own path: the "open link" AI items hand this
+           URL to an assistant on another origin, where a relative path resolves
+           to nothing. Same construction llms.txt.ts uses. -->
+      <PostActions
+        mdUrl={`/blog/${post.id}.md`}
+        postUrl={new URL(`/blog/${post.id}`, Astro.site).toString()}
+        postTitle={post.data.title}
+      />
     </header>
 
     <!-- Ragged-right, not justified. The prose column is ~57ch and these posts
