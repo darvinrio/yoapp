@@ -46,11 +46,15 @@ const trigger =
   "flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-meta uppercase tracking-[0.12em] text-ink-faint transition-colors hover:bg-surface-hover hover:text-ink";
 const iconButton =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-surface-hover hover:text-ink";
-// Anchored left below sm, right from sm up. Left matters on a phone: with the
-// control itself flush left, a right-anchored panel is free to hang off the
-// viewport edge.
+// The panel is positioned against [data-post-actions] below sm and against the
+// same box from sm up, but on opposite edges.
+//
+// Anchoring it to the chevron — which is what the markup did first — is wrong on
+// a phone: the chevron is the right-hand end of the cluster, so a left-anchored
+// panel starts ~170px in and runs off the right edge. The max-width is the
+// backstop that makes it impossible either way; 2rem matches the page's px-4.
 const panel =
-  "absolute left-0 z-20 mt-2 w-max min-w-56 rounded-xl border border-line bg-surface-raised p-1 shadow-lg sm:left-auto sm:right-0";
+  "absolute left-0 z-20 mt-2 w-max min-w-56 max-w-[calc(100vw_-_2rem)] rounded-xl border border-line bg-surface-raised p-1 shadow-lg sm:left-auto sm:right-0";
 // Brand marks like ContactItem's: sized by utility, coloured by fill-current so
 // each glyph sits in the row's ink and picks up the hover tint with its label.
 const itemIcon = "h-3.5 w-3.5 shrink-0 fill-current";
@@ -59,10 +63,18 @@ const item =
 ---
 
 <!-- Sits in the date · tags row. sm:ml-auto pins it to the right edge of the
-     measure from sm up; below that it stays left, directly under the tags,
-     which is where a phone has room for it and where a right-aligned cluster
-     would push the primary action into the far corner. -->
-<div class="shrink-0 sm:ml-auto" data-post-actions data-md-url={mdUrl}>
+     measure from sm up; below that it stays left, directly under the tags.
+
+     w-full below sm is what makes the left anchor deterministic rather than
+     incidental. Without it the cluster shares a line with the date whenever
+     there is room for both, which puts the panel's left edge wherever the
+     chevron happens to land instead of at the column's edge. Forcing the row
+     gives the panel the whole column to open into. -->
+<div
+  class="relative w-full shrink-0 sm:ml-auto sm:w-auto"
+  data-post-actions
+  data-md-url={mdUrl}
+>
   <div class={group}>
     <button
       type="button"
@@ -105,94 +117,95 @@ const item =
       <span data-copy-label>Copy markdown</span>
     </button>
 
-    <div class="relative">
-      <button
-        type="button"
-        class={iconButton}
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-controls={panelId}
-        data-actions-toggle
+    <button
+      type="button"
+      class={iconButton}
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-controls={panelId}
+      data-actions-toggle
+    >
+      <span class="sr-only">More ways to open this post</span>
+      <svg
+        class="post-actions__chevron transition-transform"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
       >
-        <span class="sr-only">More ways to open this post</span>
-        <svg
-          class="post-actions__chevron transition-transform"
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+  </div>
 
-      <!-- No display utility on the panel, same reason PostTocDisclosure gives:
-           an author-level `display` outranks the `hidden` attribute's UA rule and
-           would leave the menu permanently open. -->
-      <div id={panelId} hidden role="menu" class={panel} data-actions-menu>
-        <a
-          role="menuitem"
-          href={mdUrl}
-          target="_blank"
-          rel="noreferrer"
-          class={item}
-        >
-          <MarkdownIcon class={itemIcon} />
-          <span>Open markdown</span>
-        </a>
-        <div role="separator" class="mx-2 my-1 h-px bg-line"></div>
-        <a
-          role="menuitem"
-          href={chatgptPaste}
-          data-clipboard
-          data-fallback-href={chatgptLink}
-          target="_blank"
-          rel="noreferrer"
-          class={item}
-        >
-          <OpenAiIcon class={itemIcon} />
-          <span>ChatGPT · paste article</span>
-        </a>
-        <a
-          role="menuitem"
-          href={chatgptLink}
-          target="_blank"
-          rel="noreferrer"
-          class={item}
-        >
-          <OpenAiIcon class={itemIcon} />
-          <span>ChatGPT · open link</span>
-        </a>
-        <a
-          role="menuitem"
-          href={claudePaste}
-          data-clipboard
-          data-fallback-href={claudeLink}
-          target="_blank"
-          rel="noreferrer"
-          class={item}
-        >
-          <ClaudeIcon class={itemIcon} />
-          <span>Claude · paste article</span>
-        </a>
-        <a
-          role="menuitem"
-          href={claudeLink}
-          target="_blank"
-          rel="noreferrer"
-          class={item}
-        >
-          <ClaudeIcon class={itemIcon} />
-          <span>Claude · open link</span>
-        </a>
-      </div>
-    </div>
+  <!-- Sibling of the cluster rather than a child of the chevron, so `left-0`
+       below sm means the column's left edge. See the note on `panel` above.
+
+       No display utility here, same reason PostTocDisclosure gives: an
+       author-level `display` outranks the `hidden` attribute's UA rule and
+       would leave the menu permanently open. -->
+  <div id={panelId} hidden role="menu" class={panel} data-actions-menu>
+    <a
+      role="menuitem"
+      href={mdUrl}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <MarkdownIcon class={itemIcon} />
+      <span>Open markdown</span>
+    </a>
+    <div role="separator" class="mx-2 my-1 h-px bg-line"></div>
+    <a
+      role="menuitem"
+      href={chatgptPaste}
+      data-clipboard
+      data-fallback-href={chatgptLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <OpenAiIcon class={itemIcon} />
+      <span>ChatGPT · paste article</span>
+    </a>
+    <a
+      role="menuitem"
+      href={chatgptLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <OpenAiIcon class={itemIcon} />
+      <span>ChatGPT · open link</span>
+    </a>
+    <a
+      role="menuitem"
+      href={claudePaste}
+      data-clipboard
+      data-fallback-href={claudeLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <ClaudeIcon class={itemIcon} />
+      <span>Claude · paste article</span>
+    </a>
+    <a
+      role="menuitem"
+      href={claudeLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <ClaudeIcon class={itemIcon} />
+      <span>Claude · open link</span>
+    </a>
   </div>
 
   <!-- The label swap is a visual confirmation only; this is what actually
