@@ -103,9 +103,8 @@ const labelId = `${idPrefix}-contents-label`;
 <script>
   // One script for both instances: Astro bundles a component's <script> once
   // per page no matter how many times the component renders.
-  const toggles = document.querySelectorAll<HTMLButtonElement>(
-    "[data-toc-toggle]",
-  );
+  const toggles =
+    document.querySelectorAll<HTMLButtonElement>("[data-toc-toggle]");
 
   toggles.forEach((toggle) => {
     const controls = toggle.getAttribute("aria-controls");
@@ -118,6 +117,163 @@ const labelId = `${idPrefix}-contents-label`;
       sublist.hidden = expanded;
     });
   });
+</script>
+
+<script>
+  // Scroll-spy.
+  //
+  // Deliberately a rAF-throttled scroll handler rather than an
+  // IntersectionObserver. "Active" here means *the last heading whose top has
+  // passed a fixed offset*, and expressing that as an observer band needs a
+  // rootMargin thin enough to be one line — which computes to a negative root
+  // height below roughly 1200px of viewport and silently stops intersecting.
+  // Reading positions directly is correct at every viewport height, and a post
+  // tops out at 37 headings, so the scan is not the expensive part.
+  const links = [
+    ...document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+  ];
+
+  if (links.length > 0) {
+    // Resolve --sticky-offset through a throwaway node rather than repeating
+    // 96px here, where it would drift from the token the CSS uses.
+    const probe = document.createElement("div");
+    probe.style.cssText =
+      "position:absolute;top:0;height:var(--sticky-offset);visibility:hidden;pointer-events:none";
+    document.body.append(probe);
+    const OFFSET = probe.getBoundingClientRect().height;
+    probe.remove();
+
+    const sections = [
+      ...new Set(links.map((link) => link.getAttribute("data-toc-link"))),
+    ]
+      .map((slug) => ({ slug, el: document.getElementById(slug ?? "") }))
+      .filter((section) => section.el);
+
+    let current = "";
+    let locked: string | null = null;
+    let unlockTimer = 0;
+    let queued = 0;
+
+    // Open the group a highlighted sub-heading lives in, or the highlight lands
+    // on a link the reader cannot see. Done per instance because both the rail
+    // and the disclosure keep their own copy of the list.
+    const reveal = (link: HTMLAnchorElement) => {
+      const sublist = link.closest<HTMLElement>("[data-toc-sublist]");
+      if (!sublist || !sublist.hidden) return;
+      sublist.hidden = false;
+      const toggle = sublist.id
+        ? document.querySelector<HTMLButtonElement>(
+            `[data-toc-toggle][aria-controls="${sublist.id}"]`,
+          )
+        : null;
+      toggle?.setAttribute("aria-expanded", "true");
+    };
+
+    // Keep the highlighted row inside the rail's own scroll box. Assigning
+    // scrollTop directly is what makes this safe: scrollIntoView would walk up
+    // and scroll the document too, yanking the page away from the reader.
+    const keepVisible = (link: HTMLAnchorElement) => {
+      const box = link.closest<HTMLElement>("[data-toc-scroll]");
+      // A closed disclosure panel measures zero and is not a scroll box at all.
+      if (
+        !box ||
+        box.clientHeight === 0 ||
+        box.scrollHeight <= box.clientHeight
+      ) {
+        return;
+      }
+      const bounds = box.getBoundingClientRect();
+      const row = link.getBoundingClientRect();
+      const pad = 8;
+      if (row.top < bounds.top + pad)
+        box.scrollTop -= bounds.top + pad - row.top;
+      else if (row.bottom > bounds.bottom - pad) {
+        box.scrollTop += row.bottom - (bounds.bottom - pad);
+      }
+    };
+
+    const setActive = (slug: string) => {
+      if (slug === current) return;
+      current = slug;
+
+      for (const link of links) {
+        const match =
+          slug !== "" && link.getAttribute("data-toc-link") === slug;
+        if (match) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      }
+
+      if (slug === "") return;
+      for (const link of links) {
+        if (link.getAttribute("data-toc-link") !== slug) continue;
+        reveal(link);
+        keepVisible(link);
+      }
+    };
+
+    const update = () => {
+      if (locked !== null) {
+        setActive(locked);
+        return;
+      }
+
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+
+      // The bottom-of-page rule. A final section is often too short to ever
+      // reach the offset line, so without this the reader scrolls to the end of
+      // a post and the last heading simply never lights up.
+      if (atBottom) {
+        setActive(sections[sections.length - 1]?.slug ?? "");
+        return;
+      }
+
+      let active = "";
+      for (const section of sections) {
+        if (section.el!.getBoundingClientRect().top <= OFFSET)
+          active = section.slug;
+        else break;
+      }
+      setActive(active);
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = requestAnimationFrame(() => {
+        queued = 0;
+        update();
+      });
+    };
+
+    const unlock = () => {
+      locked = null;
+      window.clearTimeout(unlockTimer);
+      window.removeEventListener("scrollend", unlock);
+      update();
+    };
+
+    // A click sets the highlight at once and holds it until the smooth scroll
+    // lands. Without the hold, update() runs on every frame of the journey and
+    // walks the highlight through every heading the page passes on the way, so
+    // the rail strobes and then disagrees with where the reader was sent.
+    for (const link of links) {
+      link.addEventListener("click", () => {
+        locked = link.getAttribute("data-toc-link") ?? "";
+        setActive(locked);
+
+        window.removeEventListener("scrollend", unlock);
+        window.addEventListener("scrollend", unlock, { once: true });
+        // Fallback: scrollend is recent, and a click that goes nowhere (already
+        // at that heading) never fires it.
+        window.clearTimeout(unlockTimer);
+        unlockTimer = window.setTimeout(unlock, 1500);
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+  }
 </script>
 
 <style>
@@ -133,7 +289,7 @@ const labelId = `${idPrefix}-contents-label`;
   }
 
   /* `location` rather than `page`: this is position within a set, and the
-     navbar already claims `page` for the current route. Task 4 writes this. */
+     navbar already claims `page` for the current route. */
   [data-toc-link][aria-current="location"] {
     color: var(--color-accent);
   }

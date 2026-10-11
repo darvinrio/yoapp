@@ -35,7 +35,7 @@ interface Props {
       <slot />
     </div>
 
-    <div class="post-shell__aside">
+    <div class="post-shell__aside" data-toc-scroll>
       <slot name="aside" />
     </div>
   </main>
@@ -43,9 +43,11 @@ interface Props {
 
 <style>
   .post-shell {
+    /* The article's track is named so this stays one readable line; written
+       inline, prettier wraps minmax() across four. */
+    --article-track: minmax(0, var(--container-width));
     display: grid;
-    grid-template-columns:
-      minmax(0, 1fr) minmax(0, var(--container-width)) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) var(--article-track) minmax(0, 1fr);
   }
 
   .post-shell > .container-max {

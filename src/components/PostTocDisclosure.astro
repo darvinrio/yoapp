@@ -67,7 +67,9 @@ const panelId = "toc-disclosure-panel";
 
 <script>
   const root = document.querySelector<HTMLElement>("[data-toc-disclosure]");
-  const toggle = root?.querySelector<HTMLButtonElement>("button[aria-expanded]");
+  const toggle = root?.querySelector<HTMLButtonElement>(
+    "button[aria-expanded]",
+  );
   const panel = root?.querySelector<HTMLElement>("[data-toc-panel]");
 
   if (root && toggle && panel) {
