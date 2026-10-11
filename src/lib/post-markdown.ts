@@ -33,13 +33,11 @@ const FALLBACK_FILE_PATH = "src/content/blog/post.mdx";
 const IMPORT_LINE = /^import\s+[A-Za-z_$][\w$]*\s+from\s+"[^"]+";?[ \t]*$/;
 
 /** `import img001 from "../../assets/…"` → identifier → built asset URL. */
-async function collectImportUrls(post: BlogPost): Promise<Map<string, string>> {
+async function collectImportUrls(
+  post: BlogPost,
+  dir: string,
+): Promise<Map<string, string>> {
   const urls = new Map<string, string>();
-  const filePath = post.filePath ?? FALLBACK_FILE_PATH;
-  // filePath is documented as relative to the site root, which is the same
-  // frame import.meta.glob's keys live in — but the specifiers inside the file
-  // are relative to the file, not the root.
-  const dir = filePath.slice(0, filePath.lastIndexOf("/") + 1);
 
   for (const line of post.body?.split("\n") ?? []) {
     const match =
@@ -49,22 +47,49 @@ async function collectImportUrls(post: BlogPost): Promise<Map<string, string>> {
     const [, identifier, specifier] = match;
     if (!specifier.startsWith(".")) continue;
 
-    const key = `/${resolveRelative(dir, specifier)}`;
-    const url = await resolveImageUrl(key);
+    const url = await resolveAssetUrl(dir, specifier);
     if (url) urls.set(identifier, url);
   }
 
   return urls;
 }
 
-function resolveRelative(dir: string, specifier: string): string {
+// Three images in the collection are authored as plain markdown with a path
+// relative to the .mdx file, not as an <Image /> component. Astro's image
+// plugin rewrites those to hashed URLs when it renders the page; passing them
+// through verbatim would leave a served .md pointing at `../../assets/…`,
+// which a reader resolves against the post URL and 404s on.
+const MARKDOWN_IMAGE = /!\[([^\]]*)\]\((\.\.?\/[^)\s]+)\)/g;
+
+async function rewriteMarkdownImages(body: string, dir: string) {
+  const resolved = new Map<string, string>();
+  for (const [, , specifier] of body.matchAll(MARKDOWN_IMAGE)) {
+    if (resolved.has(specifier)) continue;
+    const url = await resolveAssetUrl(dir, specifier);
+    // An unresolvable path is left exactly as authored: a wrong link the author
+    // can see and fix beats one silently dropped from a published post.
+    if (url) resolved.set(specifier, url);
+  }
+  if (!resolved.size) return body;
+
+  return body.replace(
+    MARKDOWN_IMAGE,
+    (match, alt: string, specifier: string) =>
+      resolved.has(specifier)
+        ? `![${escapeAlt(alt)}](${resolved.get(specifier)})`
+        : match,
+  );
+}
+
+/** A specifier as written inside a post → the asset's built URL. */
+function resolveAssetUrl(dir: string, specifier: string) {
   const segments = [...dir.split("/").filter(Boolean)];
   for (const part of specifier.split("/")) {
     if (part === "." || part === "") continue;
     if (part === "..") segments.pop();
     else segments.push(part);
   }
-  return segments.join("/");
+  return resolveImageUrl(`/${segments.join("/")}`);
 }
 
 async function resolveImageUrl(key: string): Promise<string | null> {
@@ -101,7 +126,13 @@ function attribute(attributes: string, name: string): string | undefined {
  * Rebuild a post as markdown: frontmatter, then the source with MDX removed.
  */
 export async function toPostMarkdown(post: BlogPost): Promise<string> {
-  const imageUrls = await collectImportUrls(post);
+  const filePath = post.filePath ?? FALLBACK_FILE_PATH;
+  // filePath is documented as relative to the site root, which is the same
+  // frame import.meta.glob's keys live in — but a specifier written inside the
+  // post is relative to the post, not to the root.
+  const dir = filePath.slice(0, filePath.lastIndexOf("/") + 1);
+
+  const imageUrls = await collectImportUrls(post, dir);
 
   let body = post.body ?? "";
   const lines = body.split("\n");
@@ -115,10 +146,10 @@ export async function toPostMarkdown(post: BlogPost): Promise<string> {
   }
   body = lines.slice(index).join("\n").trim();
 
-  // Pass 1 rewrites every tag that carries an alt or a caption. What pass 1
-  // leaves behind is an <Image /> with neither — and an image with no alt and
-  // no caption has nothing to say, so pass 2 deletes the whole line rather than
-  // leaving an empty `![]()` that renders as a broken icon.
+  // Pass 1 rewrites every tag that carries an alt, a caption, or both. What
+  // pass 1 leaves behind is an <Image /> with neither — and an image with no
+  // alt and no caption has nothing to say, so pass 2 deletes the whole line
+  // rather than leaving an empty `![]()` that renders as a broken icon.
   body = body.replace(IMAGE_TAG, (tag, attributes: string) => {
     const source =
       SRC_PROP.exec(attributes)?.[1] ?? SRC_STRING.exec(attributes)?.[1];
@@ -126,15 +157,23 @@ export async function toPostMarkdown(post: BlogPost): Promise<string> {
     const alt = attribute(attributes, "alt")?.trim();
     const caption = attribute(attributes, "caption")?.trim();
 
+    // A captioned image is usually written with the caption copied into the
+    // alt, because that is what a screen reader announces. Emitting both would
+    // print the same sentence twice, so when they are identical the image
+    // carries the text on its own.
+    const captionLine = caption && caption !== alt ? `*${caption}*` : null;
+
     const parts: string[] = [];
     if (url && alt) parts.push(`![${escapeAlt(alt)}](${url})`);
     else if (url && caption) parts.push(`![${escapeAlt(caption)}](${url})`);
-    if (caption) parts.push(`*${caption}*`);
+    if (captionLine) parts.push(captionLine);
 
     return parts.join("\n\n");
   });
 
   body = body.replace(/^[ \t]*<Image\b[^>]*\/>[ \t]*\n?/gm, "");
+
+  body = await rewriteMarkdownImages(body, dir);
 
   return `${frontmatter(post)}\n${body.trim()}\n`;
 }
