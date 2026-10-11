@@ -26,10 +26,10 @@ const labelId = `${idPrefix}-contents-label`;
 
   <ol class="mt-4 space-y-1">
     {
-      toc.groups.map((group) => {
+      toc.groups.map((group, groupIndex) => {
         const sublistId = `${idPrefix}-${group.slug}`;
         return (
-          <li>
+          <li data-toc-group={groupIndex}>
             <div class="grid grid-cols-[1fr_auto] items-start gap-x-1.5">
               <a
                 href={`#${group.slug}`}
@@ -150,6 +150,7 @@ const labelId = `${idPrefix}-contents-label`;
       .filter((section) => section.el);
 
     let current = "";
+    let activeGroupIndex = -1;
     let locked: string | null = null;
     let unlockTimer = 0;
     let queued = 0;
@@ -192,6 +193,31 @@ const labelId = `${idPrefix}-contents-label`;
       }
     };
 
+    const setGroupOpen = (group: Element, open: boolean) => {
+      const toggle = group.querySelector("[data-toc-toggle]");
+      const sublist = group.querySelector<HTMLElement>("[data-toc-sublist]");
+      // A group with no children has neither, and there is nothing to collapse.
+      if (!toggle || !sublist) return;
+      if ((toggle.getAttribute("aria-expanded") === "true") === open) return;
+      toggle.setAttribute("aria-expanded", String(open));
+      sublist.hidden = !open;
+    };
+
+    // Keep only a +/-1 window of groups open around the reader. Without this the
+    // rail grows by a row per heading scrolled past and spends the whole post
+    // scrolling its own contents instead of the post.
+    //
+    // Deliberately gated on the group having *changed*, not on every scroll
+    // tick: otherwise a group the reader expanded by hand would be folded away
+    // on the next rAF while they are still looking at it. Manual state survives
+    // until they move into a different section.
+    const applyWindow = (activeIndex: number) => {
+      for (const group of document.querySelectorAll("[data-toc-group]")) {
+        const index = Number(group.getAttribute("data-toc-group"));
+        setGroupOpen(group, Math.abs(index - activeIndex) <= 1);
+      }
+    };
+
     const setActive = (slug: string) => {
       if (slug === current) return;
       current = slug;
@@ -204,11 +230,21 @@ const labelId = `${idPrefix}-contents-label`;
       }
 
       if (slug === "") return;
+      let activeGroup = -1;
       for (const link of links) {
         if (link.getAttribute("data-toc-link") !== slug) continue;
+        // Runs on every activation, not just a group change: if the reader
+        // collapsed the group they are inside, moving to a sibling heading
+        // within it would otherwise highlight something inside a closed group.
         reveal(link);
         keepVisible(link);
+        const group = link.closest("[data-toc-group]");
+        if (group) activeGroup = Number(group.getAttribute("data-toc-group"));
       }
+
+      if (activeGroup < 0 || activeGroup === activeGroupIndex) return;
+      activeGroupIndex = activeGroup;
+      applyWindow(activeGroup);
     };
 
     const update = () => {
