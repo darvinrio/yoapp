@@ -7,10 +7,21 @@ interface Props {
     href: string;
     svgIcon: SvgComponent;
     brandColor: string;
+    invertInDark?: boolean;
   };
 }
 
 const { contact }: Props = Astro.props;
+
+// --brand-dark is emitted only for near-black brands, where it resolves to a
+// theme token. Every other entry falls back to --brand in both themes.
+const brandVars = contact.invertInDark
+  ? `--brand: ${contact.brandColor}; --brand-dark: var(--color-ink-strong);`
+  : `--brand: ${contact.brandColor};`;
+
+// The icon carries no scoped class of its own: size comes from utilities and
+// colour from the anchor's `color` via fill-current, which is what keeps every
+// icon in the row inside one box on one baseline.
 ---
 
 <a
@@ -18,10 +29,33 @@ const { contact }: Props = Astro.props;
   target="_blank"
   rel="noopener noreferrer"
   aria-label={contact.name}
-  class="transition-colors hover:scale-110 inline-block bg-surface rounded-full p-1"
-  style={`--brand-color: ${contact.brandColor};`}
+  style={brandVars}
+  class="contact-link"
 >
-  <contact.svgIcon
-    class="w-9 h-9 fill-current transition-colors hover:[&]:text-(--brand-color) pb-0.5"
-  />
+  <contact.svgIcon class="h-5 w-5 fill-current" />
 </a>
+
+<style>
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 0.5rem;
+    color: var(--color-ink-muted);
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  /* Brand colour is the hover reward only; at rest the icon stays neutral
+     ink so the row reads as one system. */
+  .contact-link:hover {
+    color: var(--brand-dark, var(--brand));
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-line-strong);
+  }
+</style>

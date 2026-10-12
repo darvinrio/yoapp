@@ -1,0 +1,193 @@
+---
+import PostTocNav from "./PostTocNav.astro";
+import type { Toc } from "../lib/toc";
+
+interface Props {
+  toc: Toc;
+}
+
+const { toc } = Astro.props;
+const panelId = "toc-disclosure-panel";
+---
+
+<!-- Below 2xl this is the only table of contents a reader gets; at 2xl and up
+     the rail in the gutter takes over and this is display:none.
+
+     The wrapper spans the viewport and must not eat clicks meant for the prose
+     underneath it, so it takes no pointer events and only the pill and panel
+     opt back in. -->
+<div
+  class="toc-disclosure pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-end px-4 pb-4 sm:px-6 sm:pb-6"
+  data-toc-disclosure
+>
+  <!-- flex-col-reverse puts the panel visually above the pill while keeping it
+       later in the DOM, so Tab goes pill -> panel links rather than skipping
+       the list a reader just opened. -->
+  <div
+    class="pointer-events-auto flex w-full max-w-sm flex-col-reverse items-stretch gap-3"
+  >
+    <!-- No display utility on the panel: an author-level `display` outranks the
+         `hidden` attribute's UA rule and would leave it permanently open.
+
+         data-toc-scroll makes this a scroll box the scroll-spy knows how to keep
+         the active row inside, exactly as the rail is. Without it a long post's
+         panel highlights a section the reader cannot currently see. -->
+    <div
+      id={panelId}
+      hidden
+      class="toc-disclosure__panel max-h-[min(60vh,28rem)] overflow-y-auto overscroll-contain rounded-xl border border-line bg-surface-raised p-4 shadow-lg"
+      data-toc-panel
+      data-toc-scroll
+    >
+      <PostTocNav toc={toc} idPrefix="toc-disclosure" />
+    </div>
+
+    <!-- The one accented control on a post. A neutral pill sank into the page
+         furniture, and on a phone the floating chrome is the only visible cue
+         that a post can be navigated at all — a solid accent fill on
+         accent/on-accent (the skip link's pairing) makes it read as the primary
+         affordance, and unlike accent-soft it keeps its weight in dark mode
+         where the soft tint sits close to the raised surface. -->
+    <button
+      type="button"
+      class="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-accent bg-accent text-on-accent shadow-lg transition-colors hover:bg-accent-bright hover:border-accent-bright"
+      aria-expanded="false"
+      aria-controls={panelId}
+      data-toc-disclosure-toggle
+    >
+      <!-- Glyph swap is driven by aria-expanded, the same source of truth
+           Navbar.astro uses, so the icon cannot disagree with the panel. -->
+      <svg
+        class="toc-disclosure__icon toc-disclosure__icon--menu"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg
+        class="toc-disclosure__icon toc-disclosure__icon--close"
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      <!-- Glyph only. The panel still needs an accessible name, which the
+           screen-reader-only span supplies — dropping the visible label does
+           not leave the control unnamed. -->
+      <span class="sr-only">Contents</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-toc-disclosure]");
+  // Scoped to the pill's own hook, NOT a bare `button[aria-expanded]`. The
+  // panel's group chevrons are buttons with aria-expanded too and they come
+  // first in the DOM, so the generic selector bound the handler to the first
+  // chevron and left the pill itself completely dead.
+  const toggle = root?.querySelector<HTMLButtonElement>(
+    "[data-toc-disclosure-toggle]",
+  );
+  const panel = root?.querySelector<HTMLElement>("[data-toc-panel]");
+
+  if (root && toggle && panel) {
+    const setExpanded = (expanded: boolean) =>
+      toggle.setAttribute("aria-expanded", String(expanded));
+
+    // Deliberately unlike Navbar's menu, opening does NOT move focus into the
+    // panel. This is a popover over the page rather than a view that replaces
+    // it, so pulling focus out of the prose would lose a keyboard reader's
+    // place in the document.
+    const close = (restoreFocus: boolean) => {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      setExpanded(false);
+      if (restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => {
+      if (panel.hidden) {
+        panel.hidden = false;
+        setExpanded(true);
+      } else {
+        close(false);
+      }
+    });
+
+    // Following a link closes the panel so the reader lands on the section
+    // rather than behind a list they just opened.
+    panel.addEventListener("click", (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest("a[data-toc-link]")) {
+        close(false);
+      }
+    });
+
+    // A popover implies dismissal by clicking away. Navbar's menu is a
+    // full-width overlay that covers the page, so it has no outside to click.
+    document.addEventListener("pointerdown", (event) => {
+      const target = event.target;
+      if (target instanceof Node && root.contains(target)) return;
+      close(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || panel.hidden) return;
+      event.preventDefault();
+      close(true);
+    });
+
+    // The panel is display:none from 2xl up, so growing past the breakpoint
+    // must not strand it open with aria-expanded="true".
+    window
+      .matchMedia("(min-width: 96rem)")
+      .addEventListener("change", (event) => {
+        if (event.matches) close(false);
+      });
+  }
+</script>
+
+<style>
+  .toc-disclosure__icon--menu {
+    display: block;
+  }
+
+  .toc-disclosure__icon--close {
+    display: none;
+  }
+
+  [data-toc-disclosure-toggle][aria-expanded="true"]
+    .toc-disclosure__icon--menu {
+    display: none;
+  }
+
+  [data-toc-disclosure-toggle][aria-expanded="true"]
+    .toc-disclosure__icon--close {
+    display: block;
+  }
+
+  @media (min-width: 96rem) {
+    .toc-disclosure {
+      display: none;
+    }
+  }
+</style>

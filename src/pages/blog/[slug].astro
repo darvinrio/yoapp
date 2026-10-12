@@ -1,13 +1,12 @@
 ---
-import {
-  getCollection,
-  getEntry,
-  render,
-  type CollectionEntry,
-} from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
 import "../../styles/blog.css";
 import PageTitle from "../../components/PageTitle.astro";
+import PostActions from "../../components/PostActions.astro";
+import PostTocNav from "../../components/PostTocNav.astro";
+import PostTocDisclosure from "../../components/PostTocDisclosure.astro";
+import { buildToc } from "../../lib/toc";
 
 export async function getStaticPaths() {
   const posts: CollectionEntry<"blog">[] = await getCollection("blog");
@@ -25,7 +24,13 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props as { post: CollectionEntry<"blog"> };
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+// render() already hands back { depth, slug, text } for every heading in the
+// post, so the contents list needs no remark plugin and no new dependency.
+// buildToc returns null on posts too short to be worth navigating, and that one
+// null gates both the rail and the inline disclosure.
+const toc = buildToc(headings);
 
 const blogPosting = {
   "@context": "https://schema.org",
@@ -51,36 +56,76 @@ const blogPosting = {
   publishedTime={post.data.date}
   structuredData={[blogPosting]}
 >
-  <article class="font-text">
-    <PageTitle title={post.data.title} backHref="/blog">
-      <div slot="actions" class="text-right">
-        <time
-          datetime={post.data.date.toISOString()}
-          class="text-sm text-ink-faint mt-2 block"
-        >
-          {
-            post.data.date.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
-          }
-        </time>
-        <div class="mt-3 flex flex-wrap gap-2 justify-end">
-          {
-            post.data.tags.map((tag: string) => (
-              <span class="text-xs px-2 py-0.5 rounded-full bg-accent-soft text-accent-soft-ink">
-                {tag}
-              </span>
-            ))
-          }
-        </div>
-      </div>
-    </PageTitle>
-    <div
-      class="prose dark:prose-invert max-w-none text-justify wrap-break-word"
-    >
+  <!-- The rail lives outside the article on purpose: PostLayout parks it in the
+       right gutter at 2xl so the prose column keeps its exact --container-width
+       measure and its alignment with the navbar wordmark and /blog index.
+       Renders nothing when buildToc returned null, which leaves the grid's third
+       track empty and the article still centred. -->
+  <Fragment slot="aside">
+    {toc && <PostTocNav toc={toc} idPrefix="toc-rail" />}
+  </Fragment>
+
+  <!-- pb-28 only when the floating pill is present; without it the article
+       keeps its own py-12 rhythm. -->
+  <article class:list={["font-text", toc && "pb-28"]}>
+    <!-- The title, the back link and the accent rule come from PageTitle, which
+         keeps its own default slot empty here. Reading a post header top to
+         bottom: h1, back link, accent rule, then one line of meta, then the
+         body. -->
+    <PageTitle title={post.data.title} backHref="/blog" />
+
+    <!-- Long-form month here, abbreviated on the index: the prose column is wide
+         enough for it, and the index has to fit its date in a narrow gutter. -->
+    <header class="mb-8 flex flex-wrap items-center gap-x-3 gap-y-2">
+      <time
+        datetime={post.data.date.toISOString()}
+        class="font-mono text-meta uppercase tracking-[0.12em] text-ink-faint"
+      >
+        {
+          post.data.date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+      </time>
+      <span class="text-line-strong" aria-hidden="true">·</span>
+      <ul class="flex flex-wrap gap-1.5">
+        {
+          post.data.tags.map((tag: string) => (
+            <li class="rounded-full bg-accent-soft px-2.5 py-1 text-meta text-accent-soft-ink">
+              {tag}
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Absolute, not the page's own path: the "open link" AI items hand this
+           URL to an assistant on another origin, where a relative path resolves
+           to nothing. Same construction llms.txt.ts uses. -->
+      <PostActions
+        mdUrl={`/blog/${post.id}.md`}
+        postUrl={new URL(`/blog/${post.id}`, Astro.site).toString()}
+        postTitle={post.data.title}
+      />
+    </header>
+
+    <!-- Ragged-right, not justified. The prose column is ~57ch and these posts
+         carry no hyphenation, so justifying it stretched the word spacing on
+         most lines instead of evening out the margins. -->
+    <div class="prose dark:prose-invert max-w-none wrap-break-word">
       <Content />
     </div>
   </article>
+
+  <!-- Below 2xl there is no gutter to hold a rail, so the same list arrives as
+       a floating pill instead. It sits outside <article> because it is page
+       chrome rather than post content, and it is position:fixed, so its place
+       in the flow does not matter.
+
+       The padding on the article above is what keeps the pill from permanently
+       covering the post's last line: fixed bottom-right chrome sits over
+       whatever is at the bottom of the viewport, and without the clearance the
+       final paragraph could never be scrolled fully clear of it. -->
+  {toc && <PostTocDisclosure toc={toc} />}
 </PostLayout>

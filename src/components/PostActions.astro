@@ -1,0 +1,434 @@
+---
+import ClaudeIcon from "./icons/ClaudeIcon.astro";
+import MarkdownIcon from "./icons/MarkdownIcon.astro";
+import OpenAiIcon from "./icons/OpenAiIcon.astro";
+
+interface Props {
+  /** Site-root-relative path to the post's generated markdown, e.g. /blog/x.md */
+  mdUrl: string;
+  /** Absolute canonical URL — a relative one is useless to a remote assistant. */
+  postUrl: string;
+  postTitle: string;
+}
+
+const { mdUrl, postUrl, postTitle } = Astro.props;
+
+// Both assistants read `?q=` off their "new conversation" route and drop the
+// decoded value into an empty composer. It is undocumented by both, but it is
+// the mechanism every "ask about this page" button on the web is built on, and
+// when it ever goes away the link degrades to opening the app rather than
+// breaking the page.
+const CHATGPT = "https://chatgpt.com/";
+const CLAUDE = "https://claude.ai/new";
+
+const deepLink = (base: string, prompt: string) =>
+  `${base}?q=${encodeURIComponent(prompt)}`;
+
+const TASK =
+  "summarise the key claims, flagging anything that looks like an unsupported assertion";
+
+const PASTE_PROMPT = `I've pasted a blog post below. Read it and ${TASK}.`;
+const linkPrompt = (url: string) =>
+  `Read this blog post and ${TASK}. Post: "${postTitle}" — ${url}`;
+
+const chatgptPaste = deepLink(CHATGPT, PASTE_PROMPT);
+const chatgptLink = deepLink(CHATGPT, linkPrompt(postUrl));
+const claudePaste = deepLink(CLAUDE, PASTE_PROMPT);
+const claudeLink = deepLink(CLAUDE, linkPrompt(postUrl));
+
+const panelId = "post-actions-menu";
+
+// One cluster, so the label and the chevron read as a single control rather
+// than two loose buttons. Same recipe as Navbar's .nav-controls.
+const group =
+  "inline-flex items-center gap-0.5 rounded-full border border-line p-[0.1875rem]";
+const trigger =
+  "flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-meta uppercase tracking-[0.12em] text-ink-faint transition-colors hover:bg-surface-hover hover:text-ink";
+const iconButton =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-surface-hover hover:text-ink";
+// The panel is positioned against [data-post-actions] below sm and against the
+// same box from sm up, but on opposite edges.
+//
+// Anchoring it to the chevron — which is what the markup did first — is wrong on
+// a phone: the chevron is the right-hand end of the cluster, so a left-anchored
+// panel starts ~170px in and runs off the right edge. The max-width is the
+// backstop that makes it impossible either way; 2rem matches the page's px-4.
+const panel =
+  "absolute left-0 z-20 mt-2 w-max min-w-56 max-w-[calc(100vw_-_2rem)] rounded-xl border border-line bg-surface-raised p-1 shadow-lg sm:left-auto sm:right-0";
+// Brand marks like ContactItem's: sized by utility, coloured by fill-current so
+// each glyph sits in the row's ink and picks up the hover tint with its label.
+const itemIcon = "h-3.5 w-3.5 shrink-0 fill-current";
+const item =
+  "flex w-full items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-left font-mono text-meta uppercase tracking-[0.12em] text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink";
+---
+
+<!-- Sits in the date · tags row. sm:ml-auto pins it to the right edge of the
+     measure from sm up; below that it stays left, directly under the tags.
+
+     w-full below sm is what makes the left anchor deterministic rather than
+     incidental. Without it the cluster shares a line with the date whenever
+     there is room for both, which puts the panel's left edge wherever the
+     chevron happens to land instead of at the column's edge. Forcing the row
+     gives the panel the whole column to open into. -->
+<div
+  class="relative w-full shrink-0 sm:ml-auto sm:w-auto"
+  data-post-actions
+  data-md-url={mdUrl}
+>
+  <div class={group}>
+    <button
+      type="button"
+      class={trigger}
+      aria-pressed="false"
+      data-copy-markdown
+    >
+      <svg
+        class="post-actions__icon--copy"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+        ></path>
+      </svg>
+      <svg
+        class="post-actions__icon--check"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span data-copy-label>Copy markdown</span>
+    </button>
+
+    <button
+      type="button"
+      class={iconButton}
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-controls={panelId}
+      data-actions-toggle
+    >
+      <span class="sr-only">More ways to open this post</span>
+      <svg
+        class="post-actions__chevron transition-transform"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Sibling of the cluster rather than a child of the chevron, so `left-0`
+       below sm means the column's left edge. See the note on `panel` above.
+
+       No display utility here, same reason PostTocDisclosure gives: an
+       author-level `display` outranks the `hidden` attribute's UA rule and
+       would leave the menu permanently open. -->
+  <div id={panelId} hidden role="menu" class={panel} data-actions-menu>
+    <a
+      role="menuitem"
+      href={mdUrl}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <MarkdownIcon class={itemIcon} />
+      <span>Open markdown</span>
+    </a>
+    <div role="separator" class="mx-2 my-1 h-px bg-line"></div>
+    <a
+      role="menuitem"
+      href={chatgptPaste}
+      data-clipboard
+      data-fallback-href={chatgptLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <OpenAiIcon class={itemIcon} />
+      <span>ChatGPT · paste article</span>
+    </a>
+    <a
+      role="menuitem"
+      href={chatgptLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <OpenAiIcon class={itemIcon} />
+      <span>ChatGPT · open link</span>
+    </a>
+    <a
+      role="menuitem"
+      href={claudePaste}
+      data-clipboard
+      data-fallback-href={claudeLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <ClaudeIcon class={itemIcon} />
+      <span>Claude · paste article</span>
+    </a>
+    <a
+      role="menuitem"
+      href={claudeLink}
+      target="_blank"
+      rel="noreferrer"
+      class={item}
+    >
+      <ClaudeIcon class={itemIcon} />
+      <span>Claude · open link</span>
+    </a>
+  </div>
+
+  <!-- The label swap is a visual confirmation only; this is what actually
+       reaches a screen reader. -->
+  <span class="sr-only" role="status" aria-live="polite" data-copy-status
+  ></span>
+</div>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-post-actions]")
+    .forEach((root) => {
+      const mdUrl = root.getAttribute("data-md-url") ?? "";
+      const copyButton = root.querySelector<HTMLButtonElement>(
+        "[data-copy-markdown]",
+      );
+      const copyLabel = root.querySelector<HTMLElement>("[data-copy-label]");
+      const copyStatus = root.querySelector<HTMLElement>("[data-copy-status]");
+      const toggle = root.querySelector<HTMLButtonElement>(
+        "[data-actions-toggle]",
+      );
+      const menu = root.querySelector<HTMLElement>("[data-actions-menu]");
+
+      if (!copyButton || !copyLabel || !toggle || !menu) return;
+
+      const items = () =>
+        Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+
+      // The generated .md file is the single source of truth for "this post as
+      // markdown", so the button and the Open markdown link can never disagree.
+      // Embedding a second copy in a <script type="text/plain"> would ship the
+      // whole post to every reader to save one cached request.
+      let markdown: string | undefined;
+      const readMarkdown = async () => {
+        if (markdown === undefined) {
+          const response = await fetch(mdUrl);
+          if (!response.ok) throw new Error(`${response.status} ${mdUrl}`);
+          markdown = await response.text();
+        }
+        return markdown;
+      };
+
+      const writeClipboard = async (text: string) => {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch {
+          // navigator.clipboard is undefined outside a secure context, which is
+          // what serving the dev server over a LAN address gives you.
+          const scratch = document.createElement("textarea");
+          scratch.value = text;
+          scratch.setAttribute("readonly", "");
+          scratch.style.cssText = "position:fixed;top:-1000px;opacity:0";
+          document.body.append(scratch);
+          scratch.select();
+          const copied = document.execCommand("copy");
+          scratch.remove();
+          return copied;
+        }
+      };
+
+      let resetTimer = 0;
+      // aria-pressed drives the glyph swap in CSS, the same single source of
+      // truth Navbar's menu toggle and PostTocDisclosure use.
+      const flash = (copied: boolean) => {
+        window.clearTimeout(resetTimer);
+        copyButton.setAttribute("aria-pressed", String(copied));
+        copyLabel.textContent = copied ? "Copied" : "Copy failed";
+        copyStatus.textContent = copied
+          ? "Markdown copied to the clipboard."
+          : "Could not copy the markdown. Use Open markdown instead.";
+        resetTimer = window.setTimeout(() => {
+          copyButton.setAttribute("aria-pressed", "false");
+          copyLabel.textContent = "Copy markdown";
+        }, 2000);
+      };
+
+      let copying = false;
+      copyButton.addEventListener("click", async () => {
+        if (copying) return;
+        copying = true;
+        try {
+          flash(await writeClipboard(await readMarkdown()));
+        } catch {
+          flash(false);
+        } finally {
+          copying = false;
+        }
+      });
+
+      // Paste-into-the-assistant items. The clipboard write has to be awaited
+      // before the destination is known, because a failed copy should not open
+      // a composer that claims something was pasted — so the tab is opened
+      // blank and synchronously (which is what satisfies the popup blocker)
+      // and navigated once the write resolves.
+      menu
+        .querySelectorAll<HTMLAnchorElement>("[data-clipboard]")
+        .forEach((link) => {
+          link.addEventListener("click", async (event) => {
+            // Modified clicks are the browser's own "open in new tab" gestures;
+            // intercepting them would break middle-click and cmd-click.
+            if (
+              event.button !== 0 ||
+              event.metaKey ||
+              event.ctrlKey ||
+              event.shiftKey ||
+              event.altKey
+            ) {
+              return;
+            }
+            event.preventDefault();
+
+            const tab = window.open("", "_blank");
+            if (tab) tab.opener = null;
+
+            let copied = false;
+            try {
+              copied = await writeClipboard(await readMarkdown());
+            } catch {
+              copied = false;
+            }
+
+            const href = copied
+              ? link.href
+              : (link.dataset.fallbackHref ?? link.href);
+            if (tab) tab.location.replace(href);
+            else window.location.href = href;
+          });
+        });
+
+      const setExpanded = (expanded: boolean) =>
+        toggle.setAttribute("aria-expanded", String(expanded));
+
+      const close = (restoreFocus: boolean) => {
+        if (menu.hidden) return;
+        menu.hidden = true;
+        setExpanded(false);
+        if (restoreFocus) toggle.focus();
+      };
+
+      // Unlike the TOC popover, this one DOES move focus: it is a menu, and
+      // leaving focus on the trigger while the keyboard is inside a menu is the
+      // thing role="menu" exists to prevent.
+      const open = () => {
+        if (!menu.hidden) return;
+        menu.hidden = false;
+        setExpanded(true);
+        items()[0]?.focus();
+      };
+
+      toggle.addEventListener("click", () => {
+        if (menu.hidden) open();
+        else close(false);
+      });
+
+      menu.addEventListener("click", (event) => {
+        const target = event.target;
+        if (target instanceof Element && target.closest('[role="menuitem"]')) {
+          close(false);
+        }
+      });
+
+      // A popover implies dismissal by clicking away.
+      document.addEventListener("pointerdown", (event) => {
+        const target = event.target;
+        if (target instanceof Node && root.contains(target)) return;
+        close(false);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || menu.hidden) return;
+        event.preventDefault();
+        close(true);
+      });
+
+      // Roving focus. Tab hands focus back to the toggle first and lets the
+      // browser continue sequential navigation from there, so focus is never
+      // dropped onto a hidden element.
+      menu.addEventListener("keydown", (event) => {
+        const current = items();
+        const index = current.indexOf(document.activeElement as HTMLElement);
+        if (index === -1) return;
+
+        let next = -1;
+        switch (event.key) {
+          case "ArrowDown":
+            next = (index + 1) % current.length;
+            break;
+          case "ArrowUp":
+            next = (index - 1 + current.length) % current.length;
+            break;
+          case "Home":
+            next = 0;
+            break;
+          case "End":
+            next = current.length - 1;
+            break;
+          case "Tab":
+            close(true);
+            return;
+          default:
+            return;
+        }
+        event.preventDefault();
+        current[next]?.focus();
+      });
+    });
+</script>
+
+<style>
+  .post-actions__icon--check {
+    display: none;
+  }
+
+  [data-copy-markdown][aria-pressed="true"] .post-actions__icon--copy {
+    display: none;
+  }
+
+  [data-copy-markdown][aria-pressed="true"] .post-actions__icon--check {
+    display: block;
+  }
+
+  [data-actions-toggle][aria-expanded="true"] .post-actions__chevron {
+    transform: rotate(180deg);
+  }
+</style>

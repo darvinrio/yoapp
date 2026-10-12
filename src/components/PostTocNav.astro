@@ -1,0 +1,332 @@
+---
+import type { Toc } from "../lib/toc";
+
+interface Props {
+  toc: Toc;
+  /** Namespace for this instance's element ids. Both a rail and a disclosure are
+   *  rendered on every post page and each carries its own copy of the list, so
+   *  the ids have to be distinct even though only one is ever displayed. */
+  idPrefix: string;
+}
+
+const { toc, idPrefix } = Astro.props;
+const labelId = `${idPrefix}-contents-label`;
+---
+
+<!-- Both instances of this nav ship on a post page. The one that does not
+     match the viewport is display:none, which drops it from the accessibility
+     tree entirely, so a reader is never offered two copies of the same list. -->
+<nav aria-labelledby={labelId} data-toc-nav>
+  <p
+    id={labelId}
+    class="font-mono text-meta uppercase tracking-[0.12em] text-ink-faint"
+  >
+    Contents
+  </p>
+
+  <ol class="mt-4 space-y-1">
+    {
+      toc.groups.map((group, groupIndex) => {
+        const sublistId = `${idPrefix}-${group.slug}`;
+        return (
+          <li data-toc-group={groupIndex}>
+            <div class="grid grid-cols-[1fr_auto] items-start gap-x-1.5">
+              <a
+                href={`#${group.slug}`}
+                data-toc-link={group.slug}
+                class="text-meta text-ink-muted transition-colors hover:text-ink"
+              >
+                {group.text}
+              </a>
+
+              {group.children.length > 0 && (
+                <button
+                  type="button"
+                  class="-mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded text-ink-faint transition-colors hover:bg-surface-hover hover:text-ink"
+                  aria-expanded="false"
+                  aria-controls={sublistId}
+                  data-toc-toggle
+                >
+                  <span class="sr-only">
+                    Show {group.children.length} subsection
+                    {group.children.length === 1 ? "" : "s"} of {group.text}
+                  </span>
+                  <svg
+                    class="toc-chevron"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {group.children.length > 0 && (
+              /* No display utility here: an author-level `display` would outrank
+                 the `hidden` attribute's UA rule and leave the list permanently
+                 expanded. Spacing is margin-based for the same reason. */
+              <ol
+                id={sublistId}
+                data-toc-sublist
+                hidden
+                class="mt-1.5 space-y-1 border-s border-line ps-3"
+              >
+                {group.children.map((child) => (
+                  <li>
+                    <a
+                      href={`#${child.slug}`}
+                      data-toc-link={child.slug}
+                      class="text-meta text-ink-faint transition-colors hover:text-ink"
+                    >
+                      {child.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>
+
+<script>
+  // One script for both instances: Astro bundles a component's <script> once
+  // per page no matter how many times the component renders.
+  const toggles =
+    document.querySelectorAll<HTMLButtonElement>("[data-toc-toggle]");
+
+  toggles.forEach((toggle) => {
+    const controls = toggle.getAttribute("aria-controls");
+    const sublist = controls ? document.getElementById(controls) : null;
+    if (!sublist) return;
+
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      sublist.hidden = expanded;
+    });
+  });
+</script>
+
+<script>
+  // Scroll-spy.
+  //
+  // Deliberately a rAF-throttled scroll handler rather than an
+  // IntersectionObserver. "Active" here means *the last heading whose top has
+  // passed a fixed offset*, and expressing that as an observer band needs a
+  // rootMargin thin enough to be one line — which computes to a negative root
+  // height below roughly 1200px of viewport and silently stops intersecting.
+  // Reading positions directly is correct at every viewport height, and a post
+  // tops out at 37 headings, so the scan is not the expensive part.
+  const links = [
+    ...document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+  ];
+
+  if (links.length > 0) {
+    // Resolve --sticky-offset through a throwaway node rather than repeating
+    // 96px here, where it would drift from the token the CSS uses.
+    const probe = document.createElement("div");
+    probe.style.cssText =
+      "position:absolute;top:0;height:var(--sticky-offset);visibility:hidden;pointer-events:none";
+    document.body.append(probe);
+    const OFFSET = probe.getBoundingClientRect().height;
+    probe.remove();
+
+    const sections = [
+      ...new Set(links.map((link) => link.getAttribute("data-toc-link"))),
+    ]
+      .map((slug) => ({ slug, el: document.getElementById(slug ?? "") }))
+      .filter((section) => section.el);
+
+    let current = "";
+    let activeGroupIndex = -1;
+    let locked: string | null = null;
+    let unlockTimer = 0;
+    let queued = 0;
+
+    // Open the group a highlighted sub-heading lives in, or the highlight lands
+    // on a link the reader cannot see. Done per instance because both the rail
+    // and the disclosure keep their own copy of the list.
+    const reveal = (link: HTMLAnchorElement) => {
+      const sublist = link.closest<HTMLElement>("[data-toc-sublist]");
+      if (!sublist || !sublist.hidden) return;
+      sublist.hidden = false;
+      const toggle = sublist.id
+        ? document.querySelector<HTMLButtonElement>(
+            `[data-toc-toggle][aria-controls="${sublist.id}"]`,
+          )
+        : null;
+      toggle?.setAttribute("aria-expanded", "true");
+    };
+
+    // Keep the highlighted row inside the rail's own scroll box. Assigning
+    // scrollTop directly is what makes this safe: scrollIntoView would walk up
+    // and scroll the document too, yanking the page away from the reader.
+    const keepVisible = (link: HTMLAnchorElement) => {
+      const box = link.closest<HTMLElement>("[data-toc-scroll]");
+      // A closed disclosure panel measures zero and is not a scroll box at all.
+      if (
+        !box ||
+        box.clientHeight === 0 ||
+        box.scrollHeight <= box.clientHeight
+      ) {
+        return;
+      }
+      const bounds = box.getBoundingClientRect();
+      const row = link.getBoundingClientRect();
+      const pad = 8;
+      if (row.top < bounds.top + pad)
+        box.scrollTop -= bounds.top + pad - row.top;
+      else if (row.bottom > bounds.bottom - pad) {
+        box.scrollTop += row.bottom - (bounds.bottom - pad);
+      }
+    };
+
+    const setGroupOpen = (group: Element, open: boolean) => {
+      const toggle = group.querySelector("[data-toc-toggle]");
+      const sublist = group.querySelector<HTMLElement>("[data-toc-sublist]");
+      // A group with no children has neither, and there is nothing to collapse.
+      if (!toggle || !sublist) return;
+      if ((toggle.getAttribute("aria-expanded") === "true") === open) return;
+      toggle.setAttribute("aria-expanded", String(open));
+      sublist.hidden = !open;
+    };
+
+    // Keep only a +/-1 window of groups open around the reader. Without this the
+    // rail grows by a row per heading scrolled past and spends the whole post
+    // scrolling its own contents instead of the post.
+    //
+    // Deliberately gated on the group having *changed*, not on every scroll
+    // tick: otherwise a group the reader expanded by hand would be folded away
+    // on the next rAF while they are still looking at it. Manual state survives
+    // until they move into a different section.
+    const applyWindow = (activeIndex: number) => {
+      for (const group of document.querySelectorAll("[data-toc-group]")) {
+        const index = Number(group.getAttribute("data-toc-group"));
+        setGroupOpen(group, Math.abs(index - activeIndex) <= 1);
+      }
+    };
+
+    const setActive = (slug: string) => {
+      if (slug === current) return;
+      current = slug;
+
+      for (const link of links) {
+        const match =
+          slug !== "" && link.getAttribute("data-toc-link") === slug;
+        if (match) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      }
+
+      if (slug === "") return;
+      let activeGroup = -1;
+      for (const link of links) {
+        if (link.getAttribute("data-toc-link") !== slug) continue;
+        // Runs on every activation, not just a group change: if the reader
+        // collapsed the group they are inside, moving to a sibling heading
+        // within it would otherwise highlight something inside a closed group.
+        reveal(link);
+        keepVisible(link);
+        const group = link.closest("[data-toc-group]");
+        if (group) activeGroup = Number(group.getAttribute("data-toc-group"));
+      }
+
+      if (activeGroup < 0 || activeGroup === activeGroupIndex) return;
+      activeGroupIndex = activeGroup;
+      applyWindow(activeGroup);
+    };
+
+    const update = () => {
+      if (locked !== null) {
+        setActive(locked);
+        return;
+      }
+
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+
+      // The bottom-of-page rule. A final section is often too short to ever
+      // reach the offset line, so without this the reader scrolls to the end of
+      // a post and the last heading simply never lights up.
+      if (atBottom) {
+        setActive(sections[sections.length - 1]?.slug ?? "");
+        return;
+      }
+
+      let active = "";
+      for (const section of sections) {
+        if (section.el!.getBoundingClientRect().top <= OFFSET)
+          active = section.slug;
+        else break;
+      }
+      setActive(active);
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = requestAnimationFrame(() => {
+        queued = 0;
+        update();
+      });
+    };
+
+    const unlock = () => {
+      locked = null;
+      window.clearTimeout(unlockTimer);
+      window.removeEventListener("scrollend", unlock);
+      update();
+    };
+
+    // A click sets the highlight at once and holds it until the smooth scroll
+    // lands. Without the hold, update() runs on every frame of the journey and
+    // walks the highlight through every heading the page passes on the way, so
+    // the rail strobes and then disagrees with where the reader was sent.
+    for (const link of links) {
+      link.addEventListener("click", () => {
+        locked = link.getAttribute("data-toc-link") ?? "";
+        setActive(locked);
+
+        window.removeEventListener("scrollend", unlock);
+        window.addEventListener("scrollend", unlock, { once: true });
+        // Fallback: scrollend is recent, and a click that goes nowhere (already
+        // at that heading) never fires it.
+        window.clearTimeout(unlockTimer);
+        unlockTimer = window.setTimeout(unlock, 1500);
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  /* aria-expanded is the single source of truth for the open state — the same
+     trick Navbar.astro uses for its menu/close glyph swap — so the chevron
+     cannot disagree with the sublist it controls. */
+  .toc-chevron {
+    transition: transform 0.15s ease;
+  }
+
+  [data-toc-toggle][aria-expanded="true"] .toc-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* `location` rather than `page`: this is position within a set, and the
+     navbar already claims `page` for the current route. */
+  [data-toc-link][aria-current="location"] {
+    color: var(--color-accent);
+  }
+</style>

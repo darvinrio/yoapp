@@ -1,5 +1,5 @@
 ---
-import LandingLayout from "../layouts/LandingLayout.astro";
+import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 import Welcome from "../components/Welcome.astro";
 
@@ -29,10 +29,10 @@ const website = {
 };
 ---
 
-<LandingLayout structuredData={[person, website]}>
-  <main class="px-6 py-8 md:px-12 md:py-12">
-    <section class="container-max">
-      <Welcome />
-    </section>
+<Layout structuredData={[person, website]}>
+  <!-- Same container and gutters as the navbar, footer and every other page,
+       so the hero's left edge lines up with the wordmark above it. -->
+  <main id="main-content" tabindex="-1" class="container-max px-4 py-12">
+    <Welcome />
   </main>
-</LandingLayout>
+</Layout>

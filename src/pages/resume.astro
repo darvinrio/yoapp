@@ -1,226 +1,123 @@
 ---
 // src/pages/resume.astro
-// Update the data below to match your actual experience, education, and skills
 import PageTitle from "../components/PageTitle.astro";
 import Layout from "../layouts/Layout.astro";
+import { education, experience, skills, stack } from "../data/resume";
 
-const skills = {
-  "Data Analysis & Visualization": [
-    "Dashboard Building",
-    "Data Visualization",
-    "KPI Frameworks",
-  ],
-  "Data Engineering": [
-    "Schema Modelling",
-    "Data Pipelines",
-    "ClickHouse",
-    "Snowflake",
-  ],
-  "Machine Learning": [
-    "Clustering",
-    "Anomaly Detection",
-    "Regression Analysis",
-  ],
-};
-
-const stack = {
-  Languages: ["Python", "SQL", "TypeScript"],
-  Libraries: ["Pandas", "Polars", "Git", "Linux", "SciKit Learn"],
-  Infra: ["DBT", "Git", "Linux"],
-  Visualization: ["Matplotlib", "Dune", "Superset", "Looker"],
-};
-
-const experience = [
-  {
-    role: "Data Lead",
-    company: "Swell Network (Remote - Sydney Time)",
-    period: "Apr 2024 — Feb 2026",
-    bullets: [
-      "Built and automated a scalable ClickHouse SQL + Python pipeline ingesting data from 150+ DeFi integrations, powering real-time user portfolio monitoring, vault KPIs, and exit liquidity health monitoring.",
-      "Developed ML framework using k-Means Clustering, DBSCAN, and Louvain Community Detection to detect, flag, and penalize exploitative user behavior.",
-      "Investigated a falsely marketed integration that was later rug-pulled, flagging the returns as fake based on existing liquidity and yield dynamics and escalating to the Strategy Team with a recommendation to block the integration.",
-      "Drove $500M in protocol inflows by identifying outliers in liquidity concentration on Ethereum through on-chain analysis.",
-      "Produced monthly summaries and technical documentation for Operations and Marketing Teams, cutting operational costs by 25% and reducing Mean Ticket Resolution time from 2+ days to 4 hours.",
-      "Implemented HyperNative Risk Alerting Framework on suspicious liquidity movements, contract deployments, and code upgrades on partner integrations, providing operational risk coverage for Vault products.",
-    ],
-  },
-  {
-    role: "Research Data Analyst",
-    company: "PYOR (Remote - Bengaluru)",
-    period: "Oct 2022 — Oct 2024",
-    bullets: [
-      "Devised a quantitative analysis framework with Cohort Segmentation to evaluate ROI and user retention of $75M+ expenditure in Arbitrum DAO grants.",
-      "Built automated dbt pipelines transforming raw blockchain data into standardized growth and revenue KPIs and metrics, generating $130K in ARR.",
-      "Deployed high-traffic Dune Analytics dashboards to monitor LRT liquidity and peg health, translating ecosystem visibility into $150K in DAO grants acquired.",
-    ],
-  },
-  {
-    role: "Freelance Data Analyst",
-    company: "Independent (Remote - Bengaluru)",
-    period: "Jul 2021 — Oct 2022",
-    bullets: [
-      "Built the Anchor Protocol Risk Monitoring dashboard, detected unsustainable borrows beyond thresholds, and flagged systemic risk signals months before the eventual collapse.",
-      "Automated the RociFi Credit Risk Reports, delivering daily updates on system health and borrow activity.",
-    ],
-  },
+// Skills and Stack are the same shape — named groups of chips — so they are
+// declared once here and rendered through one piece of markup.
+const chipSections: {
+  id: string;
+  heading: string;
+  groups: Record<string, string[]>;
+}[] = [
+  { id: "skills", heading: "Skills", groups: skills },
+  { id: "stack", heading: "Stack", groups: stack },
 ];
 
-const education = [
-  {
-    degree: "Master of Science - Physics",
-    school: "Christ University",
-    startYear: "2019",
-    endYear: "2021",
-    score: "8.52 CGPA",
-  },
-  {
-    degree: "Bachelor of Science - Physics",
-    school: "Christ University",
-    startYear: "2016",
-    endYear: "2019",
-    score: "8.92 CGPA",
-  },
-];
+// F5.6 ships weight 400 only, so section headings get their level from size and
+// spacing alone; nothing here is bolded.
+const sectionHeading = "font-title text-h2 text-ink-strong";
+const groupLabel =
+  "font-mono text-meta uppercase tracking-[0.12em] text-ink-faint";
+const chip =
+  "rounded-full bg-accent-soft px-2.5 py-1 text-meta text-accent-soft-ink";
+const pdfLink =
+  "inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-meta text-ink transition-colors hover:border-accent hover:text-accent";
 ---
 
 <Layout
   title="Resume"
   description="Resume of Yonas (maybeYonas) — Analytics Engineer with 4 years of blockchain data experience."
 >
-  <main class="container-max px-4 py-12">
+  <main id="main-content" tabindex="-1" class="container-max px-4 py-12">
     <PageTitle title="resume" backHref="/">
       <a
         slot="actions"
         href="/Darvin_Analytics_Engineer.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-block text-sm text-accent border border-accent mt-3 px-4 py-1.5 hover:bg-accent hover:text-on-accent transition-colors"
-        >download pdf ↓</a
+        class={pdfLink}>download pdf ↓</a
       >
+    </PageTitle>
 
-      <!-- Two Column Layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <!-- Left Column: Experience + Education -->
-        <div class="lg:col-span-2 space-y-10">
-          <!-- Experience -->
-          <section>
-            <p
-              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
-            >
-              Experience
-            </p>
+    <!-- Two columns: the narrative (experience) on the left, the scannable
+         facts (skills, stack, education) in a fixed-width rail on the right,
+         split by a single hairline rather than a third of the grid. -->
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-0">
+      <div class="lg:pr-14">
+        <section aria-labelledby="experience-heading">
+          <h2 id="experience-heading" class={sectionHeading}>Experience</h2>
+          <ol class="mt-7 flex flex-col gap-9">
             {
               experience.map((job) => (
-                <div class="mb-6">
-                  <div class="mb-1 flex flex-col gap-y-1">
-                    <span class="text-xl text-ink-strong block">
-                      {job.role}
-                    </span>
-                    <span class="text-accent block text-sm">{job.company}</span>
-                    <span class="text-sm text-ink-faintest tracking-wide block">
-                      {job.period}
-                    </span>
-                  </div>
-                  <ul class="space-y-1 mt-2">
-                    {job.bullets.map((b) => (
-                      <li class="flex text-ink-faint text-sm leading-relaxed">
-                        <span class="text-line-strong mr-2 select-none">—</span>
-                        <span>{b}</span>
+                <li>
+                  <h3 class="font-title text-h3 text-ink-strong">{job.role}</h3>
+                  <p class="mt-1.5 text-body text-ink">{job.company}</p>
+                  <p class="mt-1 font-mono text-meta uppercase tracking-[0.12em] text-ink-faint">
+                    {job.period}
+                  </p>
+                  <ul class="mt-4 flex flex-col gap-2.5">
+                    {job.bullets.map((bullet) => (
+                      <li class="flex gap-3 text-body text-ink-muted">
+                        <span aria-hidden="true" class="text-line-strong">
+                          —
+                        </span>
+                        <span>{bullet}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
+                </li>
               ))
             }
-          </section>
-        </div>
-
-        <!-- Right Column: Skills + Stack + Education -->
-        <aside class="lg:col-span-1 space-y-10">
-          <!-- Skills -->
-          <section>
-            <p
-              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
-            >
-              Skills
-            </p>
-            <div class="space-y-4">
-              {
-                Object.entries(skills).map(([group, tags]) => (
-                  <div>
-                    <p class="text-xs text-ink-faintest uppercase tracking-wider mb-2">
-                      {group}
-                    </p>
-                    <div class="flex flex-wrap gap-2">
-                      {tags.map((tag) => (
-                        <span class="text-sm text-accent-bright border border-line bg-surface-raised px-2.5 py-1">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
-          </section>
-
-          <!-- Stack -->
-          <section>
-            <p
-              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
-            >
-              Stack
-            </p>
-            <div class="space-y-4">
-              {
-                Object.entries(stack).map(([group, tags]) => (
-                  <div>
-                    <p class="text-xs text-ink-faintest uppercase tracking-wider mb-2">
-                      {group}
-                    </p>
-                    <div class="flex flex-wrap gap-2">
-                      {tags.map((tag) => (
-                        <span class="text-sm text-accent-bright border border-line bg-surface-raised px-2.5 py-1">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))
-              }
-            </div>
-          </section>
-
-          <!-- Education -->
-          <section>
-            <p
-              class="text-xs font-mono uppercase tracking-widest text-accent mb-3"
-            >
-              Education
-            </p>
-            <div class="space-y-4">
-              {
-                education.map((edu) => (
-                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <span class="text-ink-strong">
-                      {edu.degree}
-                      <span class="text-line-strong"> · </span>
-                    </span>
-                    <span class="text-accent block w-full">{edu.school}</span>
-                    <span class="text-sm text-ink-faintest tracking-wide">
-                      {edu.startYear} – {edu.endYear}
-                      <span class="text-line-strong mx-1">·</span>
-                    </span>
-                    <span class="text-sm text-ink-faintest tracking-wide">
-                      {edu.score}
-                    </span>
-                  </div>
-                ))
-              }
-            </div>
-          </section>
-        </aside>
+          </ol>
+        </section>
       </div>
-    </PageTitle>
+
+      <aside class="flex flex-col gap-11 lg:border-l lg:border-line lg:pl-14">
+        {
+          chipSections.map(({ id, heading, groups }) => (
+            <section aria-labelledby={`${id}-heading`}>
+              <h2 id={`${id}-heading`} class={sectionHeading}>
+                {heading}
+              </h2>
+              <div class="mt-5 flex flex-col gap-5">
+                {Object.entries(groups).map(([group, tags]) => (
+                  <div>
+                    <p class={groupLabel}>{group}</p>
+                    <ul class="mt-2.5 flex flex-wrap gap-1.5">
+                      {tags.map((tag) => (
+                        <li class={chip}>{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))
+        }
+
+        <section aria-labelledby="education-heading">
+          <h2 id="education-heading" class={sectionHeading}>Education</h2>
+          <ul class="mt-5 flex flex-col gap-6">
+            {
+              education.map((edu) => (
+                <li>
+                  <p class="text-body text-ink-strong">{edu.degree}</p>
+                  <p class="mt-1 text-body text-ink">{edu.school}</p>
+                  <p class="mt-1 text-meta text-ink-faint">
+                    {edu.startYear} – {edu.endYear}
+                    <span class="mx-1 text-line-strong" aria-hidden="true">
+                      ·
+                    </span>
+                    {edu.score}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </aside>
+    </div>
   </main>
 </Layout>

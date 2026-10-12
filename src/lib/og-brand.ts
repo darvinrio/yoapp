@@ -9,9 +9,9 @@ export const HEIGHT = 630;
 export const COLORS = {
   background: "#18181b",
   accent: "#2dd4bf",
-  flagPole: "#f5f7fa",
-  flagCloth: "#14b8a6",
-  textPrimary: "#f1eef7",
+  flagPole: "#fafafa",
+  flagCloth: "#5eead4",
+  textPrimary: "#fafafa",
   textMuted: "#a1a1aa",
   divider: "#3f3f46",
 } as const;
