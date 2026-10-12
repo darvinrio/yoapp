@@ -1,10 +1,16 @@
 ---
 import Contacts from "./Contacts.astro";
 
+// Outbound booking link, never an embed: an embed would pull
+// assets.calendly.com on every page load, and the site ships no third-party
+// runtime requests (spec-008). A plain anchor costs one click and nothing else.
+const CALENDLY_URL = "https://calendly.com/darvinrio";
+
 const quickLinks = [
   { href: "/resume", label: "View Resume" },
   { href: "/work", label: "Work Experience" },
   { href: "/blog", label: "Writings" },
+  { href: CALENDLY_URL, label: "Book a call", external: true },
 ];
 ---
 
@@ -20,18 +26,20 @@ const quickLinks = [
     maybe<span class="text-accent">Yonas</span>
   </h1>
   <p class="hero-intro mt-7 text-body text-ink-muted">
-    I am an <span class="font-bold text-ink">Analytics Engineer</span> with 5 years of blockchain
-    data experience. <br/>
-    Currently I am exploring ML, Soccer Prediction Markets and GenAI.<br/>
-    Looking for roles to expand beyond Data Analytics.<br/>
+    I am an <span class="font-bold text-ink">Analytics Engineer</span> with 5 years
+    of blockchain data experience. <br />
+    Currently I am exploring ML, Soccer Prediction Markets and GenAI.<br />
+    Looking for roles to expand beyond Data Analytics.<br />
   </p>
 
   <ul class="mt-10 flex flex-wrap items-center gap-3">
     {
-      quickLinks.map(({ href, label }) => (
+      quickLinks.map(({ href, label, external }) => (
         <li>
           <a
             href={href}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
             class="inline-flex items-center rounded-full border border-line px-4 py-2 text-body text-ink transition-colors hover:border-accent hover:text-accent"
           >
             {label}
