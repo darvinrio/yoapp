@@ -51,6 +51,22 @@
   color: var(--shiki-dark, var(--tw-prose-pre-code));
 }
 
+/* Anchor offset. A bare fragment jump puts the target's top edge flush with the
+   top of the viewport, and the sticky navbar is 69px tall — so every in-page link
+   used to land its heading tucked underneath the navbar, with only the heading's
+   lower half showing below it.
+
+   --sticky-offset (6rem) clears the navbar with 27px of air above the heading,
+   which reads as "arrived at this section" rather than "scrolled slightly past
+   it". It is the same token the sticky table-of-contents rail hangs from, so the
+   rail and the headings agree on where "the top" is.
+
+   h2-h4 only: no post body carries an h1 (the page's single h1 comes from
+   PageTitle, outside .prose), and the table of contents never links to it. */
+.prose :is(h2, h3, h4) {
+  scroll-margin-top: var(--sticky-offset);
+}
+
 /* Quotation carries on the accent rule rather than on a slant: Merriweather is
    loaded upright only (300/400/700/900), so the face's `italic` would be a
    synthetic oblique. */

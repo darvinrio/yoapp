@@ -1,13 +1,12 @@
 ---
-import {
-  getCollection,
-  getEntry,
-  render,
-  type CollectionEntry,
-} from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
 import "../../styles/blog.css";
 import PageTitle from "../../components/PageTitle.astro";
+import PostActions from "../../components/PostActions.astro";
+import PostTocNav from "../../components/PostTocNav.astro";
+import PostTocDisclosure from "../../components/PostTocDisclosure.astro";
+import { buildToc } from "../../lib/toc";
 
 export async function getStaticPaths() {
   const posts: CollectionEntry<"blog">[] = await getCollection("blog");
@@ -25,7 +24,13 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props as { post: CollectionEntry<"blog"> };
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+// render() already hands back { depth, slug, text } for every heading in the
+// post, so the contents list needs no remark plugin and no new dependency.
+// buildToc returns null on posts too short to be worth navigating, and that one
+// null gates both the rail and the inline disclosure.
+const toc = buildToc(headings);
 
 const blogPosting = {
   "@context": "https://schema.org",
@@ -51,7 +56,18 @@ const blogPosting = {
   publishedTime={post.data.date}
   structuredData={[blogPosting]}
 >
-  <article class="font-text">
+  <!-- The rail lives outside the article on purpose: PostLayout parks it in the
+       right gutter at 2xl so the prose column keeps its exact --container-width
+       measure and its alignment with the navbar wordmark and /blog index.
+       Renders nothing when buildToc returned null, which leaves the grid's third
+       track empty and the article still centred. -->
+  <Fragment slot="aside">
+    {toc && <PostTocNav toc={toc} idPrefix="toc-rail" />}
+  </Fragment>
+
+  <!-- pb-28 only when the floating pill is present; without it the article
+       keeps its own py-12 rhythm. -->
+  <article class:list={["font-text", toc && "pb-28"]}>
     <!-- The title, the back link and the accent rule come from PageTitle, which
          keeps its own default slot empty here. Reading a post header top to
          bottom: h1, back link, accent rule, then one line of meta, then the
@@ -83,6 +99,15 @@ const blogPosting = {
           ))
         }
       </ul>
+
+      <!-- Absolute, not the page's own path: the "open link" AI items hand this
+           URL to an assistant on another origin, where a relative path resolves
+           to nothing. Same construction llms.txt.ts uses. -->
+      <PostActions
+        mdUrl={`/blog/${post.id}.md`}
+        postUrl={new URL(`/blog/${post.id}`, Astro.site).toString()}
+        postTitle={post.data.title}
+      />
     </header>
 
     <!-- Ragged-right, not justified. The prose column is ~57ch and these posts
@@ -92,4 +117,15 @@ const blogPosting = {
       <Content />
     </div>
   </article>
+
+  <!-- Below 2xl there is no gutter to hold a rail, so the same list arrives as
+       a floating pill instead. It sits outside <article> because it is page
+       chrome rather than post content, and it is position:fixed, so its place
+       in the flow does not matter.
+
+       The padding on the article above is what keeps the pill from permanently
+       covering the post's last line: fixed bottom-right chrome sits over
+       whatever is at the bottom of the viewport, and without the clearance the
+       final paragraph could never be scrolled fully clear of it. -->
+  {toc && <PostTocDisclosure toc={toc} />}
 </PostLayout>

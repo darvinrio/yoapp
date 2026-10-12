@@ -21,8 +21,88 @@ interface Props {
        which is the classic comfortable reading measure but left roughly 400px of
        the column empty beside every post. If that ever reads too wide again,
        the dial-back is one max-width on .prose — do not reintroduce a second
-       width token for it. -->
-  <main id="main-content" tabindex="-1" class="container-max px-4 py-12">
-    <slot />
+       width token for it.
+
+       The shell only becomes a grid at 2xl, and only so the table of contents
+       can sit in the right gutter without touching the measure. The two gutters
+       are written as explicit halves of the leftover width and the article track
+       is exactly --container-width, so the three always sum to the viewport and
+       the article stays dead-centre, keeping its edges aligned with the navbar
+       wordmark and the /blog index. Below 2xl <main> is an ordinary block and
+       nothing here affects width at all. -->
+  <main id="main-content" tabindex="-1" class="post-shell">
+    <div class="container-max px-4 py-12">
+      <slot />
+    </div>
+
+    <div class="post-shell__aside" data-toc-scroll>
+      <slot name="aside" />
+    </div>
   </main>
 </Layout>
+
+<style>
+  /* Below 2xl this file contributes NOTHING to the horizontal layout: <main> is
+     an ordinary block, .container-max behaves exactly as it did before the rail
+     existed, and the aside is simply not rendered. Everything that could affect
+     width is inside the 2xl query.
+
+     That is deliberate rather than incidental. An earlier version applied this
+     grid at every width as
+     `minmax(0, 1fr) minmax(0, var(--container-width)) minmax(0, 1fr)` and
+     relied on the two 1fr tracks to absorb whatever the middle track left
+     over. But that middle track is a *non-flexible* track whose base size is
+     zero, and how a browser sizes that against flexible siblings is not
+     something to bet a mobile layout on — the article track did not come out at
+     full width on narrow viewports and the page gained a horizontal scrollbar.
+     Explicit gutters below cannot fail that way. */
+
+  .post-shell__aside {
+    display: none;
+  }
+
+  /* 96rem == Tailwind's 2xl. The gutter is (viewport - 1024px) / 2 per side, so
+     1536px is the first width where a 13rem rail actually fits: 256px of gutter
+     against 208px of rail plus a 2rem offset, leaving 16px of slack. Below it
+     the rail has nowhere to go and the page uses the floating pill. */
+  @media (min-width: 96rem) {
+    .post-shell {
+      display: grid;
+      /* Written out as arithmetic rather than 1fr: the three tracks sum to
+         (W - 1024)/2 + 1024 + (W - 1024)/2, which is exactly W at every width,
+         so the row can never be wider than its container. */
+      grid-template-columns:
+        calc((100% - var(--container-width)) / 2)
+        var(--container-width)
+        calc((100% - var(--container-width)) / 2);
+    }
+
+    .post-shell > .container-max {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    /* align-self: start is load-bearing. A grid item defaults to stretch, which
+       would give this the full height of the row and leave a sticky element no
+       room to travel; start sizes it to its content so it can stick inside the
+       grid area, which is as tall as the article. That is also what unpins the
+       rail when the article ends — no scroll listener involved. */
+    .post-shell__aside {
+      display: block;
+      grid-column: 3;
+      grid-row: 1;
+      align-self: start;
+      position: sticky;
+      top: var(--sticky-offset);
+      /* 2rem offset + 13rem rail = 15rem, the narrowest thing that fits the
+         256px gutter at 1536px. The scroll bounds live here rather than on the
+         nav itself so they do not have to reach into slotted content from this
+         component's style scope. */
+      width: 15rem;
+      padding-inline-start: 2rem;
+      max-height: calc(100vh - 2 * var(--sticky-offset));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+</style>
